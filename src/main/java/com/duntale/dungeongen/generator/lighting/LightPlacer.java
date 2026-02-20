@@ -141,14 +141,14 @@ public class LightPlacer {
     @Nonnull
     private LightSet getLightsForTheme(@Nonnull String paletteName) {
         return switch (paletteName) {
-            case "crypt" -> new LightSet("Furniture_Ancient_Torch", "Deco_Lantern_Ceiling", "Furniture_Ancient_Candle");
+            case "crypt" -> new LightSet("Furniture_Crude_Torch", "Deco_Lantern_Ceiling", "Furniture_Ancient_Candle");
             case "volcanic" -> new LightSet("Furniture_Crude_Torch", null, "Furniture_Dungeon_Earth_Brazier");
-            case "arcane" -> new LightSet("Furniture_Human_Ruins_Torch", "Furniture_Human_Ruins_Lantern_Ceiling", "Furniture_Royal_Magic_Potion_Glow");
+            case "arcane" -> new LightSet("Furniture_Crude_Torch", "Furniture_Human_Ruins_Lantern_Ceiling", "Furniture_Royal_Magic_Potion_Glow");
             case "mine" -> new LightSet("Furniture_Crude_Torch", null, null);
-            case "mushroom" -> new LightSet("Plant_Crop_Mushroom_Glowing_Blue", null, "Plant_Crop_Mushroom_Glowing_Purple");
-            case "hive" -> new LightSet("Furniture_Scarak_Hive_Lantern", "Furniture_Scarak_Hive_Lamp", null);
-            case "temple_dark" -> new LightSet("Furniture_Temple_Dark_Candle", null, "Furniture_Temple_Dark_Brazier");
-            default -> new LightSet("Furniture_Ancient_Torch", "Deco_Lantern_Ceiling", null);
+            case "mushroom" -> new LightSet("Furniture_Crude_Torch", null, "Plant_Crop_Mushroom_Glowing_Purple");
+            case "hive" -> new LightSet("Furniture_Crude_Torch", "Furniture_Scarak_Hive_Lamp", null);
+            case "temple_dark" -> new LightSet("Furniture_Crude_Torch", null, "Furniture_Temple_Dark_Brazier");
+            default -> new LightSet("Furniture_Crude_Torch", "Deco_Lantern_Ceiling", null);
         };
     }
 

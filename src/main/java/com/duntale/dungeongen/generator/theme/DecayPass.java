@@ -3,6 +3,7 @@ package com.duntale.dungeongen.generator.theme;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -49,30 +50,74 @@ public class DecayPass {
     }
 
     /**
-     * Place overgrowth blocks (vines, moss, roots) on air cells that are
-     * adjacent to a solid block.
+     * Place overgrowth blocks on air cells based on structural position:
+     * <ul>
+     *   <li>Floor blocks (solid below): moss, rubble-like plants</li>
+     *   <li>Wall blocks (solid to the side): wall vines</li>
+     *   <li>Ceiling blocks (solid above): hanging vines — skipped when
+     *       {@code removeCeiling} is {@code true}</li>
+     * </ul>
      *
      * @param grid             the block grid to modify
      * @param palette          the block palette providing overgrowth blocks
      * @param overgrowthFactor density factor (0–1); actual placement rate
      *                         is scaled to {@code overgrowthFactor * 0.3}
+     * @param removeCeiling    whether ceilings have been stripped
      */
     public void applyOvergrowth(@Nonnull BlockGrid grid, @Nonnull BlockPalette palette,
-                                double overgrowthFactor) {
+                                double overgrowthFactor, boolean removeCeiling) {
         if (overgrowthFactor <= 0 || palette.getOvergrowthBlocks().length == 0) return;
         String[] blocks = palette.getOvergrowthBlocks();
 
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
                 for (int z = 0; z < grid.getDepth(); z++) {
-                    if (grid.isAir(x, y, z) && hasAdjacentSolid(grid, x, y, z)) {
-                        if (random.nextDouble() < overgrowthFactor * 0.3) {
-                            grid.set(x, y, z, blocks[random.nextInt(blocks.length)]);
-                        }
+                    if (!grid.isAir(x, y, z)) continue;
+                    if (random.nextDouble() >= overgrowthFactor * 0.3) continue;
+
+                    boolean solidBelow = grid.isSolid(x, y - 1, z);
+                    boolean solidAbove = grid.isSolid(x, y + 1, z);
+                    boolean solidSide = grid.isSolid(x - 1, y, z) || grid.isSolid(x + 1, y, z)
+                                     || grid.isSolid(x, y, z - 1) || grid.isSolid(x, y, z + 1);
+
+                    if (!solidBelow && !solidAbove && !solidSide) continue;
+
+                    // Pick a block that matches this structural position
+                    String block = pickOvergrowthBlock(blocks, solidBelow, solidAbove, solidSide, removeCeiling);
+                    if (block != null) {
+                        grid.set(x, y, z, block);
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Select an overgrowth block appropriate for the structural context.
+     * Returns {@code null} if no block fits the position.
+     */
+    @Nullable
+    private String pickOvergrowthBlock(@Nonnull String[] blocks,
+                                       boolean solidBelow, boolean solidAbove,
+                                       boolean solidSide, boolean removeCeiling) {
+        // Build a filtered list of candidates for this position
+        for (String block : blocks) {
+            boolean isFloorBlock = block.contains("Moss_Cave") || block.contains("Rubble")
+                                || block.contains("Crop_Mushroom");
+            boolean isWallBlock = block.contains("Vine_Wall") || block.contains("SpiderWeb");
+            boolean isCeilingBlock = block.contains("Hanging") || block.contains("Chains");
+
+            if (isFloorBlock && solidBelow) return block;
+            if (isWallBlock && solidSide) return block;
+            if (isCeilingBlock && solidAbove && !removeCeiling) return block;
+        }
+        // Fallback: if the block doesn't match any known category, place on floor
+        if (solidBelow) {
+            for (String block : blocks) {
+                if (!block.contains("Hanging") && !block.contains("Chains")) return block;
+            }
+        }
+        return null;
     }
 
     /**

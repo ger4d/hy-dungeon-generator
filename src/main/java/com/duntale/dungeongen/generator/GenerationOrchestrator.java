@@ -128,23 +128,23 @@ public class GenerationOrchestrator {
 
             // Phase 2b: Feature placement (pillars, water, lava, traps, secret walls)
             FeaturePlacer featurePlacer = new FeaturePlacer(seed + 5);
-            featurePlacer.placeFeatures(grid, graph, layout);
+            // featurePlacer.placeFeatures(grid, graph, layout);
 
             // Phase 2c: Erosion
-            carver.applyErosion(grid, layout.erosion());
+            // carver.applyErosion(grid, layout.erosion());
 
             LOGGER.atInfo().log("[DungeonGen] Features + erosion applied");
 
             // Phase 3: Theme decoration
             ThemeDecorator decorator = new ThemeDecorator(seed + 1, config.theme());
-            decorator.applyTheme(grid, graph);
+            decorator.applyTheme(grid, graph, layout.removeCeiling());
 
             LOGGER.atInfo().log("[DungeonGen] Theme applied: %s (decay=%.2f)",
                 palette, config.theme().decayFactor());
 
             // Phase 4: Prop placement
             PropPlacer propPlacer = new PropPlacer(seed + 2);
-            propPlacer.placeProps(grid, graph, palette);
+            propPlacer.placeProps(grid, graph, palette, layout.removeCeiling());
 
             // Phase 5: Light placement
             LightPlacer lightPlacer = new LightPlacer(seed + 3);

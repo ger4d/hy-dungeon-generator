@@ -37,12 +37,15 @@ public class PropPlacer {
      * @param graph       the dungeon layout graph
      * @param paletteName the theme palette name
      */
-    public void placeProps(@Nonnull BlockGrid grid, @Nonnull DungeonGraph graph, @Nonnull String paletteName) {
+    public void placeProps(@Nonnull BlockGrid grid, @Nonnull DungeonGraph graph,
+                            @Nonnull String paletteName, boolean removeCeiling) {
         List<PropRule> rules = getPropsForTheme(paletteName);
 
         for (Room room : graph.getRooms()) {
             for (PropRule rule : rules) {
                 if (!rule.isAllowedIn(room.getType())) continue;
+                // Skip ceiling props when ceiling is removed
+                if (removeCeiling && rule.getPlacement() == PropRule.Placement.CEILING) continue;
                 placePropsInRoom(grid, room, rule);
             }
         }
@@ -58,13 +61,14 @@ public class PropPlacer {
 
         switch (rule.getPlacement()) {
             case WALL_ALIGNED -> {
+                int wallY = floorY + rule.getYOffset();
                 for (int x = interiorMinX; x <= interiorMaxX && placed < rule.getMaxPerRoom(); x++) {
-                    if (tryPlaceWallProp(grid, x, floorY, interiorMinZ, 0, 0, -1, rule)) placed++;
-                    if (placed < rule.getMaxPerRoom() && tryPlaceWallProp(grid, x, floorY, interiorMaxZ, 0, 0, 1, rule)) placed++;
+                    if (tryPlaceWallProp(grid, x, wallY, interiorMinZ, 0, 0, -1, rule)) placed++;
+                    if (placed < rule.getMaxPerRoom() && tryPlaceWallProp(grid, x, wallY, interiorMaxZ, 0, 0, 1, rule)) placed++;
                 }
                 for (int z = interiorMinZ; z <= interiorMaxZ && placed < rule.getMaxPerRoom(); z++) {
-                    if (tryPlaceWallProp(grid, interiorMinX, floorY, z, -1, 0, 0, rule)) placed++;
-                    if (placed < rule.getMaxPerRoom() && tryPlaceWallProp(grid, interiorMaxX, floorY, z, 1, 0, 0, rule)) placed++;
+                    if (tryPlaceWallProp(grid, interiorMinX, wallY, z, -1, 0, 0, rule)) placed++;
+                    if (placed < rule.getMaxPerRoom() && tryPlaceWallProp(grid, interiorMaxX, wallY, z, 1, 0, 0, rule)) placed++;
                 }
             }
             case CORNER -> {
@@ -165,7 +169,7 @@ public class PropPlacer {
                 new RoomType[]{RoomType.BOSS}));
         props.add(new PropRule("Furniture_Ancient_Statue", PropRule.Placement.CENTER, 0.3, 1,
                 new RoomType[]{RoomType.HUB, RoomType.ENTRANCE}));
-        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.15, 2, null));
+        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.15, 2, null, 1));
         props.add(new PropRule("Furniture_Ancient_Table", PropRule.Placement.FLOOR, 0.2, 1,
                 new RoomType[]{RoomType.SAFE}));
         props.add(new PropRule("Deco_Iron_Chains_Vertical", PropRule.Placement.CEILING, 0.1, 2,
@@ -258,7 +262,7 @@ public class PropPlacer {
         props.add(new PropRule("Deco_SpiderWeb", PropRule.Placement.CORNER, 0.5, 4, null));
         props.add(new PropRule("Deco_Bone_Skulls", PropRule.Placement.CORNER, 0.2, 2,
                 new RoomType[]{RoomType.COMBAT, RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.1, 2, null));
+        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.1, 2, null, 1));
         return props;
     }
 }

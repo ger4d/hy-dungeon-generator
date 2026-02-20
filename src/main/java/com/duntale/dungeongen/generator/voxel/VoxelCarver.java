@@ -87,7 +87,7 @@ public class VoxelCarver {
 
         if (!solidFill) {
             // Step 7: Fill any remaining holes in walls (1x1 air cells with 3+ solid neighbours)
-            fillWalls(grid, "Rock_Cyrstal_Blue_Block");
+            fillWalls(grid, fillBlock);
         }
 
         return grid;

@@ -31,6 +31,7 @@ public class PropRule {
     private final double spawnChance;
     private final int maxPerRoom;
     private final RoomType[] allowedRooms;
+    private final int yOffset;
 
     /**
      * Create a new prop rule.
@@ -46,11 +47,31 @@ public class PropRule {
                     double spawnChance,
                     int maxPerRoom,
                     @Nullable RoomType[] allowedRooms) {
+        this(blockId, placement, spawnChance, maxPerRoom, allowedRooms, 0);
+    }
+
+    /**
+     * Create a new prop rule with a vertical offset.
+     *
+     * @param blockId      the block type ID for this prop
+     * @param placement    where in the room the prop may appear
+     * @param spawnChance  probability (0–1) of placement per valid position
+     * @param maxPerRoom   maximum instances in a single room
+     * @param allowedRooms room types that allow this prop ({@code null} = all)
+     * @param yOffset      Y offset relative to placement base (e.g. 1 for banners)
+     */
+    public PropRule(@Nonnull String blockId,
+                    @Nonnull Placement placement,
+                    double spawnChance,
+                    int maxPerRoom,
+                    @Nullable RoomType[] allowedRooms,
+                    int yOffset) {
         this.blockId = blockId;
         this.placement = placement;
         this.spawnChance = spawnChance;
         this.maxPerRoom = maxPerRoom;
         this.allowedRooms = allowedRooms;
+        this.yOffset = yOffset;
     }
 
     /** @return the block type ID for this prop. */
@@ -66,6 +87,9 @@ public class PropRule {
 
     /** @return the maximum number of this prop per room. */
     public int getMaxPerRoom() { return maxPerRoom; }
+
+    /** @return the Y offset relative to the placement base (0 = default). */
+    public int getYOffset() { return yOffset; }
 
     /**
      * Check whether this prop may appear in the given room type.

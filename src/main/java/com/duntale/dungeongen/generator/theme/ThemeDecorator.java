@@ -45,7 +45,7 @@ public class ThemeDecorator {
      * @param grid  the carved block grid to decorate
      * @param graph the dungeon layout graph (used for room metadata)
      */
-    public void applyTheme(@Nonnull BlockGrid grid, @Nonnull DungeonGraph graph) {
+    public void applyTheme(@Nonnull BlockGrid grid, @Nonnull DungeonGraph graph, boolean removeCeiling) {
         BlockPalette palette = BlockPalette.fromName(themeConfig.palette());
 
         // Phase 1: Material assignment — replace generic fill with themed blocks
@@ -57,7 +57,7 @@ public class ThemeDecorator {
         // Phase 3: Environmental passes
         DecayPass decayPass = new DecayPass(random.nextLong());
         decayPass.applyDecay(grid, palette, themeConfig.decayFactor());
-        decayPass.applyOvergrowth(grid, palette, themeConfig.overgrowthFactor());
+        decayPass.applyOvergrowth(grid, palette, themeConfig.overgrowthFactor(), removeCeiling);
         decayPass.applyRubble(grid, palette, themeConfig.decayFactor());
         decayPass.applyFlooding(grid, palette, themeConfig.floodingFactor());
     }
