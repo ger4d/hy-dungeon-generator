@@ -27,6 +27,7 @@ import java.util.Map;
  * @param waterFrequency     frequency of water pools (default: 0.05)
  * @param lavaFrequency      frequency of lava pools (default: 0.0)
  * @param trapDensity        density of traps (default: 0.08)
+ * @param floorTraps         if true, include breakable floor traps that drop players into the void (default: false)
  * @param secretWallChance   chance of secret walls (default: 0.05)
  * @param entrancePlacement  entrance placement strategy: edge/corner/center/random (default: "edge")
  * @param exitDistance        min normalised distance entrance→exit (default: 0.7)
@@ -64,6 +65,7 @@ public record LayoutConfig(
     double waterFrequency,
     double lavaFrequency,
     double trapDensity,
+    boolean floorTraps,
     double secretWallChance,
     // Entrance / Exit
     String entrancePlacement,
@@ -111,6 +113,7 @@ public record LayoutConfig(
             json.containsKey("waterFrequency")    ? JsonParser.toDouble(json.get("waterFrequency")) : d.waterFrequency(),
             json.containsKey("lavaFrequency")     ? JsonParser.toDouble(json.get("lavaFrequency"))  : d.lavaFrequency(),
             json.containsKey("trapDensity")       ? JsonParser.toDouble(json.get("trapDensity"))    : d.trapDensity(),
+            json.containsKey("floorTraps")        ? JsonParser.toBoolean(json.get("floorTraps"))     : d.floorTraps(),
             json.containsKey("secretWallChance")  ? JsonParser.toDouble(json.get("secretWallChance")): d.secretWallChance(),
             json.containsKey("entrancePlacement") ? JsonParser.toStringOrNull(json.get("entrancePlacement")) : d.entrancePlacement(),
             json.containsKey("exitDistance")      ? JsonParser.toDouble(json.get("exitDistance"))   : d.exitDistance(),
@@ -138,7 +141,7 @@ public record LayoutConfig(
             0.45, 4, 14, 20,                        // rooms
             "rectangular", 0.2,                      // shape
             2, 0.3, 0.15, false, 0.5,               // corridors
-            0.1, 0.05, 0.0, 0.08, 0.05,             // features
+            0.1, 0.05, 0.0, 0.08, false, 0.05,      // features
             "edge", 0.7,                             // entrance/exit
             0.4, 5, true, 0.1,                       // enemies
             0.1,                                     // architecture

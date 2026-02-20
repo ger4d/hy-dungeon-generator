@@ -42,6 +42,8 @@ public class DecayPass {
             for (int y = 0; y < grid.getHeight(); y++) {
                 for (int z = 0; z < grid.getDepth(); z++) {
                     if (grid.isExposed(x, y, z) && random.nextDouble() < decayFactor) {
+                        String block = grid.get(x, y, z);
+                        if (block != null && block.startsWith("Fluid_")) continue;
                         grid.set(x, y, z, variants[random.nextInt(variants.length)]);
                     }
                 }
@@ -85,7 +87,13 @@ public class DecayPass {
                     // Pick a block that matches this structural position
                     String block = pickOvergrowthBlock(blocks, solidBelow, solidAbove, solidSide, removeCeiling);
                     if (block != null) {
-                        grid.set(x, y, z, block);
+                        boolean isWallBlock = block.contains("Vine_Wall") || block.contains("SpiderWeb");
+                        if (isWallBlock) {
+                            int rotation = wallRotation(grid, x, y, z);
+                            grid.set(x, y, z, block, rotation);
+                        } else {
+                            grid.set(x, y, z, block);
+                        }
                     }
                 }
             }
@@ -95,6 +103,7 @@ public class DecayPass {
     /**
      * Select an overgrowth block appropriate for the structural context.
      * Returns {@code null} if no block fits the position.
+     * Also sets rotation on the grid for wall-mounted blocks.
      */
     @Nullable
     private String pickOvergrowthBlock(@Nonnull String[] blocks,
@@ -121,6 +130,26 @@ public class DecayPass {
     }
 
     /**
+     * Determine the yaw rotation index for a wall-mounted block based on
+     * which adjacent face is solid.
+     * <ul>
+     *   <li>0 = attached to north wall (-Z)</li>
+     *   <li>1 = attached to west wall (-X)</li>
+     *   <li>2 = attached to south wall (+Z)</li>
+     *   <li>3 = attached to east wall (+X)</li>
+     * </ul>
+     *
+     * @return rotation index (0–3), or 0 if no clear wall
+     */
+    static int wallRotation(@Nonnull BlockGrid grid, int x, int y, int z) {
+        if (grid.isSolid(x, y, z - 1)) return 0; // north
+        if (grid.isSolid(x - 1, y, z)) return 1; // west
+        if (grid.isSolid(x, y, z + 1)) return 2; // south
+        if (grid.isSolid(x + 1, y, z)) return 3; // east
+        return 0;
+    }
+
+    /**
      * Scatter rubble blocks on floor surfaces (air blocks with a solid
      * block directly below).
      *
@@ -135,12 +164,14 @@ public class DecayPass {
         String[] rubble = palette.getRubbleBlocks();
 
         for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 1; y < grid.getHeight(); y++) {
-                for (int z = 0; z < grid.getDepth(); z++) {
+            for (int z = 0; z < grid.getDepth(); z++) {
+                // Only place rubble at the lowest floor surface in each column
+                for (int y = 1; y < grid.getHeight(); y++) {
                     if (grid.isAir(x, y, z) && grid.isSolid(x, y - 1, z)) {
                         if (random.nextDouble() < decayFactor * 0.1) {
                             grid.set(x, y, z, rubble[random.nextInt(rubble.length)]);
                         }
+                        break; // Only the first (lowest) floor surface per column
                     }
                 }
             }

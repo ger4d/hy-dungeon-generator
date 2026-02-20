@@ -72,8 +72,15 @@ public class ThemeDecorator {
                 for (int z = 0; z < grid.getDepth(); z++) {
                     if (grid.isAir(x, y, z)) continue;
 
+                    // Skip fluid blocks — they were placed by FeaturePlacer
+                    // and must not be overwritten by material theming.
+                    String current = grid.get(x, y, z);
+                    if (current != null && current.startsWith("Fluid_")) continue;
+
                     boolean airAbove = grid.isAir(x, y + 1, z);
-                    boolean airBelow = grid.isAir(x, y - 1, z);
+                    // Treat out-of-bounds below (y == 0) as solid — the grid
+                    // bottom is structurally equivalent to bedrock.
+                    boolean airBelow = y > 0 && grid.isAir(x, y - 1, z);
                     boolean airSide = grid.isAir(x - 1, y, z) || grid.isAir(x + 1, y, z) ||
                                       grid.isAir(x, y, z - 1) || grid.isAir(x, y, z + 1);
 

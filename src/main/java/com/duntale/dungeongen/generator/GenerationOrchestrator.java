@@ -98,6 +98,7 @@ public class GenerationOrchestrator {
                 layout.windingCorridors(), layout.windingFactor(),
                 layout.pillarFrequency(), layout.waterFrequency(), layout.lavaFrequency(),
                 Math.max(0.0, Math.min(0.5, layout.trapDensity() * cScale)),
+                layout.floorTraps(),
                 Math.max(0.0, Math.min(0.3, layout.secretWallChance() * cScale)),
                 layout.entrancePlacement(), layout.exitDistance(),
                 Math.max(0.0, Math.min(1.0, layout.enemyDensity() * cScale)),
@@ -128,7 +129,7 @@ public class GenerationOrchestrator {
 
             // Phase 2b: Feature placement (pillars, water, lava, traps, secret walls)
             FeaturePlacer featurePlacer = new FeaturePlacer(seed + 5);
-            // featurePlacer.placeFeatures(grid, graph, layout);
+            featurePlacer.placeFeatures(grid, graph, layout);
 
             // Phase 2c: Erosion
             // carver.applyErosion(grid, layout.erosion());
