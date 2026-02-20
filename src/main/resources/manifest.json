@@ -1,0 +1,17 @@
+{
+    "Group": "com.duntale",
+    "Name": "DungeonGen",
+    "Version": "1.0.0-SNAPSHOT",
+    "Description": "Procedural dungeon generator with REST API",
+    "Authors": [
+        {
+            "Name": "Duntale Team"
+        }
+    ],
+    "Main": "com.duntale.dungeongen.DungeonGenPlugin",
+    "ServerVersion": "2026.02.18-f3b8fff95",
+    "Dependencies": {},
+    "OptionalDependencies": {},
+    "DisabledByDefault": false,
+    "IncludesAssetPack": false
+}

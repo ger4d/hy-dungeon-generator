@@ -1,0 +1,4 @@
+# Java
+build/
+bin/
+.gradle/
