@@ -155,6 +155,21 @@ public class Room {
     }
 
     // ============================================
+    // Utility methods
+    // ============================================
+
+    /**
+     * Check whether a grid-space coordinate is within this room's bounds.
+     *
+     * @param x X coordinate
+     * @param z Z coordinate
+     * @return {@code true} if the position is inside the room
+     */
+    public boolean contains(int x, int z) {
+        return x >= this.x && x < this.x + width && z >= this.z && z < this.z + depth;
+    }
+
+    // ============================================
     // Feature flags
     // ============================================
 

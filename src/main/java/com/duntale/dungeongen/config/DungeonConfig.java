@@ -17,6 +17,7 @@ import com.duntale.dungeongen.util.JsonParser;
  * @param theme    theme / visual palette parameters
  * @param pacing   pacing / tension curve parameters
  * @param assemble whether to place the dungeon in-world after generation
+ * @param clear    whether to run a /clear command before generation to wipe the area
  * @since 1.0.0
  */
 public record DungeonConfig(
@@ -27,7 +28,8 @@ public record DungeonConfig(
     @Nonnull LayoutConfig layout,
     @Nonnull ThemeConfig theme,
     @Nonnull PacingConfig pacing,
-    boolean assemble
+    boolean assemble,
+    boolean clear
 ) {
 
     /**
@@ -82,7 +84,11 @@ public record DungeonConfig(
             ? JsonParser.toBoolean(json.get("assemble"))
             : d.assemble();
 
-        return new DungeonConfig(seed, preset, worldName, origin, layout, theme, pacing, assemble);
+        boolean clear = json.containsKey("clear")
+            ? JsonParser.toBoolean(json.get("clear"))
+            : d.clear();
+
+        return new DungeonConfig(seed, preset, worldName, origin, layout, theme, pacing, assemble, clear);
     }
 
     /**
@@ -100,6 +106,7 @@ public record DungeonConfig(
             LayoutConfig.defaults(),
             ThemeConfig.defaults(),
             PacingConfig.defaults(),
+            false,
             false
         );
     }

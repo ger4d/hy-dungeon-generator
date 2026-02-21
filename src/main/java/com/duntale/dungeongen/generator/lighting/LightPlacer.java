@@ -38,6 +38,9 @@ public class LightPlacer {
     /** All placed wall-torch positions; checked for min-distance enforcement. */
     private final List<int[]> placedTorches = new ArrayList<>();
 
+    /** Next side to place a torch on -1 left, 1 right */
+    private int wallSide = -1;
+
     /**
      * Create a new light placer.
      *
@@ -66,7 +69,11 @@ public class LightPlacer {
         }
 
         for (Corridor corridor : graph.getCorridors()) {
-            placeLightsInCorridor(grid, corridor, lights);
+            placeLightsInCorridor(
+                grid, corridor,
+                graph.getRoom(corridor.getFromRoomId()), graph.getRoom(corridor.getToRoomId()),
+                lights
+            );
         }
     }
 
@@ -227,32 +234,52 @@ public class LightPlacer {
     // ================================================================
 
     private void placeLightsInCorridor(@Nonnull BlockGrid grid, @Nonnull Corridor corridor,
+                                       @Nonnull Room fromRoom, @Nonnull Room toRoom,
                                        @Nonnull LightSet lights) {
         List<Vec3i> path = corridor.getPath();
-        int totalLength = 0;
 
         for (int i = 0; i < path.size() - 1; i++) {
             Vec3i from = path.get(i);
             Vec3i to = path.get(i + 1);
+
+            // Skip if both endpoints are inside the same room
+            if (fromRoom.contains(to.x(), to.z()) ||
+                toRoom.contains(from.x(), from.z())) {
+                continue;
+            }
+                       
             int dx = Integer.signum(to.x() - from.x());
             int dz = Integer.signum(to.z() - from.z());
             int steps = Math.max(Math.abs(to.x() - from.x()), Math.abs(to.z() - from.z()));
 
+            int localLeght = 0;
+
             for (int s = 0; s <= steps; s++) {
-                totalLength++;
-                if (totalLength % 6 != 0) continue;
 
                 int x = from.x() + dx * s;
                 int y = from.y() + 3; // torch at height +3
                 int z = from.z() + dz * s;
-
+                
                 // Try to place on a wall adjacent to the corridor
-                int halfW = corridor.getWidth() / 2;
-                if (dx != 0) {
-                    tryPlaceWallLight(grid, x, y, z - halfW, 0, 0, -1, lights.wallLight());
-                } else {
-                    tryPlaceWallLight(grid, x - halfW, y, z, -1, 0, 0, lights.wallLight());
+                // TODO: This doesn't work well with whinding corridors
+                int halfW = corridor.getWidth() / 2 * wallSide;
+                int torchX = x - (dx == 0 ? halfW : 0);
+                int torchZ = z - (dz == 0 ? halfW : 0);
+                int wallDx = dx == 0 ? - 1 * wallSide : 0;
+                int wallDz = dz == 0 ? -1 * wallSide : 0;
+
+                if (localLeght > 0 && localLeght++ % 6 != 0) continue; // Space torches every 6 blocks along the corridor) {
+
+                if (fromRoom.contains(torchX, torchZ) || toRoom.contains(torchX, torchZ)) {
+                    // Don't place torches on walls inside rooms
+                    continue;
                 }
+
+                ++localLeght;
+
+                tryPlaceWallLight(grid, torchX, y, torchZ, wallDx, 0, wallDz, lights.wallLight());
+
+                wallSide *= -1;
             }
         }
     }
@@ -269,17 +296,15 @@ public class LightPlacer {
     private void tryPlaceWallLight(@Nonnull BlockGrid grid, int x, int y, int z,
                                    int wallDx, int wallDy, int wallDz,
                                    @Nonnull String lightBlock) {
-        if (x < 0 || y < 0 || z < 0
-                || x >= grid.getWidth() || y >= grid.getHeight() || z >= grid.getDepth()) return;
-        if (!grid.isAir(x, y, z)) return;
+        if (!grid.isAir(x, y, z) || !grid.canPlace(x, y, z)) return;
         if (!grid.isBlock(x + wallDx, y + wallDy, z + wallDz)) return;
 
         // Enforce minimum distance from all previously placed torches
-        for (int[] pos : placedTorches) {
-            int dx = Math.abs(x - pos[0]);
-            int dz = Math.abs(z - pos[1]);
-            if (dx + dz < MIN_TORCH_SPACING) return; // Too close — skip
-        }
+        // for (int[] pos : placedTorches) {
+        //     int dx = Math.abs(x - pos[0]);
+        //     int dz = Math.abs(z - pos[1]);
+        //     if (dx + dz < MIN_TORCH_SPACING) return; // Too close — skip
+        // }
 
         // Compute yaw rotation from wall direction:
         // 0=north(-Z), 1=west(-X), 2=south(+Z), 3=east(+X)

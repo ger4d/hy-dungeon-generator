@@ -205,10 +205,4 @@ public class DecayPass {
             }
         }
     }
-
-    private boolean hasAdjacentSolid(@Nonnull BlockGrid grid, int x, int y, int z) {
-        return grid.isSolid(x - 1, y, z) || grid.isSolid(x + 1, y, z) ||
-               grid.isSolid(x, y - 1, z) || grid.isSolid(x, y + 1, z) ||
-               grid.isSolid(x, y, z - 1) || grid.isSolid(x, y, z + 1);
-    }
 }

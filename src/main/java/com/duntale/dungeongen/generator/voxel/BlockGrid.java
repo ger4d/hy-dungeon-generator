@@ -40,6 +40,18 @@ public class BlockGrid {
     }
 
     /**
+     * Check whether a block can be placed at the given position.
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
+     * @return {@code true} if the position is within bounds
+     */
+    public boolean canPlace(int x, int y, int z) {
+        return x >= 0 && x < width && y >= 0 && y < height && z >= 0 && z < depth;
+    }
+
+    /**
      * Set a block at the given position with rotation.
      * Out-of-bounds writes are silently ignored.
      *
@@ -50,7 +62,7 @@ public class BlockGrid {
      * @param rotation rotation index
      */
     public void set(int x, int y, int z, @Nullable String blockId, int rotation) {
-        if (x < 0 || x >= width || y < 0 || y >= height || z < 0 || z >= depth) return;
+        if (!canPlace(x, y, z)) return;
         if (blocks[x][y][z] == null && blockId != null) blockCount++;
         if (blocks[x][y][z] != null && blockId == null) blockCount--;
         blocks[x][y][z] = blockId;
@@ -79,7 +91,7 @@ public class BlockGrid {
      */
     @Nullable
     public String get(int x, int y, int z) {
-        if (x < 0 || x >= width || y < 0 || y >= height || z < 0 || z >= depth) return null;
+        if (!canPlace(x, y, z)) return null;
         return blocks[x][y][z];
     }
 
@@ -92,7 +104,7 @@ public class BlockGrid {
      * @return the rotation index, or 0 if out of bounds
      */
     public int getRotation(int x, int y, int z) {
-        if (x < 0 || x >= width || y < 0 || y >= height || z < 0 || z >= depth) return 0;
+        if (!canPlace(x, y, z)) return 0;
         return rotations[x][y][z];
     }
 

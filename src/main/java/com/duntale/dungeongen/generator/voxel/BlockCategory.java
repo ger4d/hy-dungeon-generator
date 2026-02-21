@@ -99,7 +99,6 @@ public enum BlockCategory {
 
         // ---- Floor decorations (require BLOCK below) ----
         register(FLOOR_DECO,
-            "Plant_Moss_Cave_Green",
             "Plant_Vine_Hanging", "Plant_Vine_Green_Hanging",
             "Rubble_Stone", "Rubble_Stone_Medium", "Rubble_Stone_Mossy",
             "Rubble_Volcanic", "Rubble_Volcanic_Medium",
@@ -149,8 +148,7 @@ public enum BlockCategory {
             "Bench_Furnace", "Bench_Armory",
             "Deco_Hive",
             "Deco_Iron_Chains_Vertical",
-            "Rock_Crystal_Blue_Large", "Rock_Crystal_Purple_Large",
-            "Wood_Darkwood_Beam"
+            "Rock_Crystal_Blue_Large", "Rock_Crystal_Purple_Large"
         );
 
         // All structural blocks (Rock_*, Soil_*, Plant_Moss_Block_*,

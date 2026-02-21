@@ -3,6 +3,8 @@ package com.duntale.dungeongen.generator.layout;
 import com.duntale.dungeongen.config.LayoutConfig;
 import com.duntale.dungeongen.config.Vec3i;
 
+import com.hypixel.hytale.logger.HytaleLogger;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
@@ -27,6 +29,8 @@ import java.util.*;
  * @since 1.1.0
  */
 public class LayoutGenerator {
+
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private final Random random;
     private final LayoutConfig config;
@@ -58,12 +62,18 @@ public class LayoutGenerator {
         // Phase 1: Random placement
         List<Room> rooms = placeRooms();
         for (Room room : rooms) {
+            LOGGER.atInfo().log("[DungeonGen] Placed room %d at (%d, %d) size (%d x %d) center (%d, %d)",
+                room.getId(), room.getX(), room.getZ(), room.getWidth(), room.getDepth(), room.centerX(), room.centerZ());
             graph.addRoom(room);
         }
 
         // Phase 2: Greedy MST corridors
         List<Corridor> mstCorridors = connectRooms(rooms);
         for (Corridor c : mstCorridors) {
+            LOGGER.atInfo().log("[DungeonGen] Carved corridor from room %d to room %d with %d waypoints start (%d, %d) end (%d, %d)",
+                c.getFromRoomId(), c.getToRoomId(), c.getPath().size(),
+                c.getPath().get(0).x(), c.getPath().get(0).z(),
+                c.getPath().get(c.getPath().size() - 1).x(), c.getPath().get(c.getPath().size() - 1).z());
             graph.addCorridor(c);
         }
 
