@@ -18,6 +18,7 @@ public class Corridor {
     private final int toRoomId;
     private final List<Vec3i> path;
     private final int width;
+    private final CorridorType type;
 
     /**
      * Create a new corridor.
@@ -26,12 +27,15 @@ public class Corridor {
      * @param toRoomId   destination room ID
      * @param path       ordered waypoints from source centre to destination centre
      * @param width      corridor width in blocks (default: 3)
+     * @param type       corridor classification (MST, BRANCH, LOOP)
      */
-    public Corridor(int fromRoomId, int toRoomId, @Nonnull List<Vec3i> path, int width) {
+    public Corridor(int fromRoomId, int toRoomId, @Nonnull List<Vec3i> path, int width,
+                    @Nonnull CorridorType type) {
         this.fromRoomId = fromRoomId;
         this.toRoomId = toRoomId;
         this.path = List.copyOf(path);
         this.width = width;
+        this.type = type;
     }
 
     /** @return the source room ID. */
@@ -49,9 +53,13 @@ public class Corridor {
     /** @return the corridor width in blocks. */
     public int getWidth() { return width; }
 
+    /** @return the corridor type classification. */
+    @Nonnull
+    public CorridorType getType() { return type; }
+
     @Override
     public String toString() {
         return "Corridor{from=" + fromRoomId + ", to=" + toRoomId +
-               ", waypoints=" + path.size() + ", width=" + width + "}";
+               ", type=" + type + ", waypoints=" + path.size() + ", width=" + width + "}";
     }
 }

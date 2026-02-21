@@ -124,9 +124,9 @@ public enum BlockCategory {
             "Furniture_Ancient_Candle",
             "Furniture_Dungeon_Earth_Brazier",
             "Furniture_Royal_Magic_Potion_Glow",
-            "Forniture_Jungle_Brazier",
-            "Forniture_Human_Ruins_Brazier",
-            "Forniture_Temple_Dark_Brazier",
+            "Furniture_Jungle_Brazier",
+            "Furniture_Human_Ruins_Brazier",
+            "Furniture_Temple_Dark_Brazier",
             "Deco_Lantern_Ceiling",
             "Plant_Crop_Mushroom_Glowing_Purple",
             "Plant_Crop_Mushroom_Glowing_Blue"

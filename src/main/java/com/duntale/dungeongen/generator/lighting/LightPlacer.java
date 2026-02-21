@@ -2,6 +2,7 @@ package com.duntale.dungeongen.generator.lighting;
 
 import com.duntale.dungeongen.config.Vec3i;
 import com.duntale.dungeongen.generator.layout.Corridor;
+import com.duntale.dungeongen.generator.layout.CorridorType;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.Room;
 import com.duntale.dungeongen.generator.layout.RoomType;
@@ -238,6 +239,10 @@ public class LightPlacer {
                                        @Nonnull LightSet lights) {
         List<Vec3i> path = corridor.getPath();
 
+        int lightDensity = 6; // Place a torch every 6 blocks along the corridor
+
+        int localLeght = 0;
+
         for (int i = 0; i < path.size() - 1; i++) {
             Vec3i from = path.get(i);
             Vec3i to = path.get(i + 1);
@@ -252,7 +257,11 @@ public class LightPlacer {
             int dz = Integer.signum(to.z() - from.z());
             int steps = Math.max(Math.abs(to.x() - from.x()), Math.abs(to.z() - from.z()));
 
-            int localLeght = 0;
+            // L_SHAPED corridors only have 3 paths, so it makes sense to reset
+            // so a torch is placed at the corridor begining
+            if (corridor.getType() == CorridorType.L_SHAPED) {
+                localLeght = 0;
+            }
 
             for (int s = 0; s <= steps; s++) {
 
@@ -268,7 +277,7 @@ public class LightPlacer {
                 int wallDx = dx == 0 ? - 1 * wallSide : 0;
                 int wallDz = dz == 0 ? -1 * wallSide : 0;
 
-                if (localLeght > 0 && localLeght++ % 6 != 0) continue; // Space torches every 6 blocks along the corridor) {
+                if (localLeght > 0 && localLeght++ % lightDensity != 0) continue; // Space torches every 6 blocks along the corridor) {
 
                 if (fromRoom.contains(torchX, torchZ) || toRoom.contains(torchX, torchZ)) {
                     // Don't place torches on walls inside rooms
@@ -340,13 +349,13 @@ public class LightPlacer {
             case "volcanic" -> new LightSet(
                 "Wood_Torch_Wall",
                 null,
-                new FloorLight("Forniture_Jungle_Brazier", false),
+                new FloorLight("Furniture_Jungle_Brazier", false),
                 "Furniture_Human_Ruins_Torch"
             );
             case "arcane" -> new LightSet(
                 "Wood_Torch_Wall",
                 "Furniture_Human_Ruins_Lantern_Ceiling",
-                new FloorLight("Forniture_Human_Ruins_Brazier", false),
+                new FloorLight("Furniture_Human_Ruins_Brazier", false),
                 "Furniture_Human_Ruins_Torch"
             );
             case "mine" -> new LightSet(
@@ -370,7 +379,7 @@ public class LightPlacer {
             case "temple_dark" -> new LightSet(
                 "Wood_Torch_Wall",
                 null,
-                new FloorLight("Forniture_Temple_Dark_Brazier", false),
+                new FloorLight("Furniture_Temple_Dark_Brazier", false),
                 "Furniture_Human_Ruins_Torch"
             );
             default -> new LightSet(

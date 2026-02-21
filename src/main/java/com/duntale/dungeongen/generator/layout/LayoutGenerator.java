@@ -62,7 +62,7 @@ public class LayoutGenerator {
         // Phase 1: Random placement
         List<Room> rooms = placeRooms();
         for (Room room : rooms) {
-            LOGGER.atInfo().log("[DungeonGen] Placed room %d at (%d, %d) size (%d x %d) center (%d, %d)",
+            LOGGER.atFine().log("[DungeonGen] Placed room %d at (%d, %d) size (%d x %d) center (%d, %d)",
                 room.getId(), room.getX(), room.getZ(), room.getWidth(), room.getDepth(), room.centerX(), room.centerZ());
             graph.addRoom(room);
         }
@@ -70,7 +70,7 @@ public class LayoutGenerator {
         // Phase 2: Greedy MST corridors
         List<Corridor> mstCorridors = connectRooms(rooms);
         for (Corridor c : mstCorridors) {
-            LOGGER.atInfo().log("[DungeonGen] Carved corridor from room %d to room %d with %d waypoints start (%d, %d) end (%d, %d)",
+            LOGGER.atFine().log("[DungeonGen] Carved corridor from room %d to room %d with %d waypoints start (%d, %d) end (%d, %d)",
                 c.getFromRoomId(), c.getToRoomId(), c.getPath().size(),
                 c.getPath().get(0).x(), c.getPath().get(0).z(),
                 c.getPath().get(c.getPath().size() - 1).x(), c.getPath().get(c.getPath().size() - 1).z());
@@ -253,7 +253,7 @@ public class LayoutGenerator {
      *
      * @param a source room
      * @param b destination room
-     * @return the carved corridor
+     * @return the carved corridor (type determined by path algorithm)
      */
     @Nonnull
     private Corridor carveCorridor(@Nonnull Room a, @Nonnull Room b) {
@@ -265,14 +265,17 @@ public class LayoutGenerator {
         int bz = b.centerZ();
 
         List<Vec3i> path;
+        CorridorType type;
 
         if (config.windingCorridors() && config.windingFactor() > 0.01) {
             path = carveWindingPath(ax, ay, az, bx, by, bz);
+            type = CorridorType.WINDING;
         } else {
             path = carveLShapedPath(ax, ay, az, bx, by, bz);
+            type = CorridorType.L_SHAPED;
         }
 
-        return new Corridor(a.getId(), b.getId(), path, config.corridorWidth());
+        return new Corridor(a.getId(), b.getId(), path, config.corridorWidth(), type);
     }
 
     /**
@@ -394,7 +397,7 @@ public class LayoutGenerator {
 
             Corridor branch = new Corridor(
                 corridor.getFromRoomId(), corridor.getToRoomId(),
-                branchPath, config.corridorWidth());
+                branchPath, config.corridorWidth(), CorridorType.L_SHAPED);
             graph.addCorridor(branch);
         }
     }

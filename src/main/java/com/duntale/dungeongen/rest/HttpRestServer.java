@@ -154,6 +154,8 @@ public class HttpRestServer {
                         }
                     });
                     clearFuture.get(FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+                    // Clear is queued; wait for server to finish executing it
+                    Thread.sleep(3000);
                 } else {
                     LOGGER.atWarning().log("[DungeonGen-REST] Cannot clear: world '%s' not found", config.worldName());
                 }
