@@ -2,3 +2,5 @@
 build/
 bin/
 .gradle/
+deploy.sh
+test.sh

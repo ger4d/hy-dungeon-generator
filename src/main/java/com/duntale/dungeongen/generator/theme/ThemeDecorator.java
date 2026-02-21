@@ -3,6 +3,7 @@ package com.duntale.dungeongen.generator.theme;
 import com.duntale.dungeongen.config.ThemeConfig;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.Room;
+import com.duntale.dungeongen.generator.voxel.BlockCategory;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
 
 import javax.annotation.Nonnull;
@@ -70,24 +71,23 @@ public class ThemeDecorator {
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
                 for (int z = 0; z < grid.getDepth(); z++) {
-                    if (grid.isAir(x, y, z)) continue;
+                    // Only re-theme structural blocks — skip fluids, traps,
+                    // and any other non-BLOCK content placed by FeaturePlacer.
+                    if (!grid.isBlock(x, y, z)) continue;
 
-                    // Skip fluid blocks — they were placed by FeaturePlacer
-                    // and must not be overwritten by material theming.
-                    String current = grid.get(x, y, z);
-                    if (current != null && current.startsWith("Fluid_")) continue;
-
-                    boolean airAbove = grid.isAir(x, y + 1, z);
+                    // boolean airAbove = grid.isAir(x, y + 1, z);
                     // Treat out-of-bounds below (y == 0) as solid — the grid
                     // bottom is structurally equivalent to bedrock.
-                    boolean airBelow = y > 0 && grid.isAir(x, y - 1, z);
+                    // boolean airBelow = y > 0 && grid.isAir(x, y - 1, z);
                     boolean airSide = grid.isAir(x - 1, y, z) || grid.isAir(x + 1, y, z) ||
                                       grid.isAir(x, y, z - 1) || grid.isAir(x, y, z + 1);
 
-                    if (airAbove && !airBelow) {
+                    // if (!airAbove && !airBelow) {
+                    if (y == 0) {
                         // Floor block
                         grid.set(x, y, z, palette.getFloor());
-                    } else if (airBelow && !airAbove) {
+                    // } else if (airBelow && !airAbove) {
+                    } else if (y == grid.getHeight() - 1) {
                         // Ceiling block
                         grid.set(x, y, z, palette.getCeiling());
                     } else if (airSide) {
@@ -111,6 +111,10 @@ public class ThemeDecorator {
                             @Nonnull BlockPalette palette) {
         for (Room room : graph.getRooms()) {
             if (room.getWidth() < 8 || room.getDepth() < 8) continue;
+
+            // TODO: Pass pillar frequency from config and use it to probabilistically skip pillar placement in some rooms.
+            // if (config.pillarFrequency() <= 0.01) return;
+            if (random.nextDouble() >= 0.15) continue;
 
             // Place pillars 2 blocks in from each corner of the room interior
             int[][] pillarOffsets = {{2, 2}, {2, -3}, {-3, 2}, {-3, -3}};

@@ -127,7 +127,7 @@ public class GenerationOrchestrator {
 
             LOGGER.atInfo().log("[DungeonGen] Voxel carve complete: %d blocks", grid.getBlockCount());
 
-            // Phase 2b: Feature placement (pillars, water, lava, traps, secret walls)
+            // Phase 2b: Feature placement (water, lava, traps, secret walls)
             FeaturePlacer featurePlacer = new FeaturePlacer(seed + 5);
             featurePlacer.placeFeatures(grid, graph, layout);
 

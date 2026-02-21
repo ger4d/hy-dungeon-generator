@@ -4,6 +4,7 @@ import com.duntale.dungeongen.config.LayoutConfig;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.Room;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
+import com.hypixel.hytale.logger.HytaleLogger;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -19,6 +20,8 @@ import java.util.Random;
  * @since 1.1.0
  */
 public class FeaturePlacer {
+
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
     private static final String PILLAR_BLOCK = "Rock_Stone_Brick";
     private static final String WATER_BLOCK = "Fluid_Water";
@@ -63,11 +66,12 @@ public class FeaturePlacer {
      */
     public void placeFeatures(@Nonnull BlockGrid grid, @Nonnull DungeonGraph graph,
                               @Nonnull LayoutConfig config) {
-        placePillars(grid, graph, config);
+        // Pillars already placed during theme decoration pass since they require themed blocks to look good.
+        // placePillars(grid, graph, config);
         placeWaterPools(grid, graph, config);
         placeLavaPools(grid, graph, config);
         placeTraps(grid, graph, config);
-        placeSecretWalls(grid, graph, config);
+        // placeSecretWalls(grid, graph, config);
     }
 
     // ============================================
@@ -122,7 +126,7 @@ public class FeaturePlacer {
                     int px = startX + dx;
                     int pz = startZ + dz;
                     // Replace floor block with water (flush pool)
-                    if (grid.isSolid(px, room.getY(), pz)) {
+                    if (grid.isBlock(px, room.getY(), pz)) {
                         grid.set(px, room.getY(), pz, WATER_BLOCK);
                     }
                 }
@@ -151,7 +155,7 @@ public class FeaturePlacer {
                 for (int dz = 0; dz < poolD; dz++) {
                     int px = startX + dx;
                     int pz = startZ + dz;
-                    if (grid.isSolid(px, room.getY(), pz)) {
+                    if (grid.isBlock(px, room.getY(), pz)) {
                         grid.set(px, room.getY(), pz, LAVA_BLOCK);
                     }
                 }
@@ -169,7 +173,7 @@ public class FeaturePlacer {
 
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int z = 0; z < grid.getDepth(); z++) {
-                if (!grid.isSolid(x, 0, z)) continue;
+                if (!grid.isBlock(x, 0, z)) continue;
                 if (!grid.isAir(x, 1, z)) continue;
 
                 if (random.nextDouble() >= config.trapDensity() * 0.05) continue;
@@ -182,8 +186,8 @@ public class FeaturePlacer {
                 }
 
                 // Regular traps — placed above the floor at Y=1
-                boolean hasAdjacentWall = grid.isSolid(x, 1, z - 1) || grid.isSolid(x, 1, z + 1)
-                                       || grid.isSolid(x - 1, 1, z) || grid.isSolid(x + 1, 1, z);
+                boolean hasAdjacentWall = grid.isBlock(x, 1, z - 1) || grid.isBlock(x, 1, z + 1)
+                                       || grid.isBlock(x - 1, 1, z) || grid.isBlock(x + 1, 1, z);
 
                 // Wall-mounted spike traps (can go up to floorY+2) next to walls
                 if (hasAdjacentWall && random.nextDouble() < 0.4) {
@@ -196,6 +200,7 @@ public class FeaturePlacer {
                 } else {
                     // Floor-level regular trap at Y=1
                     String trap = REGULAR_TRAPS[random.nextInt(REGULAR_TRAPS.length)];
+                    LOGGER.atInfo().log("[DungeonGen] Placing trap %s at (%d, %d, %d)", trap, x, 1, z);
                     grid.set(x, 1, z, trap);
                 }
             }
@@ -212,10 +217,10 @@ public class FeaturePlacer {
      * </ul>
      */
     private int wallRotation(@Nonnull BlockGrid grid, int x, int y, int z) {
-        if (grid.isSolid(x, y, z - 1)) return 0;
-        if (grid.isSolid(x - 1, y, z)) return 1;
-        if (grid.isSolid(x, y, z + 1)) return 2;
-        if (grid.isSolid(x + 1, y, z)) return 3;
+        if (grid.isBlock(x, y, z - 1)) return 0;
+        if (grid.isBlock(x - 1, y, z)) return 1;
+        if (grid.isBlock(x, y, z + 1)) return 2;
+        if (grid.isBlock(x + 1, y, z)) return 3;
         return 0;
     }
 

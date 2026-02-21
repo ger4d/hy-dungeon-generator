@@ -41,9 +41,9 @@ public class DecayPass {
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
                 for (int z = 0; z < grid.getDepth(); z++) {
-                    if (grid.isExposed(x, y, z) && random.nextDouble() < decayFactor) {
-                        String block = grid.get(x, y, z);
-                        if (block != null && block.startsWith("Fluid_")) continue;
+                    if (grid.isBlock(x, y, z) &&
+                        grid.isExposed(x, y, z) &&
+                        random.nextDouble() < decayFactor) {
                         grid.set(x, y, z, variants[random.nextInt(variants.length)]);
                     }
                 }
@@ -77,10 +77,13 @@ public class DecayPass {
                     if (!grid.isAir(x, y, z)) continue;
                     if (random.nextDouble() >= overgrowthFactor * 0.3) continue;
 
-                    boolean solidBelow = grid.isSolid(x, y - 1, z);
-                    boolean solidAbove = grid.isSolid(x, y + 1, z);
-                    boolean solidSide = grid.isSolid(x - 1, y, z) || grid.isSolid(x + 1, y, z)
-                                     || grid.isSolid(x, y, z - 1) || grid.isSolid(x, y, z + 1);
+                    // Never place overgrowth on or adjacent to fluid
+                    if (grid.isFluid(x, y - 1, z)) continue;
+
+                    boolean solidBelow = grid.isBlock(x, y - 1, z);
+                    boolean solidAbove = grid.isBlock(x, y + 1, z);
+                    boolean solidSide = grid.isBlock(x - 1, y, z) || grid.isBlock(x + 1, y, z)
+                                     || grid.isBlock(x, y, z - 1) || grid.isBlock(x, y, z + 1);
 
                     if (!solidBelow && !solidAbove && !solidSide) continue;
 
@@ -142,10 +145,10 @@ public class DecayPass {
      * @return rotation index (0–3), or 0 if no clear wall
      */
     static int wallRotation(@Nonnull BlockGrid grid, int x, int y, int z) {
-        if (grid.isSolid(x, y, z - 1)) return 0; // north
-        if (grid.isSolid(x - 1, y, z)) return 1; // west
-        if (grid.isSolid(x, y, z + 1)) return 2; // south
-        if (grid.isSolid(x + 1, y, z)) return 3; // east
+        if (grid.isBlock(x, y, z - 1)) return 0; // north
+        if (grid.isBlock(x - 1, y, z)) return 1; // west
+        if (grid.isBlock(x, y, z + 1)) return 2; // south
+        if (grid.isBlock(x + 1, y, z)) return 3; // east
         return 0;
     }
 
@@ -167,7 +170,7 @@ public class DecayPass {
             for (int z = 0; z < grid.getDepth(); z++) {
                 // Only place rubble at the lowest floor surface in each column
                 for (int y = 1; y < grid.getHeight(); y++) {
-                    if (grid.isAir(x, y, z) && grid.isSolid(x, y - 1, z)) {
+                    if (grid.isAir(x, y, z) && grid.isBlock(x, y - 1, z)) {
                         if (random.nextDouble() < decayFactor * 0.1) {
                             grid.set(x, y, z, rubble[random.nextInt(rubble.length)]);
                         }

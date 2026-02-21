@@ -70,7 +70,7 @@ public class SpawnPointPlacer {
                 int sx = interiorMinX + random.nextInt(Math.max(1, interiorMaxX - interiorMinX + 1));
                 int sz = interiorMinZ + random.nextInt(Math.max(1, interiorMaxZ - interiorMinZ + 1));
 
-                if (grid.isAir(sx, floorY, sz) && grid.isSolid(sx, floorY - 1, sz)) {
+                if (grid.isAir(sx, floorY, sz) && grid.isBlock(sx, floorY - 1, sz)) {
                     spawnPoints.add(new SpawnPoint(sx, floorY, sz, spawnerTable, tier));
                     placed++;
                 }

@@ -121,6 +121,45 @@ public class BlockGrid {
     }
 
     /**
+     * Get the {@link BlockCategory} for the cell at the given position.
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
+     * @return the category; {@link BlockCategory#AIR} for empty/OOB cells
+     */
+    @Nonnull
+    public BlockCategory getCategory(int x, int y, int z) {
+        String id = get(x, y, z);
+        return id == null ? BlockCategory.AIR : BlockCategory.of(id);
+    }
+
+    /**
+     * Check whether a position holds a structural block — one that
+     * provides physical support for wall-mounted or floor-placed assets.
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
+     * @return {@code true} if the cell is a structural block
+     */
+    public boolean isBlock(int x, int y, int z) {
+        return getCategory(x, y, z) == BlockCategory.BLOCK;
+    }
+
+    /**
+     * Check whether a position holds a fluid block.
+     *
+     * @param x X coordinate
+     * @param y Y coordinate
+     * @param z Z coordinate
+     * @return {@code true} if the position is a fluid block
+     */
+    public boolean isFluid(int x, int y, int z) {
+        return getCategory(x, y, z) == BlockCategory.FLUID;
+    }
+
+    /**
      * Check whether a solid block at this position is exposed — i.e. at
      * least one face is adjacent to air or the grid edge.
      *

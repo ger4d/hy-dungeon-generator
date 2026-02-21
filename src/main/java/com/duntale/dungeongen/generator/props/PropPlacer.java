@@ -78,6 +78,7 @@ public class PropPlacer {
                 };
                 for (int[] c : corners) {
                     if (placed >= rule.getMaxPerRoom()) break;
+                    if (!grid.isBlock(c[0], floorY - 1, c[1])) continue; // must have structural floor
                     if (grid.isAir(c[0], floorY, c[1]) && random.nextDouble() < rule.getSpawnChance()) {
                         grid.set(c[0], floorY, c[1], rule.getBlockId());
                         placed++;
@@ -87,6 +88,7 @@ public class PropPlacer {
             case CENTER -> {
                 int cx = room.centerX();
                 int cz = room.centerZ();
+                if (!grid.isBlock(cx, floorY - 1, cz)) break; // must have structural floor
                 if (grid.isAir(cx, floorY, cz) && random.nextDouble() < rule.getSpawnChance()) {
                     grid.set(cx, floorY, cz, rule.getBlockId());
                 }
@@ -95,7 +97,7 @@ public class PropPlacer {
                 for (int attempt = 0; attempt < 20 && placed < rule.getMaxPerRoom(); attempt++) {
                     int rx = interiorMinX + 1 + random.nextInt(Math.max(1, interiorMaxX - interiorMinX - 1));
                     int rz = interiorMinZ + 1 + random.nextInt(Math.max(1, interiorMaxZ - interiorMinZ - 1));
-                    if (grid.isAir(rx, floorY, rz) && grid.isSolid(rx, floorY - 1, rz)
+                    if (grid.isAir(rx, floorY, rz) && grid.isBlock(rx, floorY - 1, rz)
                             && random.nextDouble() < rule.getSpawnChance()) {
                         grid.set(rx, floorY, rz, rule.getBlockId());
                         placed++;
@@ -107,7 +109,7 @@ public class PropPlacer {
                 for (int attempt = 0; attempt < 10 && placed < rule.getMaxPerRoom(); attempt++) {
                     int rx = interiorMinX + random.nextInt(Math.max(1, interiorMaxX - interiorMinX + 1));
                     int rz = interiorMinZ + random.nextInt(Math.max(1, interiorMaxZ - interiorMinZ + 1));
-                    if (grid.isAir(rx, ceilingY, rz) && grid.isSolid(rx, ceilingY + 1, rz)
+                    if (grid.isAir(rx, ceilingY, rz) && grid.isBlock(rx, ceilingY + 1, rz)
                             && random.nextDouble() < rule.getSpawnChance()) {
                         grid.set(rx, ceilingY, rz, rule.getBlockId());
                         placed++;
@@ -121,9 +123,18 @@ public class PropPlacer {
                                      int wallDx, int wallDy, int wallDz,
                                      PropRule rule) {
         if (!grid.isAir(x, y, z)) return false;
-        if (!grid.isSolid(x + wallDx, y + wallDy, z + wallDz)) return false;
+        if (!grid.isBlock(x + wallDx, y + wallDy, z + wallDz)) return false;
         if (random.nextDouble() >= rule.getSpawnChance()) return false;
-        grid.set(x, y, z, rule.getBlockId());
+
+        // Compute yaw rotation from wall direction:
+        // 0=north(-Z), 1=west(-X), 2=south(+Z), 3=east(+X)
+        int rotation = 0;
+        if (wallDz == -1)      rotation = 0;
+        else if (wallDx == -1) rotation = 1;
+        else if (wallDz == 1)  rotation = 2;
+        else if (wallDx == 1)  rotation = 3;
+
+        grid.set(x, y, z, rule.getBlockId(), rotation);
         return true;
     }
 
@@ -169,7 +180,7 @@ public class PropPlacer {
                 new RoomType[]{RoomType.BOSS}));
         props.add(new PropRule("Furniture_Ancient_Statue", PropRule.Placement.CENTER, 0.3, 1,
                 new RoomType[]{RoomType.HUB, RoomType.ENTRANCE}));
-        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.15, 2, null, 1));
+        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.15, 2, null, 4));
         props.add(new PropRule("Furniture_Ancient_Table", PropRule.Placement.FLOOR, 0.2, 1,
                 new RoomType[]{RoomType.SAFE}));
         props.add(new PropRule("Deco_Iron_Chains_Vertical", PropRule.Placement.CEILING, 0.1, 2,
@@ -262,7 +273,7 @@ public class PropPlacer {
         props.add(new PropRule("Deco_SpiderWeb", PropRule.Placement.CORNER, 0.5, 4, null));
         props.add(new PropRule("Deco_Bone_Skulls", PropRule.Placement.CORNER, 0.2, 2,
                 new RoomType[]{RoomType.COMBAT, RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.1, 2, null, 1));
+        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.1, 2, null, 4));
         return props;
     }
 }
