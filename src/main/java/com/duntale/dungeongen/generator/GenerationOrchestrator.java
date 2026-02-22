@@ -3,6 +3,8 @@ package com.duntale.dungeongen.generator;
 import com.duntale.dungeongen.assembly.WorldAssembler;
 import com.duntale.dungeongen.config.DungeonConfig;
 import com.duntale.dungeongen.config.LayoutConfig;
+import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
+import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
 import com.duntale.dungeongen.generator.entity.SpawnPointPlacer;
 import com.duntale.dungeongen.generator.feature.FeaturePlacer;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
@@ -84,8 +86,9 @@ public class GenerationOrchestrator {
 
             // Apply complexity scaling
             LayoutConfig layout = config.layout();
+            DungeonSettingsConfig settings = DungeonSettingsConfig.getDefault();
             double c = Math.max(0.0, Math.min(1.0, layout.complexity()));
-            double cScale = 0.3 + c * 1.4; // range [0.3, 1.7]
+            double cScale = settings.getComplexityBase() + c * settings.getComplexityMultiplier();
             layout = new LayoutConfig(
                 layout.width(), layout.depth(), layout.height(),
                 layout.roomDensity(),
@@ -97,9 +100,9 @@ public class GenerationOrchestrator {
                 Math.max(0.0, Math.min(1.0, layout.loopChance() * cScale)),
                 layout.windingCorridors(), layout.windingFactor(),
                 layout.pillarFrequency(), layout.waterFrequency(), layout.lavaFrequency(),
-                Math.max(0.0, Math.min(0.5, layout.trapDensity() * cScale)),
+                Math.max(0.0, Math.min(settings.getTrapDensityCap(), layout.trapDensity() * cScale)),
                 layout.floorTraps(),
-                Math.max(0.0, Math.min(0.3, layout.secretWallChance() * cScale)),
+                Math.max(0.0, Math.min(settings.getSecretWallCap(), layout.secretWallChance() * cScale)),
                 layout.entrancePlacement(), layout.exitDistance(),
                 Math.max(0.0, Math.min(1.0, layout.enemyDensity() * cScale)),
                 layout.maxEnemiesPerRoom(), layout.bossRoom(), layout.ambushChance(),
@@ -121,15 +124,17 @@ public class GenerationOrchestrator {
 
             // Phase 2: Voxel carving
             String palette = config.theme().palette();
+            DungeonThemeConfig themeAsset = DungeonThemeConfig.get(palette);
+            String fillBlock = themeAsset != null ? themeAsset.getFillBlock() : "Rock_Stone_Brick";
             VoxelCarver carver = new VoxelCarver(seed,
                 layout.width(), layout.height(), layout.depth());
-            BlockGrid grid = carver.carve(graph, "Rock_Stone_Brick", layout.removeCeiling(), layout.solidFill());
+            BlockGrid grid = carver.carve(graph, fillBlock, layout.removeCeiling(), layout.solidFill());
 
             LOGGER.atInfo().log("[DungeonGen] Voxel carve complete: %d blocks", grid.getBlockCount());
 
             // Phase 2b: Feature placement (water, lava, traps, secret walls)
             FeaturePlacer featurePlacer = new FeaturePlacer(seed + 5);
-            featurePlacer.placeFeatures(grid, graph, layout);
+            featurePlacer.placeFeatures(grid, graph, layout, palette);
 
             // Phase 2c: Erosion
             // carver.applyErosion(grid, layout.erosion());

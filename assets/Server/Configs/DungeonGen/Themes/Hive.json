@@ -1,0 +1,40 @@
+{
+    "Palette": {
+        "PrimaryWall": "Soil_Hive_Brick",
+        "SecondaryWall": "Soil_Hive_Corrupted_Brick",
+        "Floor": "Soil_Hive",
+        "Ceiling": "Soil_Hive_Brick",
+        "PillarBase": "Soil_Hive_Brick_Beam",
+        "PillarMiddle": "Soil_Hive_Brick_Beam",
+        "Stairs": "Soil_Hive_Brick",
+        "Slab": "Soil_Hive_Brick_Smooth",
+        "DecayVariants": ["Soil_Hive_Corrupted", "Soil_Hive_Corrupted_Brick"],
+        "OvergrowthBlocks": ["Deco_Scarak_Eggsacks"],
+        "RubbleBlocks": [],
+        "FluidBlock": "Fluid_Slime",
+        "SecondaryFluidBlock": "Fluid_Lava",
+        "AccentBlock": "Deco_Hive"
+    },
+    "Lights": {
+        "WallLight": "Wood_Torch_Wall",
+        "CeilingLight": "Furniture_Scarak_Hive_Lamp",
+        "FloorLightBlock": "Furniture_Desert_Torch",
+        "FloorLightTall": true,
+        "AccentFloorLight": "Furniture_Human_Ruins_Torch"
+    },
+    "Props": [
+        { "BlockId": "Deco_Scarak_Eggsacks", "Placement": "FLOOR", "SpawnChance": 0.3, "MaxPerRoom": 3, "AllowedRoomTypes": ["COMBAT", "DEAD_END"] },
+        { "BlockId": "Deco_Hive", "Placement": "FLOOR", "SpawnChance": 0.15, "MaxPerRoom": 2 },
+        { "BlockId": "Furniture_Temple_Scarak_Chest_Small", "Placement": "CENTER", "SpawnChance": 0.7, "MaxPerRoom": 1, "AllowedRoomTypes": ["LOOT"] },
+        { "BlockId": "Furniture_Dungeon_Chest_Epic", "Placement": "CENTER", "SpawnChance": 0.9, "MaxPerRoom": 1, "AllowedRoomTypes": ["BOSS"] },
+        { "BlockId": "Furniture_Temple_Scarak_Pot", "Placement": "WALL_ALIGNED", "SpawnChance": 0.1, "MaxPerRoom": 2 }
+    ],
+    "SpawnerPrefix": "Zone4_Undead",
+    "Traps": {
+        "RegularTraps": ["Survival_Trap_Snapjaw", "Survival_Trap_Spike_Iron", "Survival_Trap_Spike_Wood"],
+        "WallSpikeTraps": ["Survival_Trap_Spike_Iron", "Survival_Trap_Spike_Wood"],
+        "FloorTraps": ["Trap_Ancient_Platform", "Trap_Ice", "Trap_Slate", "Survival_Trap_Grass"]
+    },
+    "FillBlock": "Soil_Hive_Brick",
+    "SecondaryWallChance": 0.2
+}

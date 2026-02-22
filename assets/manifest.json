@@ -1,0 +1,14 @@
+{
+    "Group": "com.duntale",
+    "Name": "DungeonGenAssets",
+    "Version": "1.0.0",
+    "Description": "Dungeon generator theme configurations and feature assets",
+    "Authors": [
+        { "Name": "Duntale Team" }
+    ],
+    "ServerVersion": "2026.02.18-f3b8fff95",
+    "Dependencies": {},
+    "OptionalDependencies": {},
+    "DisabledByDefault": false,
+    "IncludesAssetPack": true
+}

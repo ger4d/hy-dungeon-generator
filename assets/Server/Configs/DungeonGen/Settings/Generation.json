@@ -1,0 +1,42 @@
+{
+  "ComplexityBase": 0.3,
+  "ComplexityMultiplier": 1.4,
+  "TrapDensityCap": 0.5,
+  "SecretWallCap": 0.3,
+
+  "TrapDensityMultiplier": 0.05,
+  "FloorTrapChance": 0.35,
+  "WallSpikeChance": 0.4,
+
+  "PillarMinRoomSize": 8,
+  "PillarSkipChance": 0.15,
+
+  "OvergrowthMultiplier": 0.3,
+  "RubbleMultiplier": 0.1,
+  "FloodScanFraction": 0.333,
+  "ErosionMultiplier": 0.3,
+  "ErosionMinExposedFaces": 2,
+
+  "MinWallTorchSpacing": 3,
+  "MinFloorTorchSpacing": 4,
+  "RoomTorchYOffset": 2,
+  "CorridorTorchYOffset": 3,
+  "CeilingLightMinRoomWidth": 8,
+  "FloorLightMinRoomSize": 5,
+  "BossAccentMinRoomSize": 8,
+  "CorridorLightDensity": 8,
+
+  "BossTier": 3,
+  "TierThreshold1": 0.33,
+  "TierThreshold2": 0.66,
+  "DifficultyRampBase": 0.5,
+  "BossSpawnBase": 3,
+  "BossSpawnAreaDivisor": 30,
+  "CombatSpawnBase": 1,
+  "CombatSpawnAreaDivisor": 40,
+  "SpawnAttemptMultiplier": 5,
+  "SpawnInteriorInset": 2,
+
+  "BlocksPerBatch": 1000,
+  "FluidFallbackBlock": "Rock_Stone_Brick"
+}

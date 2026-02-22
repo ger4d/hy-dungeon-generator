@@ -43,9 +43,19 @@ tasks {
     }
 }
 
-// Deploy to server
+// Deploy assets to server
+tasks.register<Copy>("deployAssets") {
+    from("assets")
+    into("${rootProject.projectDir}/../server/Server/mods/DungeonGenAssets/")
+    doLast {
+        println("Synced Assets to server/Server/mods/DungeonGenAssets/")
+    }
+}
+
+// Deploy JAR + assets to server
 tasks.register<Copy>("deploy") {
     dependsOn(tasks.shadowJar)
+    dependsOn("deployAssets")
     from(tasks.shadowJar.get().archiveFile)
     into("${rootProject.projectDir}/../server/Server/mods")
 

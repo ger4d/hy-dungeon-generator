@@ -1,6 +1,9 @@
 package com.duntale.dungeongen.generator.lighting;
 
 import com.duntale.dungeongen.config.Vec3i;
+import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
+import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
+import com.duntale.dungeongen.config.asset.LightEntry;
 import com.duntale.dungeongen.generator.layout.Corridor;
 import com.duntale.dungeongen.generator.layout.CorridorType;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
@@ -31,10 +34,8 @@ import java.util.Random;
  */
 public class LightPlacer {
 
-    /** Minimum blocks between wall torches (horizontal XZ distance). */
-    private static final int MIN_TORCH_SPACING = 3;
-
     private final Random random;
+    private final DungeonSettingsConfig settings;
 
     /** All placed wall-torch positions; checked for min-distance enforcement. */
     private final List<int[]> placedTorches = new ArrayList<>();
@@ -49,6 +50,7 @@ public class LightPlacer {
      */
     public LightPlacer(long seed) {
         this.random = new Random(seed);
+        this.settings = DungeonSettingsConfig.getDefault();
     }
 
     /**
@@ -85,13 +87,14 @@ public class LightPlacer {
     private void placeLightsInRoom(@Nonnull BlockGrid grid, @Nonnull Room room,
                                    @Nonnull LightSet lights, boolean removeCeiling) {
         int floorY = room.getY() + 1;
-        int torchY = floorY + 2; // torches at height +3 above room base
+        int torchY = floorY + settings.getRoomTorchYOffset();
 
         // --- Wall torches along all four walls ---
         placeWallTorchesForRoom(grid, room, torchY, lights.wallLight());
 
         // --- Ceiling light — boss rooms and large rooms ---
-        if (!removeCeiling && (room.getType() == RoomType.BOSS || room.getWidth() >= 8)
+        if (!removeCeiling && (room.getType() == RoomType.BOSS
+                || room.getWidth() >= settings.getCeilingLightMinRoomWidth())
                 && lights.ceilingLight() != null) {
             int cx = room.centerX();
             int cz = room.centerZ();
@@ -107,7 +110,7 @@ public class LightPlacer {
 
     /**
      * Place wall torches along all four interior walls of a room with
-     * a minimum spacing of {@link #MIN_TORCH_SPACING} blocks.
+     * a minimum spacing configured in {@code DungeonSettingsConfig}.
      */
     private void placeWallTorchesForRoom(@Nonnull BlockGrid grid, @Nonnull Room room,
                                          int torchY, @Nonnull String wallLight) {
@@ -116,7 +119,7 @@ public class LightPlacer {
         int minZ = room.getZ() + 1;
         int maxZ = room.getZ() + room.getDepth() - 2;
 
-        int spacing = Math.max(MIN_TORCH_SPACING + 1, 4);
+        int spacing = Math.max(settings.getMinWallTorchSpacing() + 1, 4);
 
         // North wall (z = minZ, wall at z - 1)
         for (int x = minX + 1; x <= maxX - 1; x += spacing) {
@@ -141,7 +144,7 @@ public class LightPlacer {
      * <p>
      * Each room gets at most <b>one</b> central brazier/campfire ({@code mainFloorLight}).
      * Additional standalone floor torches ({@code accentFloorLight}) may be placed
-     * near walls, at least {@link #MIN_FLOOR_TORCH_SPACING} blocks from any other
+     * near walls, at least {@code minFloorTorchSpacing} blocks from any other
      * floor torch or wall torch.
      * </p>
      */
@@ -153,12 +156,13 @@ public class LightPlacer {
         int d = room.getDepth();
 
         // --- Central brazier (at most 1 per room) ---
-        if (lights.floorLight() != null && w >= 5 && d >= 5) {
+        int floorMin = settings.getFloorLightMinRoomSize();
+        if (lights.floorLight() != null && w >= floorMin && d >= floorMin) {
             tryPlaceFloorLight(grid, cx, floorY, cz, lights.floorLight());
         }
 
         // --- Accent floor torches along walls ---
-        if (lights.accentFloorLight() != null && w >= 5 && d >= 5) {
+        if (lights.accentFloorLight() != null && w >= floorMin && d >= floorMin) {
             String accent = lights.accentFloorLight();
             int inset = 2;
             int x0 = room.getX() + inset;
@@ -167,14 +171,15 @@ public class LightPlacer {
             int z1 = room.getZ() + d - 1 - inset;
 
             // Boss rooms: four corner accent torches
-            if (room.getType() == RoomType.BOSS && w >= 8 && d >= 8) {
+            int bossMin = settings.getBossAccentMinRoomSize();
+            if (room.getType() == RoomType.BOSS && w >= bossMin && d >= bossMin) {
                 tryPlaceAccentTorch(grid, x0, floorY, z0, accent);
                 tryPlaceAccentTorch(grid, x1, floorY, z0, accent);
                 tryPlaceAccentTorch(grid, x0, floorY, z1, accent);
                 tryPlaceAccentTorch(grid, x1, floorY, z1, accent);
             }
             // Large rooms: two flanking torches on the long axis
-            else if (w >= 8 || d >= 8) {
+            else if (w >= bossMin || d >= bossMin) {
                 if (w >= d) {
                     tryPlaceAccentTorch(grid, room.getX() + w / 3, floorY, cz, accent);
                     tryPlaceAccentTorch(grid, room.getX() + 2 * w / 3, floorY, cz, accent);
@@ -186,8 +191,7 @@ public class LightPlacer {
         }
     }
 
-    /** Minimum blocks between accent floor torches (Manhattan distance). */
-    private static final int MIN_FLOOR_TORCH_SPACING = 4;
+
 
     /**
      * Attempt to place a floor light at the given position.
@@ -223,7 +227,7 @@ public class LightPlacer {
         for (int[] pos : placedTorches) {
             int dx = Math.abs(x - pos[0]);
             int dz = Math.abs(z - pos[1]);
-            if (dx + dz < MIN_FLOOR_TORCH_SPACING) return;
+            if (dx + dz < settings.getMinFloorTorchSpacing()) return;
         }
 
         grid.set(x, y, z, blockId);
@@ -239,9 +243,9 @@ public class LightPlacer {
                                        @Nonnull LightSet lights) {
         List<Vec3i> path = corridor.getPath();
 
-        int lightDensity = 6; // Place a torch every 6 blocks along the corridor
+        int lightDensity = settings.getCorridorLightDensity();
 
-        int localLeght = 0;
+        int localLength = 0;
 
         for (int i = 0; i < path.size() - 1; i++) {
             Vec3i from = path.get(i);
@@ -260,13 +264,13 @@ public class LightPlacer {
             // L_SHAPED corridors only have 3 paths, so it makes sense to reset
             // so a torch is placed at the corridor begining
             if (corridor.getType() == CorridorType.L_SHAPED) {
-                localLeght = 0;
+                localLength = 0;
             }
 
             for (int s = 0; s <= steps; s++) {
 
                 int x = from.x() + dx * s;
-                int y = from.y() + 3; // torch at height +3
+                int y = from.y() + settings.getCorridorTorchYOffset();
                 int z = from.z() + dz * s;
                 
                 // Try to place on a wall adjacent to the corridor
@@ -277,14 +281,17 @@ public class LightPlacer {
                 int wallDx = dx == 0 ? - 1 * wallSide : 0;
                 int wallDz = dz == 0 ? -1 * wallSide : 0;
 
-                if (localLeght > 0 && localLeght++ % lightDensity != 0) continue; // Space torches every 6 blocks along the corridor) {
+                if (localLength > 0 && localLength++ % lightDensity != 0) continue;
 
                 if (fromRoom.contains(torchX, torchZ) || toRoom.contains(torchX, torchZ)) {
                     // Don't place torches on walls inside rooms
                     continue;
                 }
 
-                ++localLeght;
+                if (localLength == 0) {
+                    // Always place a torch at the start of the corridor
+                    ++localLength;
+                }
 
                 tryPlaceWallLight(grid, torchX, y, torchZ, wallDx, 0, wallDz, lights.wallLight());
 
@@ -332,63 +339,28 @@ public class LightPlacer {
     // ================================================================
 
     /**
-     * Resolve the light set for the given palette theme.
+     * Resolve the light set for the given palette theme from asset config.
      *
      * @param paletteName the palette name
      * @return the themed light set
      */
     @Nonnull
     private LightSet getLightsForTheme(@Nonnull String paletteName) {
-        return switch (paletteName) {
-            case "crypt" -> new LightSet(
-                "Wood_Torch_Wall",
-                "Deco_Lantern_Ceiling",
-                new FloorLight("Furniture_Crude_Brazier", false),
-                "Furniture_Human_Ruins_Torch"
-            );
-            case "volcanic" -> new LightSet(
-                "Wood_Torch_Wall",
-                null,
-                new FloorLight("Furniture_Jungle_Brazier", false),
-                "Furniture_Human_Ruins_Torch"
-            );
-            case "arcane" -> new LightSet(
-                "Wood_Torch_Wall",
-                "Furniture_Human_Ruins_Lantern_Ceiling",
-                new FloorLight("Furniture_Human_Ruins_Brazier", false),
-                "Furniture_Human_Ruins_Torch"
-            );
-            case "mine" -> new LightSet(
-                "Wood_Torch_Wall",
-                null,
-                new FloorLight("Furniture_Feran_Torch", false),
-                "Furniture_Human_Ruins_Torch"
-            );
-            case "mushroom" -> new LightSet(
-                "Wood_Torch_Wall",
-                null,
-                new FloorLight("Plant_Crop_Mushroom_Glowing_Purple", false),
-                "Furniture_Human_Ruins_Torch"
-            );
-            case "hive" -> new LightSet(
-                "Wood_Torch_Wall",
-                "Furniture_Scarak_Hive_Lamp",
-                new FloorLight("Furniture_Desert_Torch", true),
-                "Furniture_Human_Ruins_Torch"
-            );
-            case "temple_dark" -> new LightSet(
-                "Wood_Torch_Wall",
-                null,
-                new FloorLight("Furniture_Temple_Dark_Brazier", false),
-                "Furniture_Human_Ruins_Torch"
-            );
-            default -> new LightSet(
-                "Wood_Torch_Wall",
-                "Deco_Lantern_Ceiling",
-                new FloorLight("Furniture_Feran_Torch_Tall", true),
-                "Furniture_Human_Ruins_Torch"
-            );
-        };
+        DungeonThemeConfig config = DungeonThemeConfig.get(paletteName);
+        if (config != null) {
+            LightEntry l = config.getLights();
+            FloorLight fl = l.getFloorLightBlock() != null
+                    ? new FloorLight(l.getFloorLightBlock(), l.isFloorLightTall())
+                    : null;
+            return new LightSet(l.getWallLight(), l.getCeilingLight(), fl, l.getAccentFloorLight());
+        }
+        // Fallback if assets not loaded
+        return new LightSet(
+            "Wood_Torch_Wall",
+            "Deco_Lantern_Ceiling",
+            new FloorLight("Furniture_Crude_Brazier", false),
+            "Furniture_Human_Ruins_Torch"
+        );
     }
 
     // ================================================================

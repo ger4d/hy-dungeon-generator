@@ -1,6 +1,7 @@
 package com.duntale.dungeongen.assembly;
 
 import com.duntale.dungeongen.config.Vec3i;
+import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.model.BlockEntry;
 import com.duntale.dungeongen.model.DungeonBlueprint;
 import com.duntale.dungeongen.util.BlockResolver;
@@ -38,10 +39,8 @@ public class WorldAssembler {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
 
-    /** Maximum blocks placed per world-thread dispatch. */
-    private static final int BLOCKS_PER_BATCH = 1000;
-
     private final BlockResolver blockResolver;
+    private final DungeonSettingsConfig settings;
 
     /**
      * Create a new world assembler.
@@ -50,6 +49,7 @@ public class WorldAssembler {
      */
     public WorldAssembler(@Nonnull BlockResolver blockResolver) {
         this.blockResolver = blockResolver;
+        this.settings = DungeonSettingsConfig.getDefault();
     }
 
     /**
@@ -107,7 +107,7 @@ public class WorldAssembler {
         world.execute(() -> {
             try {
                 int start = index.get();
-                int end = Math.min(start + BLOCKS_PER_BATCH, blocks.size());
+                int end = Math.min(start + settings.getBlocksPerBatch(), blocks.size());
 
                 for (int i = start; i < end; i++) {
                     BlockEntry entry = blocks.get(i);
@@ -218,7 +218,7 @@ public class WorldAssembler {
         try {
             // Ensure a solid block exists below the fluid so players don't fall through
             if (y > 0 && chunk.getBlock(x, y - 1, z) == 0) {
-                chunk.setBlock(x, y - 1, z, "Rock_Stone_Brick");
+                chunk.setBlock(x, y - 1, z, settings.getFluidFallbackBlock());
             }
 
             byte level = (byte) fluid.getMaxFluidLevel();

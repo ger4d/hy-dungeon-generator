@@ -1,6 +1,7 @@
 package com.duntale.dungeongen.generator.voxel;
 
 import com.duntale.dungeongen.config.Vec3i;
+import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.generator.layout.Corridor;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.Room;
@@ -24,9 +25,8 @@ import java.util.Random;
  */
 public class VoxelCarver {
 
-    private static final int CORRIDOR_HEIGHT = 4;
-
     private final Random random;
+    private final DungeonSettingsConfig settings;
     private final int gridWidth;
     private final int gridHeight;
     private final int gridDepth;
@@ -41,6 +41,7 @@ public class VoxelCarver {
      */
     public VoxelCarver(long seed, int gridWidth, int gridHeight, int gridDepth) {
         this.random = new Random(seed);
+        this.settings = DungeonSettingsConfig.getDefault();
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         this.gridDepth = gridDepth;
@@ -322,7 +323,8 @@ public class VoxelCarver {
                     if (grid.isAir(x, y, z - 1)) adjAir++;
                     if (grid.isAir(x, y, z + 1)) adjAir++;
 
-                    if (adjAir >= 2 && random.nextDouble() < erosionFactor * 0.3) {
+                    if (adjAir >= settings.getErosionMinExposedFaces()
+                            && random.nextDouble() < erosionFactor * settings.getErosionMultiplier()) {
                         grid.set(x, y, z, null);
                     }
                 }

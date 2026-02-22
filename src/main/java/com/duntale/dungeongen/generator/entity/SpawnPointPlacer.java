@@ -1,6 +1,8 @@
 package com.duntale.dungeongen.generator.entity;
 
 import com.duntale.dungeongen.config.PacingConfig;
+import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
+import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.Room;
 import com.duntale.dungeongen.generator.layout.RoomType;
@@ -51,22 +53,24 @@ public class SpawnPointPlacer {
         List<SpawnPoint> spawnPoints = new ArrayList<>();
         List<Integer> criticalPath = graph.getCriticalPath();
         String spawnerPrefix = getSpawnerPrefix(paletteName);
+        DungeonSettingsConfig settings = DungeonSettingsConfig.getDefault();
 
         for (Room room : graph.getRooms()) {
             if (room.getType() != RoomType.COMBAT && room.getType() != RoomType.BOSS) continue;
 
-            int tier = calculateTier(room, criticalPath);
-            int spawnCount = calculateSpawnCount(room);
+            int tier = calculateTier(room, criticalPath, settings);
+            int spawnCount = calculateSpawnCount(room, settings);
             String spawnerTable = spawnerPrefix + "_Tier" + tier;
 
             int placed = 0;
-            int interiorMinX = room.getX() + 2;
-            int interiorMaxX = room.getX() + room.getWidth() - 3;
-            int interiorMinZ = room.getZ() + 2;
-            int interiorMaxZ = room.getZ() + room.getDepth() - 3;
+            int inset = settings.getSpawnInteriorInset();
+            int interiorMinX = room.getX() + inset;
+            int interiorMaxX = room.getX() + room.getWidth() - inset - 1;
+            int interiorMinZ = room.getZ() + inset;
+            int interiorMaxZ = room.getZ() + room.getDepth() - inset - 1;
             int floorY = room.getY() + 1;
 
-            for (int attempt = 0; attempt < spawnCount * 5 && placed < spawnCount; attempt++) {
+            for (int attempt = 0; attempt < spawnCount * settings.getSpawnAttemptMultiplier() && placed < spawnCount; attempt++) {
                 int sx = interiorMinX + random.nextInt(Math.max(1, interiorMaxX - interiorMinX + 1));
                 int sz = interiorMinZ + random.nextInt(Math.max(1, interiorMaxZ - interiorMinZ + 1));
 
@@ -80,42 +84,41 @@ public class SpawnPointPlacer {
         return spawnPoints;
     }
 
-    private int calculateTier(Room room, List<Integer> criticalPath) {
-        if (room.getType() == RoomType.BOSS) return 3;
+    private int calculateTier(Room room, List<Integer> criticalPath, DungeonSettingsConfig settings) {
+        if (room.getType() == RoomType.BOSS) return settings.getBossTier();
 
         int pathIndex = criticalPath.indexOf(room.getId());
         if (pathIndex < 0) pathIndex = criticalPath.size() / 2;
 
         double progress = (double) pathIndex / Math.max(1, criticalPath.size() - 1);
-        double adjustedProgress = progress * (0.5 + pacingConfig.difficultyRamp());
+        double adjustedProgress = progress * (settings.getDifficultyRampBase() + pacingConfig.difficultyRamp());
 
-        if (adjustedProgress < 0.33) return 1;
-        if (adjustedProgress < 0.66) return 2;
+        if (adjustedProgress < settings.getTierThreshold1()) return 1;
+        if (adjustedProgress < settings.getTierThreshold2()) return 2;
         return 3;
     }
 
-    private int calculateSpawnCount(Room room) {
+    private int calculateSpawnCount(Room room, DungeonSettingsConfig settings) {
         int area = room.getWidth() * room.getDepth();
-        if (room.getType() == RoomType.BOSS) return 3 + area / 30;
-        return 1 + area / 40;
+        if (room.getType() == RoomType.BOSS) {
+            return settings.getBossSpawnBase() + area / settings.getBossSpawnAreaDivisor();
+        }
+        return settings.getCombatSpawnBase() + area / settings.getCombatSpawnAreaDivisor();
     }
 
     /**
-     * Map palette themes to spawner table prefixes.
+     * Map palette themes to spawner table prefixes from asset config.
      *
      * @param paletteName the palette name
      * @return the spawner table prefix for that theme
      */
     @Nonnull
     private String getSpawnerPrefix(@Nonnull String paletteName) {
-        return switch (paletteName) {
-            case "crypt", "temple_dark" -> "Zone1_Undead";
-            case "volcanic" -> "Zone2_Feran";
-            case "arcane" -> "Zone3_Outlander";
-            case "mine" -> "Zone1_Goblin";
-            case "mushroom" -> "Zone1_Trork";
-            case "hive" -> "Zone4_Undead";
-            default -> "Zone1_Undead";
-        };
+        DungeonThemeConfig config = DungeonThemeConfig.get(paletteName);
+        if (config != null) {
+            return config.getSpawnerPrefix();
+        }
+        // Fallback if assets not loaded
+        return "Zone1_Undead";
     }
 }

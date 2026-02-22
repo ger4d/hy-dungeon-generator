@@ -1,5 +1,6 @@
 package com.duntale.dungeongen.generator.props;
 
+import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.Room;
 import com.duntale.dungeongen.generator.layout.RoomType;
@@ -139,141 +140,22 @@ public class PropPlacer {
     }
 
     // ============================================
-    // Theme prop sets
+    // Asset-backed theme resolution
     // ============================================
 
     /**
-     * Build the prop rule list for a given theme.
+     * Build the prop rule list for a given theme from asset config.
      *
      * @param paletteName the palette name
      * @return list of prop rules for that theme
      */
     @Nonnull
     private List<PropRule> getPropsForTheme(@Nonnull String paletteName) {
-        return switch (paletteName) {
-            case "crypt" -> getCryptProps();
-            case "volcanic" -> getVolcanicProps();
-            case "arcane" -> getArcaneProps();
-            case "mine" -> getMineProps();
-            case "mushroom" -> getMushroomProps();
-            case "hive" -> getHiveProps();
-            case "temple_dark" -> getTempleDarkProps();
-            default -> getCryptProps();
-        };
-    }
-
-    private List<PropRule> getCryptProps() {
-        List<PropRule> props = new ArrayList<>();
-        props.add(new PropRule("Deco_SpiderWeb", PropRule.Placement.CORNER, 0.7, 4, null));
-        props.add(new PropRule("Deco_Bone_Skulls", PropRule.Placement.CORNER, 0.3, 2,
-                new RoomType[]{RoomType.COMBAT, RoomType.DEAD_END, RoomType.BOSS}));
-        props.add(new PropRule("Deco_Bone_Pile", PropRule.Placement.FLOOR, 0.2, 3,
-                new RoomType[]{RoomType.COMBAT, RoomType.DEAD_END}));
-        props.add(new PropRule("Furniture_Ancient_Pot", PropRule.Placement.FLOOR, 0.15, 2, null));
-        props.add(new PropRule("Furniture_Ancient_Barrel", PropRule.Placement.FLOOR, 0.1, 2,
-                new RoomType[]{RoomType.SAFE, RoomType.LOOT}));
-        props.add(new PropRule("Furniture_Ancient_Coffin", PropRule.Placement.CENTER, 0.4, 1,
-                new RoomType[]{RoomType.COMBAT, RoomType.DEAD_END}));
-        props.add(new PropRule("Furniture_Ancient_Chest_Small", PropRule.Placement.CENTER, 0.8, 1,
-                new RoomType[]{RoomType.LOOT}));
-        props.add(new PropRule("Furniture_Dungeon_Chest_Epic", PropRule.Placement.CENTER, 0.9, 1,
-                new RoomType[]{RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Ancient_Statue", PropRule.Placement.CENTER, 0.3, 1,
-                new RoomType[]{RoomType.HUB, RoomType.ENTRANCE}));
-        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.15, 2, null, 4));
-        props.add(new PropRule("Furniture_Ancient_Table", PropRule.Placement.FLOOR, 0.2, 1,
-                new RoomType[]{RoomType.SAFE}));
-        props.add(new PropRule("Deco_Iron_Chains_Vertical", PropRule.Placement.CEILING, 0.1, 2,
-                new RoomType[]{RoomType.COMBAT, RoomType.BOSS}));
-        return props;
-    }
-
-    private List<PropRule> getVolcanicProps() {
-        List<PropRule> props = new ArrayList<>();
-        props.add(new PropRule("Bench_Furnace", PropRule.Placement.FLOOR, 0.3, 1,
-                new RoomType[]{RoomType.SAFE}));
-        props.add(new PropRule("Bench_Armory", PropRule.Placement.FLOOR, 0.2, 1,
-                new RoomType[]{RoomType.SAFE}));
-        props.add(new PropRule("Furniture_Dungeon_Chest_Epic", PropRule.Placement.CENTER, 0.9, 1,
-                new RoomType[]{RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Crude_Chest_Large", PropRule.Placement.CENTER, 0.7, 1,
-                new RoomType[]{RoomType.LOOT}));
-        props.add(new PropRule("Furniture_Ancient_Crate", PropRule.Placement.FLOOR, 0.15, 2, null));
-        props.add(new PropRule("Deco_Iron_Stack", PropRule.Placement.CORNER, 0.2, 2, null));
-        return props;
-    }
-
-    private List<PropRule> getArcaneProps() {
-        List<PropRule> props = new ArrayList<>();
-        props.add(new PropRule("Furniture_Ancient_Bookshelf", PropRule.Placement.WALL_ALIGNED, 0.2, 3,
-                new RoomType[]{RoomType.SAFE, RoomType.LOOT, RoomType.HUB}));
-        props.add(new PropRule("Furniture_Royal_Magic_Table", PropRule.Placement.CENTER, 0.4, 1,
-                new RoomType[]{RoomType.SAFE}));
-        props.add(new PropRule("Furniture_Dungeon_Chest_Epic", PropRule.Placement.CENTER, 0.9, 1,
-                new RoomType[]{RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Dungeon_Chest_Epic", PropRule.Placement.CENTER, 0.7, 1,
-                new RoomType[]{RoomType.LOOT}));
-        props.add(new PropRule("Furniture_Royal_Magic_Pot", PropRule.Placement.FLOOR, 0.15, 2, null));
-        props.add(new PropRule("Rock_Crystal_Blue_Large", PropRule.Placement.FLOOR, 0.1, 2,
-                new RoomType[]{RoomType.COMBAT, RoomType.BOSS}));
-        props.add(new PropRule("Rock_Crystal_Purple_Large", PropRule.Placement.FLOOR, 0.1, 2,
-                new RoomType[]{RoomType.COMBAT, RoomType.BOSS}));
-        return props;
-    }
-
-    private List<PropRule> getMineProps() {
-        List<PropRule> props = new ArrayList<>();
-        props.add(new PropRule("Furniture_Ancient_Crate", PropRule.Placement.FLOOR, 0.15, 3, null));
-        props.add(new PropRule("Furniture_Crude_Chest_Small", PropRule.Placement.FLOOR, 0.6, 1,
-                new RoomType[]{RoomType.LOOT}));
-        props.add(new PropRule("Furniture_Crude_Chest_Large", PropRule.Placement.CENTER, 0.8, 1,
-                new RoomType[]{RoomType.BOSS}));
-        props.add(new PropRule("Wood_Darkwood_Beam", PropRule.Placement.WALL_ALIGNED, 0.2, 4, null));
-        props.add(new PropRule("Deco_SpiderWeb", PropRule.Placement.CORNER, 0.3, 2, null));
-        return props;
-    }
-
-    private List<PropRule> getMushroomProps() {
-        List<PropRule> props = new ArrayList<>();
-        props.add(new PropRule("Plant_Crop_Mushroom_Block_Blue", PropRule.Placement.FLOOR, 0.2, 3, null));
-        props.add(new PropRule("Plant_Crop_Mushroom_Block_Purple", PropRule.Placement.FLOOR, 0.15, 2, null));
-        props.add(new PropRule("Plant_Crop_Mushroom_Block_Red", PropRule.Placement.FLOOR, 0.1, 2,
-                new RoomType[]{RoomType.COMBAT}));
-        props.add(new PropRule("Furniture_Jungle_Chest_Small", PropRule.Placement.CENTER, 0.7, 1,
-                new RoomType[]{RoomType.LOOT}));
-        props.add(new PropRule("Furniture_Dungeon_Chest_Epic", PropRule.Placement.CENTER, 0.9, 1,
-                new RoomType[]{RoomType.BOSS}));
-        return props;
-    }
-
-    private List<PropRule> getHiveProps() {
-        List<PropRule> props = new ArrayList<>();
-        props.add(new PropRule("Deco_Scarak_Eggsacks", PropRule.Placement.FLOOR, 0.3, 3,
-                new RoomType[]{RoomType.COMBAT, RoomType.DEAD_END}));
-        props.add(new PropRule("Deco_Hive", PropRule.Placement.FLOOR, 0.15, 2, null));
-        props.add(new PropRule("Furniture_Temple_Scarak_Chest_Small", PropRule.Placement.CENTER, 0.7, 1,
-                new RoomType[]{RoomType.LOOT}));
-        props.add(new PropRule("Furniture_Dungeon_Chest_Epic", PropRule.Placement.CENTER, 0.9, 1,
-                new RoomType[]{RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Temple_Scarak_Pot", PropRule.Placement.WALL_ALIGNED, 0.1, 2, null));
-        return props;
-    }
-
-    private List<PropRule> getTempleDarkProps() {
-        List<PropRule> props = new ArrayList<>();
-        props.add(new PropRule("Furniture_Temple_Dark_Statue", PropRule.Placement.CENTER, 0.4, 1,
-                new RoomType[]{RoomType.HUB, RoomType.ENTRANCE, RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Temple_Dark_Coffin", PropRule.Placement.CENTER, 0.3, 1,
-                new RoomType[]{RoomType.COMBAT, RoomType.DEAD_END}));
-        props.add(new PropRule("Furniture_Temple_Dark_Chest_Large", PropRule.Placement.CENTER, 0.8, 1,
-                new RoomType[]{RoomType.LOOT}));
-        props.add(new PropRule("Furniture_Dungeon_Chest_Epic_Large", PropRule.Placement.CENTER, 0.9, 1,
-                new RoomType[]{RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Temple_Dark_Pot", PropRule.Placement.FLOOR, 0.15, 2, null));
-        props.add(new PropRule("Deco_SpiderWeb", PropRule.Placement.CORNER, 0.5, 4, null));
-        props.add(new PropRule("Deco_Bone_Skulls", PropRule.Placement.CORNER, 0.2, 2,
-                new RoomType[]{RoomType.COMBAT, RoomType.BOSS}));
-        props.add(new PropRule("Furniture_Human_Ruins_Banner", PropRule.Placement.WALL_ALIGNED, 0.1, 2, null, 4));
-        return props;
+        DungeonThemeConfig config = DungeonThemeConfig.get(paletteName);
+        if (config != null) {
+            return config.toProps();
+        }
+        // Fallback if assets not loaded
+        return List.of();
     }
 }

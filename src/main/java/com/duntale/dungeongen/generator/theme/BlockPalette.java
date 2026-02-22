@@ -1,5 +1,7 @@
 package com.duntale.dungeongen.generator.theme;
 
+import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -77,174 +79,39 @@ public class BlockPalette {
     }
 
     // ============================================
-    // Static factory methods — one per theme
+    // Asset-backed factory
     // ============================================
 
-    /** @return the crypt palette (stone brick, mossy decay, water). */
-    @Nonnull
-    public static BlockPalette crypt() {
-        return new BlockPalette(
-            "crypt",
-            "Rock_Stone_Brick",
-            "Rock_Basalt_Brick",
-            "Rock_Stone_Cobble",
-            "Rock_Stone_Brick",
-            "Rock_Stone_Brick_Pillar_Base",
-            "Rock_Stone_Brick_Pillar_Middle",
-            "Rock_Stone_Brick_Stairs",
-            "Rock_Stone_Brick_Half",
-            new String[]{"Rock_Stone_Brick_Mossy", "Rock_Stone_Cobble_Mossy", "Rock_Stone_Mossy"},
-            new String[]{"Plant_Vine_Hanging", "Plant_Vine_Wall", "Plant_Moss_Cave_Green"},
-            new String[]{"Rubble_Stone", "Rubble_Stone_Medium", "Rubble_Stone_Mossy"},
-            "Fluid_Water",
-            "Rock_Basalt_Brick"
-        );
-    }
-
-    /** @return the volcanic palette (volcanic brick, lava, gold ore). */
-    @Nonnull
-    public static BlockPalette volcanic() {
-        return new BlockPalette(
-            "volcanic",
-            "Rock_Volcanic_Brick",
-            "Rock_Volcanic_Cobble",
-            "Rock_Volcanic",
-            "Rock_Volcanic_Brick",
-            "Rock_Volcanic_Brick_Pillar_Base",
-            "Rock_Volcanic_Brick_Pillar_Middle",
-            "Rock_Volcanic_Brick",
-            "Rock_Volcanic_Brick",
-            new String[]{"Rock_Volcanic_Cracked_Incandescent", "Rock_Volcanic_Cracked_Lava"},
-            new String[0],
-            new String[]{"Rubble_Volcanic", "Rubble_Volcanic_Medium"},
-            "Fluid_Lava",
-            "Ore_Gold_Volcanic"
-        );
-    }
-
-    /** @return the arcane palette (runic brick, crystals, water). */
-    @Nonnull
-    public static BlockPalette arcane() {
-        return new BlockPalette(
-            "arcane",
-            "Rock_Runic_Blue_Brick",
-            "Rock_Runic_Teal_Brick",
-            "Rock_Runic_Cobble",
-            "Rock_Runic_Brick",
-            "Rock_Runic_Blue_Brick_Pillar_Base",
-            "Rock_Runic_Cobble_Pillar_Middle",
-            "Rock_Runic_Brick",
-            "Rock_Runic_Brick",
-            new String[]{"Rock_Runic_Dark_Brick"},
-            new String[]{"Rock_Crystal_Blue_Large", "Rock_Crystal_Purple_Large"},
-            new String[0],
-            "Fluid_Water",
-            "Rock_Runic_Blue_Brick_Pipe_Short"
-        );
-    }
-
-    /** @return the mine palette (raw stone, wood beams, iron ore). */
-    @Nonnull
-    public static BlockPalette mine() {
-        return new BlockPalette(
-            "mine",
-            "Rock_Stone",
-            "Rock_Slate",
-            "Soil_Gravel",
-            "Rock_Stone",
-            "Wood_Darkwood_Beam",
-            "Wood_Darkwood_Beam",
-            "Rock_Stone_Cobble",
-            "Wood_Darkwood_Planks",
-            new String[]{"Rock_Stone_Cobble_Mossy", "Soil_Gravel_Mossy"},
-            new String[]{"Plant_Vine_Hanging", "Plant_Moss_Cave_Green"},
-            new String[]{"Rubble_Stone", "Rubble_Stone_Medium"},
-            "Fluid_Water",
-            "Ore_Iron_Stone"
-        );
-    }
-
-    /** @return the mushroom palette (moss blocks, mushroom trunks, slime). */
-    @Nonnull
-    public static BlockPalette mushroom() {
-        return new BlockPalette(
-            "mushroom",
-            "Plant_Moss_Block_Green",
-            "Plant_Moss_Block_Blue",
-            "Plant_Moss_Cave_Green",
-            "Plant_Moss_Block_Green_Dark",
-            "Plant_Crop_Mushroom_Block_Blue_Trunk",
-            "Plant_Crop_Mushroom_Block_Blue_Trunk",
-            "Plant_Moss_Block_Green",
-            "Plant_Moss_Block_Green",
-            new String[]{"Plant_Moss_Block_Red", "Plant_Moss_Block_Yellow"},
-            new String[]{"Plant_Vine_Hanging", "Plant_Vine_Green_Hanging"},
-            new String[0],
-            "Fluid_Slime",
-            "Plant_Crop_Mushroom_Glowing_Blue"
-        );
-    }
-
-    /** @return the hive palette (hive brick, corrupted, slime). */
-    @Nonnull
-    public static BlockPalette hive() {
-        return new BlockPalette(
-            "hive",
-            "Soil_Hive_Brick",
-            "Soil_Hive_Corrupted_Brick",
-            "Soil_Hive",
-            "Soil_Hive_Brick",
-            "Soil_Hive_Brick_Beam",
-            "Soil_Hive_Brick_Beam",
-            "Soil_Hive_Brick",
-            "Soil_Hive_Brick_Smooth",
-            new String[]{"Soil_Hive_Corrupted", "Soil_Hive_Corrupted_Brick"},
-            new String[]{"Deco_Scarak_Eggsacks"},
-            new String[0],
-            "Fluid_Slime",
-            "Deco_Hive"
-        );
-    }
-
-    /** @return the temple dark palette (basalt brick, dead vines, poison). */
-    @Nonnull
-    public static BlockPalette templeDark() {
-        return new BlockPalette(
-            "temple_dark",
-            "Rock_Basalt_Brick",
-            "Rock_Shale_Brick",
-            "Rock_Basalt_Cobble",
-            "Rock_Basalt_Brick",
-            "Rock_Basalt_Brick_Pillar_Base",
-            "Rock_Basalt_Brick_Pillar_Middle",
-            "Rock_Basalt_Brick",
-            "Rock_Basalt_Brick",
-            new String[]{"Rock_Shale_Cobble"},
-            new String[]{"Plant_Vine_Wall_Dead", "Deco_SpiderWeb"},
-            new String[]{"Rubble_Basalt", "Rubble_Basalt_Medium"},
-            "Fluid_Poison",
-            "Rock_Shale_Brick"
-        );
-    }
-
     /**
-     * Look up a palette by name.
+     * Look up a palette by name from the asset-backed {@link DungeonThemeConfig}.
+     * Falls back to the crypt theme if the requested theme is not loaded.
      *
      * @param name the palette name (e.g. "crypt", "volcanic")
-     * @return the matching palette, defaulting to {@link #crypt()} if unknown
+     * @return the matching palette
      */
     @Nonnull
     public static BlockPalette fromName(@Nonnull String name) {
-        return switch (name) {
-            case "crypt" -> crypt();
-            case "volcanic" -> volcanic();
-            case "arcane" -> arcane();
-            case "mine" -> mine();
-            case "mushroom" -> mushroom();
-            case "hive" -> hive();
-            case "temple_dark" -> templeDark();
-            default -> crypt();
-        };
+        DungeonThemeConfig config = DungeonThemeConfig.get(name);
+        if (config != null) {
+            return config.toPalette();
+        }
+        // Fallback: try default crypt theme from assets
+        DungeonThemeConfig fallback = DungeonThemeConfig.get("crypt");
+        if (fallback != null) {
+            return fallback.toPalette();
+        }
+        // Last-resort hardcoded default (only if assets not yet loaded)
+        return new BlockPalette(
+            "crypt",
+            "Rock_Stone_Brick", "Rock_Basalt_Brick",
+            "Rock_Stone_Cobble", "Rock_Stone_Brick",
+            "Rock_Stone_Brick_Pillar_Base", "Rock_Stone_Brick_Pillar_Middle",
+            "Rock_Stone_Brick_Stairs", "Rock_Stone_Brick_Half",
+            new String[]{"Rock_Stone_Brick_Mossy", "Rock_Stone_Cobble_Mossy", "Rock_Stone_Mossy"},
+            new String[]{"Plant_Vine_Hanging", "Plant_Vine_Wall", "Plant_Moss_Cave_Green"},
+            new String[]{"Rubble_Stone", "Rubble_Stone_Medium", "Rubble_Stone_Mossy"},
+            "Fluid_Water", "Rock_Basalt_Brick"
+        );
     }
 
     // ============================================

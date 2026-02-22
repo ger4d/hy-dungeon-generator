@@ -1,5 +1,6 @@
 package com.duntale.dungeongen.generator.theme;
 
+import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
 
 import javax.annotation.Nonnull;
@@ -75,7 +76,7 @@ public class DecayPass {
             for (int y = 0; y < grid.getHeight(); y++) {
                 for (int z = 0; z < grid.getDepth(); z++) {
                     if (!grid.isAir(x, y, z)) continue;
-                    if (random.nextDouble() >= overgrowthFactor * 0.3) continue;
+                    if (random.nextDouble() >= overgrowthFactor * DungeonSettingsConfig.getDefault().getOvergrowthMultiplier()) continue;
 
                     // Never place overgrowth on or adjacent to fluid
                     if (grid.isFluid(x, y - 1, z)) continue;
@@ -171,7 +172,7 @@ public class DecayPass {
                 // Only place rubble at the lowest floor surface in each column
                 for (int y = 1; y < grid.getHeight(); y++) {
                     if (grid.isAir(x, y, z) && grid.isBlock(x, y - 1, z)) {
-                        if (random.nextDouble() < decayFactor * 0.1) {
+                        if (random.nextDouble() < decayFactor * DungeonSettingsConfig.getDefault().getRubbleMultiplier()) {
                             grid.set(x, y, z, rubble[random.nextInt(rubble.length)]);
                         }
                         break; // Only the first (lowest) floor surface per column
@@ -195,7 +196,7 @@ public class DecayPass {
 
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int z = 0; z < grid.getDepth(); z++) {
-                for (int y = 1; y < grid.getHeight() / 3; y++) { // only lowest third
+                for (int y = 1; y < (int)(grid.getHeight() * DungeonSettingsConfig.getDefault().getFloodScanFraction()); y++) { // only lowest portion
                     if (grid.isAir(x, y, z) && grid.isSolid(x, y - 1, z)) {
                         if (random.nextDouble() < floodingFactor) {
                             grid.set(x, y, z, palette.getFluidBlock());

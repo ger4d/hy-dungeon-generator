@@ -1,6 +1,8 @@
 package com.duntale.dungeongen.generator.theme;
 
 import com.duntale.dungeongen.config.ThemeConfig;
+import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
+import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.Room;
 import com.duntale.dungeongen.generator.voxel.BlockCategory;
@@ -68,6 +70,13 @@ public class ThemeDecorator {
      * structural position (floor, ceiling, wall, or interior).
      */
     private void applyMaterials(@Nonnull BlockGrid grid, @Nonnull BlockPalette palette) {
+        // Load secondary wall chance from theme config asset (default 0.2 = 20%)
+        double secondaryWallChance = 0.2;
+        DungeonThemeConfig themeAsset = DungeonThemeConfig.get(themeConfig.palette());
+        if (themeAsset != null) {
+            secondaryWallChance = themeAsset.getSecondaryWallChance();
+        }
+
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int y = 0; y < grid.getHeight(); y++) {
                 for (int z = 0; z < grid.getDepth(); z++) {
@@ -92,7 +101,7 @@ public class ThemeDecorator {
                         grid.set(x, y, z, palette.getCeiling());
                     } else if (airSide) {
                         // Wall block — occasionally use secondary wall
-                        String wall = (random.nextInt(5) == 0)
+                        String wall = (random.nextDouble() < secondaryWallChance)
                             ? palette.getSecondaryWall()
                             : palette.getPrimaryWall();
                         grid.set(x, y, z, wall);
@@ -105,16 +114,18 @@ public class ThemeDecorator {
 
     /**
      * Place decorative pillars near the corners of rooms whose width
-     * and depth are both at least 8 blocks.
+     * and depth meet the configured minimum size.
      */
     private void addPillars(@Nonnull BlockGrid grid, @Nonnull DungeonGraph graph,
                             @Nonnull BlockPalette palette) {
-        for (Room room : graph.getRooms()) {
-            if (room.getWidth() < 8 || room.getDepth() < 8) continue;
+        DungeonSettingsConfig settings = DungeonSettingsConfig.getDefault();
+        int minRoomSize = settings.getPillarMinRoomSize();
+        double skipChance = settings.getPillarSkipChance();
 
-            // TODO: Pass pillar frequency from config and use it to probabilistically skip pillar placement in some rooms.
-            // if (config.pillarFrequency() <= 0.01) return;
-            if (random.nextDouble() >= 0.15) continue;
+        for (Room room : graph.getRooms()) {
+            if (room.getWidth() < minRoomSize || room.getDepth() < minRoomSize) continue;
+
+            if (random.nextDouble() < skipChance) continue;
 
             // Place pillars 2 blocks in from each corner of the room interior
             int[][] pillarOffsets = {{2, 2}, {2, -3}, {-3, 2}, {-3, -3}};
