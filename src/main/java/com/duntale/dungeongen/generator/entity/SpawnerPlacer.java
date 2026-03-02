@@ -83,7 +83,9 @@ public class SpawnerPlacer {
         int nextId = 0;
 
         for (Room room : graph.getRooms()) {
-            if (room.getType() != RoomType.COMBAT && room.getType() != RoomType.BOSS) continue;
+            // Skip non-combat rooms: safe zones, entrances, and loot rooms never get spawners
+            RoomType type = room.getType();
+            if (type == RoomType.SAFE || type == RoomType.ENTRANCE || type == RoomType.LOOT) continue;
 
             int tier = calculateTier(room, criticalPath, settings);
             int totalCount = calculateSpawnCount(room, settings);
@@ -96,9 +98,13 @@ public class SpawnerPlacer {
                 if (!bossPool.isEmpty()) {
                     List<Vec3i> bossOffsets = computeSpawnOffsets(grid, room.centerX(),
                         room.getY() + 1, room.centerZ(), 1, room, settings);
-                    spawners.add(new SpawnerDefinition(nextId++, room.centerX(),
-                        room.getY() + 1, room.centerZ(), room.getId(),
-                        SpawnerType.FIXED, trigger, bossPool, 1, bossOffsets, true));
+                    if (bossOffsets.isEmpty()) {
+                        LOGGER.atWarning().log("[DungeonGen] No valid spawn offsets for boss room %d — skipping", room.getId());
+                    } else {
+                        spawners.add(new SpawnerDefinition(nextId++, room.centerX(),
+                            room.getY() + 1, room.centerZ(), room.getId(),
+                            SpawnerType.FIXED, trigger, bossPool, 1, bossOffsets, true));
+                    }
                 } else {
                     LOGGER.atWarning().log("[DungeonGen] Empty boss pool for room %d on floor %d — skipping boss spawner",
                         room.getId(), floorLevel);
@@ -113,10 +119,12 @@ public class SpawnerPlacer {
                         int mz = room.getZ() + room.getDepth() / 3;
                         List<Vec3i> minionOffsets = computeSpawnOffsets(grid, mx,
                             room.getY() + 1, mz, minionCount, room, settings);
-                        spawners.add(new SpawnerDefinition(nextId++, mx,
-                            room.getY() + 1, mz, room.getId(),
-                            SpawnerType.FIXED, trigger, minionPool, minionCount,
-                            minionOffsets, false));
+                        if (!minionOffsets.isEmpty()) {
+                            spawners.add(new SpawnerDefinition(nextId++, mx,
+                                room.getY() + 1, mz, room.getId(),
+                                SpawnerType.FIXED, trigger, minionPool, minionCount,
+                                minionOffsets, false));
+                        }
                     }
                 }
             } else {
@@ -139,9 +147,11 @@ public class SpawnerPlacer {
                     int cy = room.getY() + 1;
                     int count = countPerCluster + (i == 0 ? remainder : 0);
                     List<Vec3i> offsets = computeSpawnOffsets(grid, cx, cy, cz, count, room, settings);
-                    spawners.add(new SpawnerDefinition(nextId++, cx, cy, cz,
-                        room.getId(), SpawnerType.FIXED, trigger, pool, count,
-                        offsets, false));
+                    if (!offsets.isEmpty()) {
+                        spawners.add(new SpawnerDefinition(nextId++, cx, cy, cz,
+                            room.getId(), SpawnerType.FIXED, trigger, pool, count,
+                            offsets, false));
+                    }
                 }
             }
         }
@@ -337,8 +347,9 @@ public class SpawnerPlacer {
             }
         }
 
-        // If we got nothing at all, add a zero offset as fallback
-        if (offsets.isEmpty()) {
+        // If we got nothing valid (e.g. room center is over fluid),
+        // only add a zero-offset fallback if the center itself is walkable
+        if (offsets.isEmpty() && isValidSpawnPosition(grid, centerX, centerY, centerZ)) {
             offsets.add(Vec3i.ZERO);
         }
 
@@ -347,7 +358,8 @@ public class SpawnerPlacer {
 
     /**
      * Check if a position is a valid spawn location: air at the position
-     * and a solid block directly below.
+     * and a solid (non-fluid) block directly below. {@link BlockGrid#isBlock}
+     * already excludes fluids since {@code FLUID} is a separate category.
      */
     private boolean isValidSpawnPosition(@Nonnull BlockGrid grid, int x, int y, int z) {
         return grid.isAir(x, y, z) && grid.isBlock(x, y - 1, z);

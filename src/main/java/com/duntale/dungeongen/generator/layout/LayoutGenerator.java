@@ -561,8 +561,8 @@ public class LayoutGenerator {
             Room room = graph.getRoom(criticalPath.get(i));
             if (room == null || room.getType() != RoomType.COMBAT) continue;
 
-            // Place a safe room roughly every 3-4 rooms along the path
-            if (i % 4 == 0 && random.nextDouble() < 0.6) {
+            // Place a safe room roughly every 5-6 rooms along the path
+            if (i % 5 == 0 && random.nextDouble() < 0.4) {
                 room.setType(RoomType.SAFE);
             }
         }
