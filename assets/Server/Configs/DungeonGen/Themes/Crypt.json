@@ -44,21 +44,22 @@
     },
     "FillBlock": "Rock_Stone_Brick",
     "SecondaryWallChance": 0.2,
+    "LevelVariance": 5,
     "SpawnPools": {
         "Tier1": [
-            { "NpcRole": "Skeleton_Fighter", "MinLevel": 1, "MaxLevel": 5, "Weight": 3.0 },
-            { "NpcRole": "Skeleton_Archer", "MinLevel": 1, "MaxLevel": 5, "Weight": 2.0 }
+            { "NpcRole": "Skeleton_Fighter", "MinLevel": 1, "MaxLevel": 15, "Weight": 3.0 },
+            { "NpcRole": "Skeleton_Archer", "MinLevel": 1, "MaxLevel": 15, "Weight": 2.0 }
         ],
         "Tier2": [
-            { "NpcRole": "Skeleton_Soldier", "MinLevel": 5, "MaxLevel": 10, "Weight": 3.0 },
-            { "NpcRole": "Skeleton_Archer", "MinLevel": 5, "MaxLevel": 10, "Weight": 2.0 }
+            { "NpcRole": "Skeleton_Soldier", "MinLevel": 5, "MaxLevel": 30, "Weight": 3.0 },
+            { "NpcRole": "Skeleton_Archer", "MinLevel": 5, "MaxLevel": 30, "Weight": 2.0 }
         ],
         "Tier3": [
-            { "NpcRole": "Skeleton_Knight", "MinLevel": 10, "MaxLevel": 15, "Weight": 3.0 },
-            { "NpcRole": "Skeleton_Mage", "MinLevel": 10, "MaxLevel": 15, "Weight": 1.5 }
+            { "NpcRole": "Skeleton_Knight", "MinLevel": 10, "MaxLevel": 60, "Weight": 3.0 },
+            { "NpcRole": "Skeleton_Mage", "MinLevel": 10, "MaxLevel": 60, "Weight": 1.5 }
         ],
         "Boss": [
-            { "NpcRole": "Skeleton_Boss", "MinLevel": 15, "MaxLevel": 20, "Weight": 1.0 }
+            { "NpcRole": "Skeleton_Boss", "MinLevel": 15, "MaxLevel": 60, "Weight": 1.0 }
         ]
     }
 }

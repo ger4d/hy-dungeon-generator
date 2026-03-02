@@ -71,6 +71,9 @@ public class DungeonThemeConfig
     // Spawn Pools — NPC spawner entries per tier
     protected SpawnPoolsEntry spawnPools = new SpawnPoolsEntry();
 
+    // Level variance applied to spawned NPCs: actual level = floorLevel ± variance
+    protected int levelVariance = 5;
+
     /** No-arg constructor required by {@link com.hypixel.hytale.codec.builder.BuilderCodec}. */
     public DungeonThemeConfig() {}
 
@@ -104,6 +107,8 @@ public class DungeonThemeConfig
                 (c, v) -> c.secondaryWallChance = v, c -> c.secondaryWallChance).add()
             .append(new KeyedCodec<>("SpawnPools", SpawnPoolsEntry.CODEC),
                 (c, v) -> c.spawnPools = v, c -> c.spawnPools).add()
+            .append(new KeyedCodec<>("LevelVariance", Codec.INTEGER),
+                (c, v) -> c.levelVariance = v, c -> c.levelVariance).add()
             .build();
     }
 
@@ -170,6 +175,12 @@ public class DungeonThemeConfig
      */
     @Nonnull
     public SpawnPoolsEntry getSpawnPools() { return spawnPools; }
+
+    /**
+     * @return the level variance for spawned NPCs (actual level = floorLevel ± variance).
+     * @since 1.1.0
+     */
+    public int getLevelVariance() { return levelVariance; }
 
     // ============================================
     // Domain conversions

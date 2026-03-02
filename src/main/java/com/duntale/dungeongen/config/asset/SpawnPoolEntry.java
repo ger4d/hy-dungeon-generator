@@ -83,13 +83,15 @@ public class SpawnPoolEntry {
 
     /**
      * Check if this entry is eligible for the given floor level.
+     * Uses {@code minLevel}/{@code maxLevel} as floor eligibility gates:
+     * the NPC can only spawn on floors where {@code minLevel <= floorLevel <= maxLevel}.
      *
      * @param floorLevel the current dungeon floor
      * @return true if this entry can be used on the given floor
      * @since 1.1.0
      */
     public boolean isEligibleForFloor(int floorLevel) {
-        if (minFloor > 0 && floorLevel < minFloor) return false;
-        return maxFloor <= 0 || floorLevel <= maxFloor;
+        if (floorLevel < minLevel) return false;
+        return floorLevel <= maxLevel;
     }
 }

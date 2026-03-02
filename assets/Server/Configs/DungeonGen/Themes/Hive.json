@@ -8,8 +8,13 @@
         "PillarMiddle": "Soil_Hive_Brick_Beam",
         "Stairs": "Soil_Hive_Brick",
         "Slab": "Soil_Hive_Brick_Smooth",
-        "DecayVariants": ["Soil_Hive_Corrupted", "Soil_Hive_Corrupted_Brick"],
-        "OvergrowthBlocks": ["Deco_Scarak_Eggsacks"],
+        "DecayVariants": [
+            "Soil_Hive_Corrupted",
+            "Soil_Hive_Corrupted_Brick"
+        ],
+        "OvergrowthBlocks": [
+            "Deco_Scarak_Eggsacks"
+        ],
         "RubbleBlocks": [],
         "FluidBlock": "Fluid_Slime",
         "SecondaryFluidBlock": "Fluid_Lava",
@@ -23,35 +28,118 @@
         "AccentFloorLight": "Furniture_Human_Ruins_Torch"
     },
     "Props": [
-        { "BlockId": "Deco_Scarak_Eggsacks", "Placement": "FLOOR", "SpawnChance": 0.3, "MaxPerRoom": 3, "AllowedRoomTypes": ["COMBAT", "DEAD_END"] },
-        { "BlockId": "Deco_Hive", "Placement": "FLOOR", "SpawnChance": 0.15, "MaxPerRoom": 2 },
-        { "BlockId": "Furniture_Temple_Scarak_Chest_Small", "Placement": "CENTER", "SpawnChance": 0.7, "MaxPerRoom": 1, "AllowedRoomTypes": ["LOOT"] },
-        { "BlockId": "Furniture_Dungeon_Chest_Epic", "Placement": "CENTER", "SpawnChance": 0.9, "MaxPerRoom": 1, "AllowedRoomTypes": ["BOSS"] },
-        { "BlockId": "Furniture_Temple_Scarak_Pot", "Placement": "WALL_ALIGNED", "SpawnChance": 0.1, "MaxPerRoom": 2 }
+        {
+            "BlockId": "Deco_Scarak_Eggsacks",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.3,
+            "MaxPerRoom": 3,
+            "AllowedRoomTypes": [
+                "COMBAT",
+                "DEAD_END"
+            ]
+        },
+        {
+            "BlockId": "Deco_Hive",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.15,
+            "MaxPerRoom": 2
+        },
+        {
+            "BlockId": "Furniture_Temple_Scarak_Chest_Small",
+            "Placement": "CENTER",
+            "SpawnChance": 0.7,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "LOOT"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Dungeon_Chest_Epic",
+            "Placement": "CENTER",
+            "SpawnChance": 0.9,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "BOSS"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Temple_Scarak_Pot",
+            "Placement": "WALL_ALIGNED",
+            "SpawnChance": 0.1,
+            "MaxPerRoom": 2
+        }
     ],
     "SpawnerPrefix": "Zone4_Undead",
     "Traps": {
-        "RegularTraps": ["Survival_Trap_Snapjaw", "Survival_Trap_Spike_Iron", "Survival_Trap_Spike_Wood"],
-        "WallSpikeTraps": ["Survival_Trap_Spike_Iron", "Survival_Trap_Spike_Wood"],
-        "FloorTraps": ["Trap_Ancient_Platform", "Trap_Ice", "Trap_Slate", "Survival_Trap_Grass"]
+        "RegularTraps": [
+            "Survival_Trap_Snapjaw",
+            "Survival_Trap_Spike_Iron",
+            "Survival_Trap_Spike_Wood"
+        ],
+        "WallSpikeTraps": [
+            "Survival_Trap_Spike_Iron",
+            "Survival_Trap_Spike_Wood"
+        ],
+        "FloorTraps": [
+            "Trap_Ancient_Platform",
+            "Trap_Ice",
+            "Trap_Slate",
+            "Survival_Trap_Grass"
+        ]
     },
     "FillBlock": "Soil_Hive_Brick",
     "SecondaryWallChance": 0.2,
+    "LevelVariance": 5,
     "SpawnPools": {
         "Tier1": [
-            { "NpcRole": "Hive_Drone", "MinLevel": 1, "MaxLevel": 5, "Weight": 3.0 },
-            { "NpcRole": "Hive_Worker", "MinLevel": 1, "MaxLevel": 5, "Weight": 2.0 }
+            {
+                "NpcRole": "Hive_Drone",
+                "MinLevel": 1,
+                "MaxLevel": 15,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Hive_Worker",
+                "MinLevel": 1,
+                "MaxLevel": 15,
+                "Weight": 2.0
+            }
         ],
         "Tier2": [
-            { "NpcRole": "Hive_Soldier", "MinLevel": 5, "MaxLevel": 10, "Weight": 3.0 },
-            { "NpcRole": "Hive_Spitter", "MinLevel": 5, "MaxLevel": 10, "Weight": 1.5 }
+            {
+                "NpcRole": "Hive_Soldier",
+                "MinLevel": 5,
+                "MaxLevel": 30,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Hive_Spitter",
+                "MinLevel": 5,
+                "MaxLevel": 30,
+                "Weight": 1.5
+            }
         ],
         "Tier3": [
-            { "NpcRole": "Hive_Guardian", "MinLevel": 10, "MaxLevel": 15, "Weight": 3.0 },
-            { "NpcRole": "Hive_Spitter", "MinLevel": 10, "MaxLevel": 15, "Weight": 2.0 }
+            {
+                "NpcRole": "Hive_Guardian",
+                "MinLevel": 10,
+                "MaxLevel": 60,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Hive_Spitter",
+                "MinLevel": 10,
+                "MaxLevel": 60,
+                "Weight": 2.0
+            }
         ],
         "Boss": [
-            { "NpcRole": "Hive_Queen", "MinLevel": 15, "MaxLevel": 20, "Weight": 1.0 }
+            {
+                "NpcRole": "Hive_Queen",
+                "MinLevel": 15,
+                "MaxLevel": 60,
+                "Weight": 1.0
+            }
         ]
     }
 }

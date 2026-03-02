@@ -81,6 +81,7 @@ public class SpawnerPlacer {
         }
 
         int nextId = 0;
+        int levelVariance = themeConfig.getLevelVariance();
 
         for (Room room : graph.getRooms()) {
             // Skip non-combat rooms: safe zones, entrances, and loot rooms never get spawners
@@ -103,7 +104,8 @@ public class SpawnerPlacer {
                     } else {
                         spawners.add(new SpawnerDefinition(nextId++, room.centerX(),
                             room.getY() + 1, room.centerZ(), room.getId(),
-                            SpawnerType.FIXED, trigger, bossPool, 1, bossOffsets, true));
+                            SpawnerType.FIXED, trigger, bossPool, 1, bossOffsets, true,
+                            floorLevel, levelVariance));
                     }
                 } else {
                     LOGGER.atWarning().log("[DungeonGen] Empty boss pool for room %d on floor %d — skipping boss spawner",
@@ -123,7 +125,7 @@ public class SpawnerPlacer {
                             spawners.add(new SpawnerDefinition(nextId++, mx,
                                 room.getY() + 1, mz, room.getId(),
                                 SpawnerType.FIXED, trigger, minionPool, minionCount,
-                                minionOffsets, false));
+                                minionOffsets, false, floorLevel, levelVariance));
                         }
                     }
                 }
@@ -150,7 +152,7 @@ public class SpawnerPlacer {
                     if (!offsets.isEmpty()) {
                         spawners.add(new SpawnerDefinition(nextId++, cx, cy, cz,
                             room.getId(), SpawnerType.FIXED, trigger, pool, count,
-                            offsets, false));
+                            offsets, false, floorLevel, levelVariance));
                     }
                 }
             }
@@ -255,11 +257,7 @@ public class SpawnerPlacer {
             if (!entry.isEligibleForFloor(floorLevel)) continue;
             result.add(new SpawnEntry(
                 entry.getNpcRole(),
-                entry.getMinLevel(),
-                entry.getMaxLevel(),
-                entry.getWeight(),
-                entry.getMinFloor() > 0 ? entry.getMinFloor() : null,
-                entry.getMaxFloor() > 0 ? entry.getMaxFloor() : null
+                entry.getWeight()
             ));
         }
         return result;

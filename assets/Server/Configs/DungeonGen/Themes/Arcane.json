@@ -8,9 +8,16 @@
         "PillarMiddle": "Rock_Runic_Cobble_Pillar_Middle",
         "Stairs": "Rock_Runic_Brick",
         "Slab": "Rock_Runic_Brick",
-        "DecayVariants": ["Rock_Runic_Dark_Brick"],
-        "OvergrowthBlocks": ["Rock_Crystal_Purple_Large"],
-        "RubbleBlocks": ["Rubble_Ice", "Rubble_Ice_Medium"],
+        "DecayVariants": [
+            "Rock_Runic_Dark_Brick"
+        ],
+        "OvergrowthBlocks": [
+            "Rock_Crystal_Purple_Large"
+        ],
+        "RubbleBlocks": [
+            "Rubble_Ice",
+            "Rubble_Ice_Medium"
+        ],
         "FluidBlock": "Fluid_Water",
         "SecondaryFluidBlock": "Fluid_Lava",
         "AccentBlock": "Rock_Runic_Blue_Brick_Pipe_Short"
@@ -23,39 +30,162 @@
         "AccentFloorLight": "Furniture_Frozen_Castle_Secondary_Lamp"
     },
     "Props": [
-        { "BlockId": "Furniture_Ancient_Bookshelf", "Placement": "WALL_ALIGNED", "SpawnChance": 0.2, "MaxPerRoom": 3, "AllowedRoomTypes": ["SAFE", "LOOT", "HUB"] },
-        { "BlockId": "Furniture_Royal_Magic_Table", "Placement": "CENTER", "SpawnChance": 0.4, "MaxPerRoom": 1, "AllowedRoomTypes": ["SAFE"] },
-        { "BlockId": "Furniture_Dungeon_Chest_Epic", "Placement": "CENTER", "SpawnChance": 0.9, "MaxPerRoom": 1, "AllowedRoomTypes": ["BOSS"] },
-        { "BlockId": "Furniture_Dungeon_Chest_Epic", "Placement": "CENTER", "SpawnChance": 0.7, "MaxPerRoom": 1, "AllowedRoomTypes": ["LOOT"] },
-        { "BlockId": "Furniture_Royal_Magic_Pot", "Placement": "FLOOR", "SpawnChance": 0.15, "MaxPerRoom": 2 },
-        { "BlockId": "Rock_Crystal_Blue_Small", "Placement": "FLOOR", "SpawnChance": 0.8, "MaxPerRoom": 10, "AllowedRoomTypes": ["COMBAT", "BOSS"] },
-        { "BlockId": "Rock_Crystal_Blue_Medium", "Placement": "FLOOR", "SpawnChance": 0.16, "MaxPerRoom": 5, "AllowedRoomTypes": ["COMBAT", "BOSS"] },
-        { "BlockId": "Rock_Crystal_Blue_Large", "Placement": "FLOOR", "SpawnChance": 0.1, "MaxPerRoom": 2, "AllowedRoomTypes": ["COMBAT", "BOSS"] },
-        { "BlockId": "Rock_Crystal_Purple_Large", "Placement": "FLOOR", "SpawnChance": 0.1, "MaxPerRoom": 2, "AllowedRoomTypes": ["COMBAT", "BOSS"] }
+        {
+            "BlockId": "Furniture_Ancient_Bookshelf",
+            "Placement": "WALL_ALIGNED",
+            "SpawnChance": 0.2,
+            "MaxPerRoom": 3,
+            "AllowedRoomTypes": [
+                "SAFE",
+                "LOOT",
+                "HUB"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Royal_Magic_Table",
+            "Placement": "CENTER",
+            "SpawnChance": 0.4,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "SAFE"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Dungeon_Chest_Epic",
+            "Placement": "CENTER",
+            "SpawnChance": 0.9,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "BOSS"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Dungeon_Chest_Epic",
+            "Placement": "CENTER",
+            "SpawnChance": 0.7,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "LOOT"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Royal_Magic_Pot",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.15,
+            "MaxPerRoom": 2
+        },
+        {
+            "BlockId": "Rock_Crystal_Blue_Small",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.8,
+            "MaxPerRoom": 10,
+            "AllowedRoomTypes": [
+                "COMBAT",
+                "BOSS"
+            ]
+        },
+        {
+            "BlockId": "Rock_Crystal_Blue_Medium",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.16,
+            "MaxPerRoom": 5,
+            "AllowedRoomTypes": [
+                "COMBAT",
+                "BOSS"
+            ]
+        },
+        {
+            "BlockId": "Rock_Crystal_Blue_Large",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.1,
+            "MaxPerRoom": 2,
+            "AllowedRoomTypes": [
+                "COMBAT",
+                "BOSS"
+            ]
+        },
+        {
+            "BlockId": "Rock_Crystal_Purple_Large",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.1,
+            "MaxPerRoom": 2,
+            "AllowedRoomTypes": [
+                "COMBAT",
+                "BOSS"
+            ]
+        }
     ],
     "SpawnerPrefix": "Zone3_Outlander",
     "Traps": {
-        "RegularTraps": ["Survival_Trap_Snapjaw", "Survival_Trap_Spike_Iron", "Survival_Trap_Spike_Wood"],
-        "WallSpikeTraps": ["Survival_Trap_Spike_Iron", "Survival_Trap_Spike_Wood"],
-        "FloorTraps": ["Trap_Ancient_Platform", "Trap_Ice", "Trap_Slate", "Survival_Trap_Grass"]
+        "RegularTraps": [
+            "Survival_Trap_Snapjaw",
+            "Survival_Trap_Spike_Iron",
+            "Survival_Trap_Spike_Wood"
+        ],
+        "WallSpikeTraps": [
+            "Survival_Trap_Spike_Iron",
+            "Survival_Trap_Spike_Wood"
+        ],
+        "FloorTraps": [
+            "Trap_Ancient_Platform",
+            "Trap_Ice",
+            "Trap_Slate",
+            "Survival_Trap_Grass"
+        ]
     },
     "FillBlock": "Rock_Runic_Blue_Brick",
     "SecondaryWallChance": 0.2,
+    "LevelVariance": 5,
     "SpawnPools": {
         "Tier1": [
-            { "NpcRole": "Outlander_Scout", "MinLevel": 1, "MaxLevel": 5, "Weight": 3.0 },
-            { "NpcRole": "Outlander_Fighter", "MinLevel": 1, "MaxLevel": 5, "Weight": 2.0 }
+            {
+                "NpcRole": "Outlander_Scout",
+                "MinLevel": 1,
+                "MaxLevel": 15,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Outlander_Fighter",
+                "MinLevel": 1,
+                "MaxLevel": 15,
+                "Weight": 2.0
+            }
         ],
         "Tier2": [
-            { "NpcRole": "Outlander_Fighter", "MinLevel": 5, "MaxLevel": 10, "Weight": 3.0 },
-            { "NpcRole": "Outlander_Mage", "MinLevel": 5, "MaxLevel": 10, "Weight": 1.5 }
+            {
+                "NpcRole": "Outlander_Fighter",
+                "MinLevel": 5,
+                "MaxLevel": 30,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Outlander_Mage",
+                "MinLevel": 5,
+                "MaxLevel": 30,
+                "Weight": 1.5
+            }
         ],
         "Tier3": [
-            { "NpcRole": "Outlander_Knight", "MinLevel": 10, "MaxLevel": 15, "Weight": 3.0 },
-            { "NpcRole": "Outlander_Mage", "MinLevel": 10, "MaxLevel": 15, "Weight": 2.0 }
+            {
+                "NpcRole": "Outlander_Knight",
+                "MinLevel": 10,
+                "MaxLevel": 60,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Outlander_Mage",
+                "MinLevel": 10,
+                "MaxLevel": 60,
+                "Weight": 2.0
+            }
         ],
         "Boss": [
-            { "NpcRole": "Outlander_Boss", "MinLevel": 15, "MaxLevel": 20, "Weight": 1.0 }
+            {
+                "NpcRole": "Outlander_Boss",
+                "MinLevel": 15,
+                "MaxLevel": 60,
+                "Weight": 1.0
+            }
         ]
     }
 }

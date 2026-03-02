@@ -8,9 +8,15 @@
         "PillarMiddle": "Rock_Volcanic_Brick_Pillar_Middle",
         "Stairs": "Rock_Volcanic_Brick",
         "Slab": "Rock_Volcanic_Brick",
-        "DecayVariants": ["Rock_Volcanic_Cracked_Incandescent", "Rock_Volcanic_Cracked_Lava"],
+        "DecayVariants": [
+            "Rock_Volcanic_Cracked_Incandescent",
+            "Rock_Volcanic_Cracked_Lava"
+        ],
         "OvergrowthBlocks": [],
-        "RubbleBlocks": ["Rubble_Volcanic", "Rubble_Volcanic_Medium"],
+        "RubbleBlocks": [
+            "Rubble_Volcanic",
+            "Rubble_Volcanic_Medium"
+        ],
         "FluidBlock": "Fluid_Lava",
         "SecondaryFluidBlock": "Fluid_Lava",
         "AccentBlock": "Ore_Gold_Volcanic"
@@ -22,36 +28,126 @@
         "AccentFloorLight": "Furniture_Human_Ruins_Torch"
     },
     "Props": [
-        { "BlockId": "Bench_Furnace", "Placement": "FLOOR", "SpawnChance": 0.3, "MaxPerRoom": 1, "AllowedRoomTypes": ["SAFE"] },
-        { "BlockId": "Bench_Armory", "Placement": "FLOOR", "SpawnChance": 0.2, "MaxPerRoom": 1, "AllowedRoomTypes": ["SAFE"] },
-        { "BlockId": "Furniture_Dungeon_Chest_Epic", "Placement": "CENTER", "SpawnChance": 0.9, "MaxPerRoom": 1, "AllowedRoomTypes": ["BOSS"] },
-        { "BlockId": "Furniture_Crude_Chest_Large", "Placement": "CENTER", "SpawnChance": 0.7, "MaxPerRoom": 1, "AllowedRoomTypes": ["LOOT"] },
-        { "BlockId": "Furniture_Ancient_Crate", "Placement": "FLOOR", "SpawnChance": 0.15, "MaxPerRoom": 2 },
-        { "BlockId": "Deco_Iron_Stack", "Placement": "CORNER", "SpawnChance": 0.2, "MaxPerRoom": 2 }
+        {
+            "BlockId": "Bench_Furnace",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.3,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "SAFE"
+            ]
+        },
+        {
+            "BlockId": "Bench_Armory",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.2,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "SAFE"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Dungeon_Chest_Epic",
+            "Placement": "CENTER",
+            "SpawnChance": 0.9,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "BOSS"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Crude_Chest_Large",
+            "Placement": "CENTER",
+            "SpawnChance": 0.7,
+            "MaxPerRoom": 1,
+            "AllowedRoomTypes": [
+                "LOOT"
+            ]
+        },
+        {
+            "BlockId": "Furniture_Ancient_Crate",
+            "Placement": "FLOOR",
+            "SpawnChance": 0.15,
+            "MaxPerRoom": 2
+        },
+        {
+            "BlockId": "Deco_Iron_Stack",
+            "Placement": "CORNER",
+            "SpawnChance": 0.2,
+            "MaxPerRoom": 2
+        }
     ],
     "SpawnerPrefix": "Zone2_Feran",
     "Traps": {
-        "RegularTraps": ["Survival_Trap_Snapjaw", "Survival_Trap_Spike_Iron", "Survival_Trap_Spike_Wood"],
-        "WallSpikeTraps": ["Survival_Trap_Spike_Iron", "Survival_Trap_Spike_Wood"],
-        "FloorTraps": ["Trap_Ancient_Platform", "Trap_Ice", "Trap_Slate", "Survival_Trap_Grass"]
+        "RegularTraps": [
+            "Survival_Trap_Snapjaw",
+            "Survival_Trap_Spike_Iron",
+            "Survival_Trap_Spike_Wood"
+        ],
+        "WallSpikeTraps": [
+            "Survival_Trap_Spike_Iron",
+            "Survival_Trap_Spike_Wood"
+        ],
+        "FloorTraps": [
+            "Trap_Ancient_Platform",
+            "Trap_Ice",
+            "Trap_Slate",
+            "Survival_Trap_Grass"
+        ]
     },
     "FillBlock": "Rock_Volcanic_Brick",
     "SecondaryWallChance": 0.2,
+    "LevelVariance": 5,
     "SpawnPools": {
         "Tier1": [
-            { "NpcRole": "Feran_Scout", "MinLevel": 1, "MaxLevel": 5, "Weight": 3.0 },
-            { "NpcRole": "Feran_Warrior", "MinLevel": 1, "MaxLevel": 5, "Weight": 2.0 }
+            {
+                "NpcRole": "Feran_Scout",
+                "MinLevel": 1,
+                "MaxLevel": 15,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Feran_Warrior",
+                "MinLevel": 1,
+                "MaxLevel": 15,
+                "Weight": 2.0
+            }
         ],
         "Tier2": [
-            { "NpcRole": "Feran_Warrior", "MinLevel": 5, "MaxLevel": 10, "Weight": 3.0 },
-            { "NpcRole": "Feran_Shaman", "MinLevel": 5, "MaxLevel": 10, "Weight": 1.5 }
+            {
+                "NpcRole": "Feran_Warrior",
+                "MinLevel": 5,
+                "MaxLevel": 30,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Feran_Shaman",
+                "MinLevel": 5,
+                "MaxLevel": 30,
+                "Weight": 1.5
+            }
         ],
         "Tier3": [
-            { "NpcRole": "Feran_Champion", "MinLevel": 10, "MaxLevel": 15, "Weight": 3.0 },
-            { "NpcRole": "Feran_Shaman", "MinLevel": 10, "MaxLevel": 15, "Weight": 2.0 }
+            {
+                "NpcRole": "Feran_Champion",
+                "MinLevel": 10,
+                "MaxLevel": 60,
+                "Weight": 3.0
+            },
+            {
+                "NpcRole": "Feran_Shaman",
+                "MinLevel": 10,
+                "MaxLevel": 60,
+                "Weight": 2.0
+            }
         ],
         "Boss": [
-            { "NpcRole": "Feran_Boss", "MinLevel": 15, "MaxLevel": 20, "Weight": 1.0 }
+            {
+                "NpcRole": "Feran_Boss",
+                "MinLevel": 15,
+                "MaxLevel": 60,
+                "Weight": 1.0
+            }
         ]
     }
 }

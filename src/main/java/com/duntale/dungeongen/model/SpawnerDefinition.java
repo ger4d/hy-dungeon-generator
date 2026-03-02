@@ -31,5 +31,7 @@ public record SpawnerDefinition(
     @Nonnull List<SpawnEntry> spawnPool,
     int totalCount,
     @Nonnull List<Vec3i> spawnOffsets,
-    boolean isBoss
+    boolean isBoss,
+    int floorLevel,
+    int levelVariance
 ) {}
