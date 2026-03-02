@@ -36,5 +36,22 @@
         "FloorTraps": ["Trap_Ancient_Platform", "Trap_Ice", "Trap_Slate", "Survival_Trap_Grass"]
     },
     "FillBlock": "Soil_Hive_Brick",
-    "SecondaryWallChance": 0.2
+    "SecondaryWallChance": 0.2,
+    "SpawnPools": {
+        "Tier1": [
+            { "NpcRole": "Hive_Drone", "MinLevel": 1, "MaxLevel": 5, "Weight": 3.0 },
+            { "NpcRole": "Hive_Worker", "MinLevel": 1, "MaxLevel": 5, "Weight": 2.0 }
+        ],
+        "Tier2": [
+            { "NpcRole": "Hive_Soldier", "MinLevel": 5, "MaxLevel": 10, "Weight": 3.0 },
+            { "NpcRole": "Hive_Spitter", "MinLevel": 5, "MaxLevel": 10, "Weight": 1.5 }
+        ],
+        "Tier3": [
+            { "NpcRole": "Hive_Guardian", "MinLevel": 10, "MaxLevel": 15, "Weight": 3.0 },
+            { "NpcRole": "Hive_Spitter", "MinLevel": 10, "MaxLevel": 15, "Weight": 2.0 }
+        ],
+        "Boss": [
+            { "NpcRole": "Hive_Queen", "MinLevel": 15, "MaxLevel": 20, "Weight": 1.0 }
+        ]
+    }
 }

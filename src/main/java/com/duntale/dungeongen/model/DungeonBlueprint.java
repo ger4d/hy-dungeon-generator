@@ -17,7 +17,7 @@ import java.util.List;
 public class DungeonBlueprint {
 
     private final List<BlockEntry> blocks;
-    private final List<SpawnPoint> spawnPoints;
+    private final List<SpawnerDefinition> spawners;
     private final DungeonGraph graph;
     private final String seed;
 
@@ -31,7 +31,7 @@ public class DungeonBlueprint {
         this.seed = seed;
         this.graph = graph;
         this.blocks = new ArrayList<>();
-        this.spawnPoints = new ArrayList<>();
+        this.spawners = new ArrayList<>();
     }
 
     /**
@@ -57,12 +57,13 @@ public class DungeonBlueprint {
     }
 
     /**
-     * Register a spawn point in the blueprint.
+     * Register a spawner definition in the blueprint.
      *
-     * @param sp the spawn point to add
+     * @param spawner the spawner definition to add
+     * @since 1.1.0
      */
-    public void addSpawnPoint(@Nonnull SpawnPoint sp) {
-        spawnPoints.add(sp);
+    public void addSpawner(@Nonnull SpawnerDefinition spawner) {
+        spawners.add(spawner);
     }
 
     /**
@@ -74,11 +75,12 @@ public class DungeonBlueprint {
     }
 
     /**
-     * @return unmodifiable list of all spawn points.
+     * @return unmodifiable list of all spawner definitions.
+     * @since 1.1.0
      */
     @Nonnull
-    public List<SpawnPoint> getSpawnPoints() {
-        return Collections.unmodifiableList(spawnPoints);
+    public List<SpawnerDefinition> getSpawners() {
+        return Collections.unmodifiableList(spawners);
     }
 
     /**

@@ -92,6 +92,9 @@ public class DungeonSettingsConfig
     protected int blocksPerBatch = 1000;
     protected String fluidFallbackBlock = "Rock_Stone_Brick";
 
+    // Spawner visual marker block (null or empty = invisible)
+    protected String spawnerBlock = "Furniture_Temple_Scarak_Window";
+
     /** No-arg constructor required by codec. */
     public DungeonSettingsConfig() {}
 
@@ -184,6 +187,8 @@ public class DungeonSettingsConfig
                 (c, v) -> c.blocksPerBatch = v, c -> c.blocksPerBatch).add()
             .append(new KeyedCodec<>("FluidFallbackBlock", Codec.STRING),
                 (c, v) -> c.fluidFallbackBlock = v, c -> c.fluidFallbackBlock).add()
+            .append(new KeyedCodec<>("SpawnerBlock", Codec.STRING),
+                (c, v) -> c.spawnerBlock = v, c -> c.spawnerBlock).add()
             .build();
     }
 
@@ -310,4 +315,12 @@ public class DungeonSettingsConfig
     public int getBlocksPerBatch() { return blocksPerBatch; }
     @Nonnull
     public String getFluidFallbackBlock() { return fluidFallbackBlock; }
+
+    /**
+     * @return the block ID to place as a visual marker at spawner positions,
+     *         or {@code null}/empty for invisible spawners.
+     * @since 1.1.0
+     */
+    @Nullable
+    public String getSpawnerBlock() { return spawnerBlock; }
 }

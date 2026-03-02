@@ -35,5 +35,22 @@
         "FloorTraps": ["Trap_Ancient_Platform", "Trap_Ice", "Trap_Slate", "Survival_Trap_Grass"]
     },
     "FillBlock": "Plant_Moss_Block_Green",
-    "SecondaryWallChance": 0.2
+    "SecondaryWallChance": 0.2,
+    "SpawnPools": {
+        "Tier1": [
+            { "NpcRole": "Trork_Scout", "MinLevel": 1, "MaxLevel": 5, "Weight": 3.0 },
+            { "NpcRole": "Trork_Fighter", "MinLevel": 1, "MaxLevel": 5, "Weight": 2.0 }
+        ],
+        "Tier2": [
+            { "NpcRole": "Trork_Warrior", "MinLevel": 5, "MaxLevel": 10, "Weight": 3.0 },
+            { "NpcRole": "Trork_Shaman", "MinLevel": 5, "MaxLevel": 10, "Weight": 1.5 }
+        ],
+        "Tier3": [
+            { "NpcRole": "Trork_Champion", "MinLevel": 10, "MaxLevel": 15, "Weight": 3.0 },
+            { "NpcRole": "Trork_Shaman", "MinLevel": 10, "MaxLevel": 15, "Weight": 2.0 }
+        ],
+        "Boss": [
+            { "NpcRole": "Trork_Boss", "MinLevel": 15, "MaxLevel": 20, "Weight": 1.0 }
+        ]
+    }
 }

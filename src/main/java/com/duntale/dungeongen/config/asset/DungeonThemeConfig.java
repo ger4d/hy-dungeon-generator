@@ -68,6 +68,9 @@ public class DungeonThemeConfig
     // Secondary wall replacement chance (0.0 to 1.0)
     protected double secondaryWallChance = 0.2;
 
+    // Spawn Pools — NPC spawner entries per tier
+    protected SpawnPoolsEntry spawnPools = new SpawnPoolsEntry();
+
     /** No-arg constructor required by {@link com.hypixel.hytale.codec.builder.BuilderCodec}. */
     public DungeonThemeConfig() {}
 
@@ -99,6 +102,8 @@ public class DungeonThemeConfig
                 (c, v) -> c.fillBlock = v, c -> c.fillBlock).add()
             .append(new KeyedCodec<>("SecondaryWallChance", Codec.DOUBLE),
                 (c, v) -> c.secondaryWallChance = v, c -> c.secondaryWallChance).add()
+            .append(new KeyedCodec<>("SpawnPools", SpawnPoolsEntry.CODEC),
+                (c, v) -> c.spawnPools = v, c -> c.spawnPools).add()
             .build();
     }
 
@@ -158,6 +163,13 @@ public class DungeonThemeConfig
     @Nonnull public TrapEntry getTraps() { return traps; }
     @Nonnull public String getFillBlock() { return fillBlock; }
     public double getSecondaryWallChance() { return secondaryWallChance; }
+
+    /**
+     * @return the spawn pools configuration for this theme.
+     * @since 1.1.0
+     */
+    @Nonnull
+    public SpawnPoolsEntry getSpawnPools() { return spawnPools; }
 
     // ============================================
     // Domain conversions
