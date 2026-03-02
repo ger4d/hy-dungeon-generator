@@ -4,6 +4,7 @@ import com.duntale.dungeongen.config.Vec3i;
 import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.model.BlockEntry;
 import com.duntale.dungeongen.model.DungeonBlueprint;
+import com.duntale.dungeongen.model.SpawnerDefinition;
 import com.duntale.dungeongen.util.BlockResolver;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
@@ -89,7 +90,7 @@ public class WorldAssembler {
         AtomicInteger index = new AtomicInteger(0);
 
         // Schedule the first batch on the world thread
-        scheduleBatch(world, blocks, origin, index, startTime, future);
+        scheduleBatch(world, blocks, origin, index, startTime, future, blueprint);
 
         return future;
     }
@@ -103,7 +104,8 @@ public class WorldAssembler {
                                @Nonnull Vec3i origin,
                                @Nonnull AtomicInteger index,
                                long startTime,
-                               @Nonnull CompletableFuture<Long> future) {
+                               @Nonnull CompletableFuture<Long> future,
+                               @Nonnull DungeonBlueprint blueprint) {
         world.execute(() -> {
             try {
                 int start = index.get();
@@ -118,9 +120,10 @@ public class WorldAssembler {
 
                 if (end < blocks.size()) {
                     // More blocks remain — schedule the next batch
-                    scheduleBatch(world, blocks, origin, index, startTime, future);
+                    scheduleBatch(world, blocks, origin, index, startTime, future, blueprint);
                 } else {
-                    // All blocks placed
+                    // All blocks placed — now place spawner markers
+                    placeSpawnerMarkers(world, blueprint, origin);
                     long elapsed = System.currentTimeMillis() - startTime;
                     LOGGER.atInfo().log("[DungeonGen] Assembly complete: %d blocks in %d ms",
                         blocks.size(), elapsed);
@@ -236,6 +239,46 @@ public class WorldAssembler {
         } catch (Exception e) {
             LOGGER.atWarning().log("[DungeonGen] Failed to place fluid %s at (%d,%d,%d): %s",
                 blockId, x, y, z, e.getMessage());
+        }
+    }
+
+    /**
+     * Place debug marker blocks at spawner positions.
+     *
+     * @param world     the target world
+     * @param blueprint the dungeon blueprint
+     * @param origin    the world-space origin offset
+     * @since 1.1.0
+     */
+    private void placeSpawnerMarkers(@Nonnull World world,
+                                      @Nonnull DungeonBlueprint blueprint,
+                                      @Nonnull Vec3i origin) {
+        String spawnerBlock = settings.getSpawnerBlock();
+        if (spawnerBlock == null || spawnerBlock.isEmpty()) return;
+
+        for (SpawnerDefinition spawner : blueprint.getSpawners()) {
+            int wx = origin.x() + spawner.x();
+            int wy = origin.y() + spawner.y();
+            int wz = origin.z() + spawner.z();
+            placeMarkerBlock(world, wx, wy, wz, spawnerBlock);
+        }
+    }
+
+    /**
+     * Place a single marker block in the world.
+     *
+     * @param world   the target world
+     * @param x       world X coordinate
+     * @param y       world Y coordinate
+     * @param z       world Z coordinate
+     * @param blockId the block type to place
+     */
+    private void placeMarkerBlock(@Nonnull World world, int x, int y, int z,
+                                   @Nonnull String blockId) {
+        long chunkIndex = ChunkUtil.indexChunkFromBlock(x, z);
+        WorldChunk chunk = world.getChunk(chunkIndex);
+        if (chunk != null) {
+            chunk.setBlock(x, y, z, blockId);
         }
     }
 

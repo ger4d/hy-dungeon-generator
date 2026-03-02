@@ -1,9 +1,9 @@
 # Enemy Spawner System — Design Plan
 
-> **Status**: Draft v3  
+> **Status**: Implementation (Phases A–D complete)  
 > **Scope**: dungeon-gen (generation-time) + v3-zsquad (runtime)  
 > **Date**: 2026-03-01  
-> **Last updated**: 2026-03-01
+> **Last updated**: 2026-03-02
 
 ---
 
@@ -11,9 +11,9 @@
 
 ### What exists today
 
-The dungeon-gen generation pipeline (7 stages) produces a `DungeonBlueprint` containing block entries and `SpawnPoint` records. The `SpawnPointPlacer` (Phase 6) creates these points in COMBAT and BOSS rooms, assigning a `spawnerTable` string and a `tier` (1–3) based on critical-path progress.
+The dungeon-gen generation pipeline (7 stages) produces a `DungeonBlueprint` containing block entries and `SpawnerDefinition` records. The `SpawnerPlacer` (Phase 6) creates spawner definitions in COMBAT and BOSS rooms with tier-based spawn pools, pre-computed spawn offsets, and proximity triggers. The `WorldAssembler` places blocks and spawner debug markers.
 
-**Problem**: `SpawnPoint` is metadata-only — no runtime system consumes them. The `WorldAssembler` places blocks but ignores spawn points entirely. There's no mechanism to actually create NPC entities from these points.
+**Remaining**: v3-zsquad needs a runtime ECS system to consume `SpawnerDefinition` records and actually spawn NPC entities.
 
 ### Architecture decision: compileOnly dependency
 
@@ -425,53 +425,61 @@ Default values (tunable in `dungeon_floors` or global settings):
 
 ### dungeon-gen — new files
 
-| File | Type | Purpose |
-|---|---|---|
-| `model/SpawnerDefinition.java` | record | Core spawner definition |
-| `model/SpawnEntry.java` | record | Weighted NPC entry with level range + floor gate |
-| `model/SpawnerType.java` | enum | FIXED, RECURRENT |
-| `model/TriggerConfig.java` | record | Trigger type + parameters |
-| `model/TriggerType.java` | enum | ON_CREATE, PROXIMITY, TIMED, ON_ROOM_ENTER, ON_ROOM_CLEAR |
-| `config/asset/SpawnPoolTierEntry.java` | record + codec | SpawnPools JSON entry |
-| `generator/entity/SpawnerPlacer.java` | class | Produces SpawnerDefinitions from graph |
+| File | Type | Purpose | Status |
+|---|---|---|---|
+| `model/SpawnerDefinition.java` | record | Core spawner definition | **DONE** |
+| `model/SpawnEntry.java` | record | Weighted NPC entry with level range + floor gate | **DONE** |
+| `model/SpawnerType.java` | enum | FIXED, RECURRENT | **DONE** |
+| `model/TriggerConfig.java` | record | Trigger type + parameters | **DONE** |
+| `model/TriggerType.java` | enum | ON_CREATE, PROXIMITY, TIMED, ON_ROOM_ENTER, ON_ROOM_CLEAR | **DONE** |
+| `config/asset/SpawnPoolEntry.java` | codec class | SpawnPools JSON entry | **DONE** |
+| `config/asset/SpawnPoolsEntry.java` | codec class | SpawnPools tier container | **DONE** |
+| `generator/entity/SpawnerPlacer.java` | class | Produces SpawnerDefinitions from graph | **DONE** |
 
 ### dungeon-gen — modified files
 
-| File | Change |
-|---|---|
-| `model/DungeonBlueprint.java` | `List<SpawnPoint>` → `List<SpawnerDefinition>` |
-| `model/SpawnPoint.java` | **DELETE** — replaced by SpawnerDefinition |
-| `generator/entity/SpawnPointPlacer.java` | **DELETE** — replaced by SpawnerPlacer |
-| `generator/GenerationOrchestrator.java` | Use SpawnerPlacer, pass floorLevel |
-| `config/DungeonConfig.java` | Add `floorLevel` field |
-| `config/asset/DungeonSettingsConfig.java` | Add `spawnerBlock` field |
-| `config/asset/DungeonThemeConfig.java` | Parse SpawnPools from JSON |
-| `assembly/WorldAssembler.java` | Place spawner debug blocks from blueprint |
-| `assets/.../Themes/*.json` | Add SpawnPools section to all 7 themes |
-| `assets/.../Settings/Generation.json` | Add `SpawnerBlock` field |
-| `rest/HttpRestServer.java` | Update response to include spawner stats |
-
-### v3-zsquad — new files (future phase)
-
-| File | Type | Purpose |
+| File | Change | Status |
 |---|---|---|
-| `spawner/SpawnerComponent.java` | Component | ECS component holding spawner state |
-| `spawner/SpawnerState.java` | enum | DORMANT, ACTIVE, DEPLETED, DISABLED |
-| `spawner/SpawnerTickSystem.java` | System | ECS tick system driving spawner logic |
-| `spawner/SpawnerFactory.java` | class | Creates spawner entities from blueprint |
+| `model/DungeonBlueprint.java` | `List<SpawnPoint>` → `List<SpawnerDefinition>` | **DONE** |
+| `model/SpawnPoint.java` | **DELETE** — replaced by SpawnerDefinition | **DONE** |
+| `generator/entity/SpawnPointPlacer.java` | **DELETE** — replaced by SpawnerPlacer | **DONE** |
+| `generator/GenerationOrchestrator.java` | Use SpawnerPlacer, pass floorLevel | **DONE** |
+| `config/DungeonConfig.java` | Add `floorLevel` field | **DONE** |
+| `config/asset/DungeonSettingsConfig.java` | Add `spawnerBlock` field | **DONE** |
+| `config/asset/DungeonThemeConfig.java` | Parse SpawnPools from JSON | **DONE** |
+| `assembly/WorldAssembler.java` | Place spawner debug blocks from blueprint | **DONE** |
+| `assets/.../Themes/*.json` | Add SpawnPools section to all 7 themes | **DONE** |
+| `assets/.../Settings/Generation.json` | Add `SpawnerBlock` field | **DONE** |
+| `rest/HttpRestServer.java` | Update response to include spawner stats | Deferred |
+
+### v3-zsquad — new files
+
+| File | Type | Purpose | Status |
+|---|---|---|---|
+| `spawner/SpawnerComponent.java` | Component | ECS component holding spawner state | **DONE** |
+| `spawner/SpawnerState.java` | enum | DORMANT, ACTIVE, DEPLETED, DISABLED | **DONE** |
+| `spawner/SpawnerTickSystem.java` | System | ECS tick system driving spawner logic | **DONE** |
+| `spawner/SpawnerFactory.java` | class | Creates spawner entities from blueprint | **DONE** |
+
+### v3-zsquad — modified files
+
+| File | Change | Status |
+|---|---|---|
+| `ZSquadPlugin.java` | Register SpawnerComponent type, SpawnerTickSystem, SpawnerFactory. Add getters. | **DONE** |
+| `build.gradle.kts` | Add dungeon-gen compileOnly dependency | **DONE** |
 
 ---
 
 ## 10. Implementation Order
 
-| Phase | Scope | Deliverable |
-|---|---|---|
-| **A** | dungeon-gen data model | New records: `SpawnerDefinition`, `SpawnEntry`, `SpawnerType`, `TriggerConfig`, `TriggerType`. Update `DungeonBlueprint`. Delete `SpawnPoint`. |
-| **B** | dungeon-gen SpawnPools | `SpawnPoolTierEntry` codec. Update `DungeonThemeConfig` parsing. Add `SpawnPools` to all 7 theme JSONs. |
-| **C** | dungeon-gen placement | `SpawnerPlacer` producing definitions. Update `GenerationOrchestrator` + `DungeonConfig` (add `floorLevel`). Delete `SpawnPointPlacer`. |
-| **D** | dungeon-gen build | Verify `./gradlew build` passes. Update REST response stats. |
-| **E** | v3-zsquad runtime | `SpawnerComponent`, `SpawnerState`, `SpawnerTickSystem`, `SpawnerFactory`. Wire into `ZSquadPlugin`. |
-| **F** | v3-zsquad floor DB | `dungeon_floors` table + repository. Floor-level generation flow. |
+| Phase | Scope | Deliverable | Status |
+|---|---|---|---|
+| **A** | dungeon-gen data model | New records: `SpawnerDefinition`, `SpawnEntry`, `SpawnerType`, `TriggerConfig`, `TriggerType`. Update `DungeonBlueprint`. Delete `SpawnPoint`. | **DONE** (2026-03-01) |
+| **B** | dungeon-gen SpawnPools | `SpawnPoolEntry`/`SpawnPoolsEntry` codecs. Update `DungeonThemeConfig` + `DungeonSettingsConfig`. Add `SpawnPools` to all 7 theme JSONs. Add `SpawnerBlock` to `Generation.json`. | **DONE** (2026-03-01) |
+| **C** | dungeon-gen placement | `SpawnerPlacer` producing definitions with clustering + spawn offsets. Update `GenerationOrchestrator` + `DungeonConfig` (add `floorLevel`). Update `GenerationResult` (add spawners stat). Update `WorldAssembler` (spawner marker blocks). Gut `SpawnPointPlacer`. | **DONE** (2026-03-01) |
+| **D** | dungeon-gen build | `./gradlew build` passes. REST response includes spawner count. All new files registered in `api-docs-status.js`. | **DONE** (2026-03-01) |
+| **E** | v3-zsquad runtime | `SpawnerComponent`, `SpawnerState`, `SpawnerTickSystem`, `SpawnerFactory`. Wire into `ZSquadPlugin`. | **DONE** (2026-03-02) |
+| **F** | v3-zsquad floor DB | `dungeon_floors` table + repository. Floor-level generation flow. | Not started |
 
 ---
 

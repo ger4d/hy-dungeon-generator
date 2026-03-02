@@ -50,17 +50,35 @@ public class SpawnPoolEntry {
     // Getters
     // ============================================
 
-    /** @return the NPC role identifier. */
+    /**
+     * @return the NPC role identifier.
+     * @since 1.1.0
+     */
     @Nonnull public String getNpcRole() { return npcRole; }
-    /** @return the minimum NPC level. */
+    /**
+     * @return the minimum NPC level.
+     * @since 1.1.0
+     */
     public int getMinLevel() { return minLevel; }
-    /** @return the maximum NPC level. */
+    /**
+     * @return the maximum NPC level.
+     * @since 1.1.0
+     */
     public int getMaxLevel() { return maxLevel; }
-    /** @return the spawn weight for weighted random selection. */
+    /**
+     * @return the spawn weight for weighted random selection.
+     * @since 1.1.0
+     */
     public double getWeight() { return weight; }
-    /** @return minimum floor level, or -1 if no restriction. */
+    /**
+     * @return minimum floor level, or -1 if no restriction.
+     * @since 1.1.0
+     */
     public int getMinFloor() { return minFloor; }
-    /** @return maximum floor level, or -1 if no restriction. */
+    /**
+     * @return maximum floor level, or -1 if no restriction.
+     * @since 1.1.0
+     */
     public int getMaxFloor() { return maxFloor; }
 
     /**
@@ -68,6 +86,7 @@ public class SpawnPoolEntry {
      *
      * @param floorLevel the current dungeon floor
      * @return true if this entry can be used on the given floor
+     * @since 1.1.0
      */
     public boolean isEligibleForFloor(int floorLevel) {
         if (minFloor > 0 && floorLevel < minFloor) return false;

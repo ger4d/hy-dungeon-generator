@@ -40,6 +40,7 @@ public class SpawnPoolsEntry {
      *
      * @param tier the difficulty tier
      * @return the spawn pool entries for that tier
+     * @since 1.1.0
      */
     @Nonnull
     public SpawnPoolEntry[] getPoolForTier(int tier) {
@@ -51,12 +52,24 @@ public class SpawnPoolsEntry {
         };
     }
 
-    /** @return the tier 1 spawn pool entries. */
+    /**
+     * @return the tier 1 spawn pool entries.
+     * @since 1.1.0
+     */
     @Nonnull public SpawnPoolEntry[] getTier1() { return tier1; }
-    /** @return the tier 2 spawn pool entries. */
+    /**
+     * @return the tier 2 spawn pool entries.
+     * @since 1.1.0
+     */
     @Nonnull public SpawnPoolEntry[] getTier2() { return tier2; }
-    /** @return the tier 3 spawn pool entries. */
+    /**
+     * @return the tier 3 spawn pool entries.
+     * @since 1.1.0
+     */
     @Nonnull public SpawnPoolEntry[] getTier3() { return tier3; }
-    /** @return the boss spawn pool entries. */
+    /**
+     * @return the boss spawn pool entries.
+     * @since 1.1.0
+     */
     @Nonnull public SpawnPoolEntry[] getBoss() { return boss; }
 }

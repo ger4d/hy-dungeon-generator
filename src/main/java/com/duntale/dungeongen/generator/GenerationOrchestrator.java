@@ -5,7 +5,7 @@ import com.duntale.dungeongen.config.DungeonConfig;
 import com.duntale.dungeongen.config.LayoutConfig;
 import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
-import com.duntale.dungeongen.generator.entity.SpawnPointPlacer;
+import com.duntale.dungeongen.generator.entity.SpawnerPlacer;
 import com.duntale.dungeongen.generator.feature.FeaturePlacer;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.LayoutGenerator;
@@ -15,7 +15,7 @@ import com.duntale.dungeongen.generator.theme.ThemeDecorator;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
 import com.duntale.dungeongen.generator.voxel.VoxelCarver;
 import com.duntale.dungeongen.model.DungeonBlueprint;
-import com.duntale.dungeongen.model.SpawnPoint;
+import com.duntale.dungeongen.model.SpawnerDefinition;
 import com.duntale.dungeongen.util.BlockResolver;
 import com.hypixel.hytale.logger.HytaleLogger;
 
@@ -36,7 +36,7 @@ import java.util.concurrent.Executors;
  *   <li><b>Theme Decoration</b> — materials, pillars, decay ({@link ThemeDecorator})</li>
  *   <li><b>Props</b> — furniture, chests, cobwebs ({@link PropPlacer})</li>
  *   <li><b>Lights</b> — torches, lanterns, braziers ({@link LightPlacer})</li>
- *   <li><b>Spawns</b> — enemy spawn points ({@link SpawnPointPlacer})</li>
+ *   <li><b>Spawns</b> — enemy spawner definitions ({@link SpawnerPlacer})</li>
  *   <li><b>Assembly</b> — place into world (optional, {@link WorldAssembler})</li>
  * </ol>
  *
@@ -156,17 +156,17 @@ public class GenerationOrchestrator {
             LightPlacer lightPlacer = new LightPlacer(seed + 3);
             lightPlacer.placeLights(grid, graph, palette, layout.removeCeiling());
 
-            // Phase 6: Spawn point placement
-            SpawnPointPlacer spawnPlacer = new SpawnPointPlacer(seed + 4, config.pacing());
-            List<SpawnPoint> spawnPoints = spawnPlacer.placeSpawnPoints(grid, graph, palette);
+            // Phase 6: Spawner placement
+            SpawnerPlacer spawnerPlacer = new SpawnerPlacer(seed + 4, config.pacing());
+            List<SpawnerDefinition> spawners = spawnerPlacer.placeSpawners(grid, graph, palette, config.floorLevel());
 
-            LOGGER.atInfo().log("[DungeonGen] Props/lights/spawns placed: %d spawn points",
-                spawnPoints.size());
+            LOGGER.atInfo().log("[DungeonGen] Props/lights/spawns placed: %d spawners",
+                spawners.size());
 
             // Build the blueprint
             DungeonBlueprint blueprint = new DungeonBlueprint(seedStr, graph);
             grid.toBlockEntries().forEach(blueprint::addBlock);
-            spawnPoints.forEach(blueprint::addSpawnPoint);
+            spawners.forEach(blueprint::addSpawner);
 
             long genElapsed = System.currentTimeMillis() - start;
 
@@ -196,6 +196,7 @@ public class GenerationOrchestrator {
                 graph.getRooms().size(),
                 graph.getCorridors().size(),
                 blueprint.getTotalBlocks(),
+                spawners.size(),
                 genElapsed,
                 assemblyMs,
                 assemblyError

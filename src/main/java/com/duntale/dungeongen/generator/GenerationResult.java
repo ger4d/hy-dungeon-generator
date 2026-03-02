@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
  * @param rooms            number of rooms generated
  * @param corridors        number of corridors generated
  * @param totalBlocks      total voxel blocks in the blueprint (0 until voxel carver is implemented)
+ * @param spawners         number of spawner definitions placed
  * @param generationTimeMs wall-clock time for the generation pipeline
  * @param assemblyTimeMs   wall-clock time for world assembly (0 if assemble=false)
  * @param assemblyError    {@code null} if assembly succeeded or was not requested; error message otherwise
@@ -22,6 +23,7 @@ public record GenerationResult(
     int rooms,
     int corridors,
     int totalBlocks,
+    int spawners,
     long generationTimeMs,
     long assemblyTimeMs,
     @Nullable String assemblyError
@@ -43,6 +45,7 @@ public record GenerationResult(
         sb.append("\"rooms\": ").append(rooms).append(",");
         sb.append("\"corridors\": ").append(corridors).append(",");
         sb.append("\"totalBlocks\": ").append(totalBlocks).append(",");
+        sb.append("\"spawners\": ").append(spawners).append(",");
         sb.append("\"generationTimeMs\": ").append(generationTimeMs).append(",");
         sb.append("\"assemblyTimeMs\": ").append(assemblyTimeMs);
         sb.append("}");
