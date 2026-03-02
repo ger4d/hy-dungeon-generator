@@ -197,6 +197,7 @@ public class GenerationOrchestrator {
                 graph.getCorridors().size(),
                 blueprint.getTotalBlocks(),
                 spawners.size(),
+                List.copyOf(spawners),
                 genElapsed,
                 assemblyMs,
                 assemblyError

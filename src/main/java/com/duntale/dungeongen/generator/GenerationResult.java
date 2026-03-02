@@ -1,21 +1,25 @@
 package com.duntale.dungeongen.generator;
 
+import com.duntale.dungeongen.model.SpawnerDefinition;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * Immutable result returned by {@link GenerationOrchestrator} after a
  * dungeon generation completes. Contains summary statistics about the
  * generated dungeon.
  *
- * @param seed             the seed used for generation
- * @param rooms            number of rooms generated
- * @param corridors        number of corridors generated
- * @param totalBlocks      total voxel blocks in the blueprint (0 until voxel carver is implemented)
- * @param spawners         number of spawner definitions placed
- * @param generationTimeMs wall-clock time for the generation pipeline
- * @param assemblyTimeMs   wall-clock time for world assembly (0 if assemble=false)
- * @param assemblyError    {@code null} if assembly succeeded or was not requested; error message otherwise
+ * @param seed                the seed used for generation
+ * @param rooms               number of rooms generated
+ * @param corridors           number of corridors generated
+ * @param totalBlocks         total voxel blocks in the blueprint (0 until voxel carver is implemented)
+ * @param spawners            number of spawner definitions placed
+ * @param spawnerDefinitions  the spawner definitions for creating ECS spawner entities
+ * @param generationTimeMs    wall-clock time for the generation pipeline
+ * @param assemblyTimeMs      wall-clock time for world assembly (0 if assemble=false)
+ * @param assemblyError       {@code null} if assembly succeeded or was not requested; error message otherwise
  * @since 1.0.0
  */
 public record GenerationResult(
@@ -24,6 +28,7 @@ public record GenerationResult(
     int corridors,
     int totalBlocks,
     int spawners,
+    @Nonnull List<SpawnerDefinition> spawnerDefinitions,
     long generationTimeMs,
     long assemblyTimeMs,
     @Nullable String assemblyError
