@@ -12,10 +12,9 @@
             "Plant_Moss_Block_Red",
             "Plant_Moss_Block_Yellow"
         ],
-        "OvergrowthBlocks": [
-            "Plant_Vine_Hanging",
-            "Plant_Vine_Green_Hanging"
-        ],
+        "OvergrowthBlocks": {
+            "Ceiling": ["Plant_Vine_Hanging", "Plant_Vine_Green_Hanging"]
+        },
         "RubbleBlocks": [],
         "FluidBlock": "Fluid_Slime",
         "SecondaryFluidBlock": "Fluid_Lava",

@@ -26,7 +26,7 @@ public class PaletteEntry {
     protected String stairs = "Rock_Stone_Brick";
     protected String slab = "Rock_Stone_Brick";
     protected String[] decayVariants = new String[0];
-    protected String[] overgrowthBlocks = new String[0];
+    protected OvergrowthEntry overgrowthBlocks = new OvergrowthEntry();
     protected String[] rubbleBlocks = new String[0];
     protected String fluidBlock = "Fluid_Water";
     protected String secondaryFluidBlock = "Fluid_Lava";
@@ -54,7 +54,7 @@ public class PaletteEntry {
                 (e, v) -> e.slab = v, e -> e.slab).add()
             .append(new KeyedCodec<>("DecayVariants", Codec.STRING_ARRAY),
                 (e, v) -> e.decayVariants = v, e -> e.decayVariants).add()
-            .append(new KeyedCodec<>("OvergrowthBlocks", Codec.STRING_ARRAY),
+            .append(new KeyedCodec<>("OvergrowthBlocks", OvergrowthEntry.CODEC),
                 (e, v) -> e.overgrowthBlocks = v, e -> e.overgrowthBlocks).add()
             .append(new KeyedCodec<>("RubbleBlocks", Codec.STRING_ARRAY),
                 (e, v) -> e.rubbleBlocks = v, e -> e.rubbleBlocks).add()
@@ -80,7 +80,7 @@ public class PaletteEntry {
     @Nonnull public String getStairs() { return stairs; }
     @Nonnull public String getSlab() { return slab; }
     @Nonnull public String[] getDecayVariants() { return decayVariants; }
-    @Nonnull public String[] getOvergrowthBlocks() { return overgrowthBlocks; }
+    @Nonnull public OvergrowthEntry getOvergrowthBlocks() { return overgrowthBlocks; }
     @Nonnull public String[] getRubbleBlocks() { return rubbleBlocks; }
     @Nonnull public String getFluidBlock() { return fluidBlock; }
     @Nonnull public String getSecondaryFluidBlock() { return secondaryFluidBlock; }

@@ -193,6 +193,7 @@ public class DungeonThemeConfig
      */
     @Nonnull
     public BlockPalette toPalette() {
+        OvergrowthEntry og = palette.getOvergrowthBlocks();
         return new BlockPalette(
             id,
             palette.getPrimaryWall(),
@@ -204,7 +205,9 @@ public class DungeonThemeConfig
             palette.getStairs(),
             palette.getSlab(),
             palette.getDecayVariants(),
-            palette.getOvergrowthBlocks(),
+            og.getFloor(),
+            og.getWall(),
+            og.getCeiling(),
             palette.getRubbleBlocks(),
             palette.getFluidBlock(),
             palette.getAccentBlock() != null ? palette.getAccentBlock() : palette.getPrimaryWall()

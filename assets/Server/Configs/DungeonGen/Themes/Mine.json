@@ -12,10 +12,10 @@
             "Rock_Stone_Cobble_Mossy",
             "Soil_Gravel_Mossy"
         ],
-        "OvergrowthBlocks": [
-            "Plant_Vine_Hanging",
-            "Plant_Moss_Cave_Green"
-        ],
+        "OvergrowthBlocks": {
+            "Floor": ["Plant_Moss_Cave_Green"],
+            "Ceiling": ["Plant_Vine_Hanging"]
+        },
         "RubbleBlocks": [
             "Rubble_Stone",
             "Rubble_Stone_Medium"

@@ -25,7 +25,9 @@ public class BlockPalette {
     private final String stairs;
     private final String slab;
     private final String[] decayVariants;
-    private final String[] overgrowthBlocks;
+    private final String[] overgrowthFloor;
+    private final String[] overgrowthWall;
+    private final String[] overgrowthCeiling;
     private final String[] rubbleBlocks;
     private final String fluidBlock;
     private final String accentBlock;
@@ -42,11 +44,13 @@ public class BlockPalette {
      * @param pillarMiddle     pillar middle block ID
      * @param stairs           stairs block ID
      * @param slab             slab / half-block ID
-     * @param decayVariants    mossy / cracked wall variants
-     * @param overgrowthBlocks vine / moss / root blocks
-     * @param rubbleBlocks     rubble / debris blocks
-     * @param fluidBlock       fluid source block ID (water, lava, etc.)
-     * @param accentBlock      accent block (gold trim, ore, etc.)
+     * @param decayVariants      mossy / cracked wall variants
+     * @param overgrowthFloor    floor overgrowth blocks (moss, rubble-like plants)
+     * @param overgrowthWall     wall overgrowth blocks (vines, webs)
+     * @param overgrowthCeiling  ceiling overgrowth blocks (hanging vines, chains)
+     * @param rubbleBlocks       rubble / debris blocks
+     * @param fluidBlock         fluid source block ID (water, lava, etc.)
+     * @param accentBlock        accent block (gold trim, ore, etc.)
      */
     public BlockPalette(@Nonnull String name,
                         @Nonnull String primaryWall,
@@ -58,7 +62,9 @@ public class BlockPalette {
                         @Nonnull String stairs,
                         @Nonnull String slab,
                         @Nonnull String[] decayVariants,
-                        @Nonnull String[] overgrowthBlocks,
+                        @Nonnull String[] overgrowthFloor,
+                        @Nonnull String[] overgrowthWall,
+                        @Nonnull String[] overgrowthCeiling,
                         @Nonnull String[] rubbleBlocks,
                         @Nonnull String fluidBlock,
                         @Nonnull String accentBlock) {
@@ -72,7 +78,9 @@ public class BlockPalette {
         this.stairs = stairs;
         this.slab = slab;
         this.decayVariants = decayVariants;
-        this.overgrowthBlocks = overgrowthBlocks;
+        this.overgrowthFloor = overgrowthFloor;
+        this.overgrowthWall = overgrowthWall;
+        this.overgrowthCeiling = overgrowthCeiling;
         this.rubbleBlocks = rubbleBlocks;
         this.fluidBlock = fluidBlock;
         this.accentBlock = accentBlock;
@@ -108,7 +116,9 @@ public class BlockPalette {
             "Rock_Stone_Brick_Pillar_Base", "Rock_Stone_Brick_Pillar_Middle",
             "Rock_Stone_Brick_Stairs", "Rock_Stone_Brick_Half",
             new String[]{"Rock_Stone_Brick_Mossy", "Rock_Stone_Cobble_Mossy", "Rock_Stone_Mossy"},
-            new String[]{"Plant_Vine_Hanging", "Plant_Vine_Wall", "Plant_Moss_Cave_Green"},
+            new String[]{"Plant_Moss_Cave_Green"},
+            new String[]{"Plant_Vine_Wall"},
+            new String[]{"Plant_Vine_Hanging"},
             new String[]{"Rubble_Stone", "Rubble_Stone_Medium", "Rubble_Stone_Mossy"},
             "Fluid_Water", "Rock_Basalt_Brick"
         );
@@ -148,8 +158,19 @@ public class BlockPalette {
     /** @return decay variant block IDs (mossy / cracked). */
     @Nonnull public String[] getDecayVariants() { return decayVariants; }
 
-    /** @return overgrowth block IDs (vine / moss / root). */
-    @Nonnull public String[] getOvergrowthBlocks() { return overgrowthBlocks; }
+    /** @return floor overgrowth block IDs (moss, rubble-like plants). */
+    @Nonnull public String[] getOvergrowthFloor() { return overgrowthFloor; }
+
+    /** @return wall overgrowth block IDs (vines, webs). */
+    @Nonnull public String[] getOvergrowthWall() { return overgrowthWall; }
+
+    /** @return ceiling overgrowth block IDs (hanging vines, chains). */
+    @Nonnull public String[] getOvergrowthCeiling() { return overgrowthCeiling; }
+
+    /** @return true if all overgrowth arrays are empty. */
+    public boolean hasOvergrowth() {
+        return overgrowthFloor.length > 0 || overgrowthWall.length > 0 || overgrowthCeiling.length > 0;
+    }
 
     /** @return rubble block IDs. */
     @Nonnull public String[] getRubbleBlocks() { return rubbleBlocks; }

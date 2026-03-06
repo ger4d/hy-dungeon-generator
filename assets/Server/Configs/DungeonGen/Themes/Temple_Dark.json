@@ -11,10 +11,9 @@
         "DecayVariants": [
             "Rock_Shale_Cobble"
         ],
-        "OvergrowthBlocks": [
-            "Plant_Vine_Wall_Dead",
-            "Deco_SpiderWeb"
-        ],
+        "OvergrowthBlocks": {
+            "Wall": ["Plant_Vine_Wall_Dead", "Deco_SpiderWeb"]
+        },
         "RubbleBlocks": [
             "Rubble_Basalt",
             "Rubble_Basalt_Medium"

@@ -4,7 +4,6 @@ import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Random;
 
 /**
@@ -69,11 +68,15 @@ public class DecayPass {
      */
     public void applyOvergrowth(@Nonnull BlockGrid grid, @Nonnull BlockPalette palette,
                                 double overgrowthFactor, boolean removeCeiling) {
-        if (overgrowthFactor <= 0 || palette.getOvergrowthBlocks().length == 0) return;
-        String[] blocks = palette.getOvergrowthBlocks();
+        if (overgrowthFactor <= 0 || !palette.hasOvergrowth()) return;
 
+        String[] floorBlocks = palette.getOvergrowthFloor();
+        String[] wallBlocks = palette.getOvergrowthWall();
+        String[] ceilingBlocks = palette.getOvergrowthCeiling();
+
+        int maxY = removeCeiling ? grid.getHeight() - 2 : grid.getHeight();
         for (int x = 0; x < grid.getWidth(); x++) {
-            for (int y = 0; y < grid.getHeight(); y++) {
+            for (int y = 0; y < maxY; y++) {
                 for (int z = 0; z < grid.getDepth(); z++) {
                     if (!grid.isAir(x, y, z)) continue;
                     if (random.nextDouble() >= overgrowthFactor * DungeonSettingsConfig.getDefault().getOvergrowthMultiplier()) continue;
@@ -88,11 +91,18 @@ public class DecayPass {
 
                     if (!solidBelow && !solidAbove && !solidSide) continue;
 
-                    // Pick a block that matches this structural position
-                    String block = pickOvergrowthBlock(blocks, solidBelow, solidAbove, solidSide, removeCeiling);
+                    // Pick a block from the appropriate category
+                    String block = null;
+                    if (solidBelow && floorBlocks.length > 0) {
+                        block = floorBlocks[random.nextInt(floorBlocks.length)];
+                    } else if (solidSide && wallBlocks.length > 0) {
+                        block = wallBlocks[random.nextInt(wallBlocks.length)];
+                    } else if (solidAbove && !removeCeiling && ceilingBlocks.length > 0) {
+                        block = ceilingBlocks[random.nextInt(ceilingBlocks.length)];
+                    }
+
                     if (block != null) {
-                        boolean isWallBlock = block.contains("Vine_Wall") || block.contains("SpiderWeb");
-                        if (isWallBlock) {
+                        if (solidSide && wallBlocks.length > 0 && block.equals(wallBlocks[0]) || isWallMounted(block, wallBlocks)) {
                             int rotation = wallRotation(grid, x, y, z);
                             grid.set(x, y, z, block, rotation);
                         } else {
@@ -105,32 +115,13 @@ public class DecayPass {
     }
 
     /**
-     * Select an overgrowth block appropriate for the structural context.
-     * Returns {@code null} if no block fits the position.
-     * Also sets rotation on the grid for wall-mounted blocks.
+     * Check if a block is from the wall overgrowth category (needs rotation).
      */
-    @Nullable
-    private String pickOvergrowthBlock(@Nonnull String[] blocks,
-                                       boolean solidBelow, boolean solidAbove,
-                                       boolean solidSide, boolean removeCeiling) {
-        // Build a filtered list of candidates for this position
-        for (String block : blocks) {
-            boolean isFloorBlock = block.contains("Moss_Cave") || block.contains("Rubble")
-                                || block.contains("Crop_Mushroom");
-            boolean isWallBlock = block.contains("Vine_Wall") || block.contains("SpiderWeb");
-            boolean isCeilingBlock = block.contains("Hanging") || block.contains("Chains");
-
-            if (isFloorBlock && solidBelow) return block;
-            if (isWallBlock && solidSide) return block;
-            if (isCeilingBlock && solidAbove && !removeCeiling) return block;
+    private static boolean isWallMounted(@Nonnull String block, @Nonnull String[] wallBlocks) {
+        for (String wb : wallBlocks) {
+            if (wb.equals(block)) return true;
         }
-        // Fallback: if the block doesn't match any known category, place on floor
-        if (solidBelow) {
-            for (String block : blocks) {
-                if (!block.contains("Hanging") && !block.contains("Chains")) return block;
-            }
-        }
-        return null;
+        return false;
     }
 
     /**
@@ -157,20 +148,25 @@ public class DecayPass {
      * Scatter rubble blocks on floor surfaces (air blocks with a solid
      * block directly below).
      *
-     * @param grid        the block grid to modify
-     * @param palette     the block palette providing rubble blocks
-     * @param decayFactor overall decay factor; actual rubble rate is
-     *                    {@code decayFactor * 0.1}
+     * @param grid          the block grid to modify
+     * @param palette       the block palette providing rubble blocks
+     * @param decayFactor   overall decay factor; actual rubble rate is
+     *                      {@code decayFactor * 0.1}
+     * @param removeCeiling whether ceilings have been stripped; when
+     *                      {@code true}, the top two rows are skipped
+     *                      to avoid floating rubble on the exposed surface
      */
     public void applyRubble(@Nonnull BlockGrid grid, @Nonnull BlockPalette palette,
-                            double decayFactor) {
+                            double decayFactor, boolean removeCeiling) {
         if (decayFactor <= 0 || palette.getRubbleBlocks().length == 0) return;
         String[] rubble = palette.getRubbleBlocks();
+
+        int maxY = removeCeiling ? grid.getHeight() - 2 : grid.getHeight();
 
         for (int x = 0; x < grid.getWidth(); x++) {
             for (int z = 0; z < grid.getDepth(); z++) {
                 // Only place rubble at the lowest floor surface in each column
-                for (int y = 1; y < grid.getHeight(); y++) {
+                for (int y = 1; y < maxY; y++) {
                     if (grid.isAir(x, y, z) && grid.isBlock(x, y - 1, z)) {
                         if (random.nextDouble() < decayFactor * DungeonSettingsConfig.getDefault().getRubbleMultiplier()) {
                             grid.set(x, y, z, rubble[random.nextInt(rubble.length)]);

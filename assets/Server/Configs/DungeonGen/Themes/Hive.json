@@ -12,9 +12,9 @@
             "Soil_Hive_Corrupted",
             "Soil_Hive_Corrupted_Brick"
         ],
-        "OvergrowthBlocks": [
-            "Deco_Scarak_Eggsacks"
-        ],
+        "OvergrowthBlocks": {
+            "Floor": ["Deco_Scarak_Eggsacks"]
+        },
         "RubbleBlocks": [],
         "FluidBlock": "Fluid_Slime",
         "SecondaryFluidBlock": "Fluid_Lava",

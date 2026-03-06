@@ -11,9 +11,9 @@
         "DecayVariants": [
             "Rock_Runic_Dark_Brick"
         ],
-        "OvergrowthBlocks": [
-            "Rock_Crystal_Purple_Large"
-        ],
+        "OvergrowthBlocks": {
+            "Floor": ["Rock_Crystal_Purple_Large"]
+        },
         "RubbleBlocks": [
             "Rubble_Ice",
             "Rubble_Ice_Medium"

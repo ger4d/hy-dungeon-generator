@@ -12,7 +12,11 @@
             "Rock_Volcanic_Cracked_Incandescent",
             "Rock_Volcanic_Cracked_Lava"
         ],
-        "OvergrowthBlocks": [],
+        "OvergrowthBlocks": {
+            "Floor": [],
+            "Wall": [],
+            "Ceiling": []
+        },
         "RubbleBlocks": [
             "Rubble_Volcanic",
             "Rubble_Volcanic_Medium"

@@ -61,7 +61,7 @@ public class ThemeDecorator {
         DecayPass decayPass = new DecayPass(random.nextLong());
         decayPass.applyDecay(grid, palette, themeConfig.decayFactor());
         decayPass.applyOvergrowth(grid, palette, themeConfig.overgrowthFactor(), removeCeiling);
-        decayPass.applyRubble(grid, palette, themeConfig.decayFactor());
+        decayPass.applyRubble(grid, palette, themeConfig.decayFactor(), removeCeiling);
         decayPass.applyFlooding(grid, palette, themeConfig.floodingFactor());
     }
 
