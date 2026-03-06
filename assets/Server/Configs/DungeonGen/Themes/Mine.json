@@ -92,13 +92,13 @@
     "SpawnPools": {
         "Tier1": [
             {
-                "NpcRole": "Goblin_Scout",
+                "NpcRole": "Goblin_Scrapper",
                 "MinLevel": 1,
                 "MaxLevel": 15,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Goblin_Fighter",
+                "NpcRole": "Goblin_Miner",
                 "MinLevel": 1,
                 "MaxLevel": 15,
                 "Weight": 2.0
@@ -106,13 +106,13 @@
         ],
         "Tier2": [
             {
-                "NpcRole": "Goblin_Warrior",
+                "NpcRole": "Goblin_Scavenger",
                 "MinLevel": 5,
                 "MaxLevel": 30,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Goblin_Shaman",
+                "NpcRole": "Goblin_Lobber",
                 "MinLevel": 5,
                 "MaxLevel": 30,
                 "Weight": 1.5
@@ -120,13 +120,13 @@
         ],
         "Tier3": [
             {
-                "NpcRole": "Goblin_Champion",
+                "NpcRole": "Goblin_Ogre",
                 "MinLevel": 10,
                 "MaxLevel": 60,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Goblin_Shaman",
+                "NpcRole": "Goblin_Lobber",
                 "MinLevel": 10,
                 "MaxLevel": 60,
                 "Weight": 2.0
@@ -134,7 +134,7 @@
         ],
         "Boss": [
             {
-                "NpcRole": "Goblin_Boss",
+                "NpcRole": "Goblin_Duke",
                 "MinLevel": 15,
                 "MaxLevel": 60,
                 "Weight": 1.0

@@ -92,13 +92,13 @@
     "SpawnPools": {
         "Tier1": [
             {
-                "NpcRole": "Trork_Scout",
+                "NpcRole": "Trork_Hunter",
                 "MinLevel": 1,
                 "MaxLevel": 15,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Trork_Fighter",
+                "NpcRole": "Trork_Brawler",
                 "MinLevel": 1,
                 "MaxLevel": 15,
                 "Weight": 2.0
@@ -120,7 +120,7 @@
         ],
         "Tier3": [
             {
-                "NpcRole": "Trork_Champion",
+                "NpcRole": "Trork_Mauler",
                 "MinLevel": 10,
                 "MaxLevel": 60,
                 "Weight": 3.0
@@ -134,7 +134,7 @@
         ],
         "Boss": [
             {
-                "NpcRole": "Trork_Boss",
+                "NpcRole": "Trork_Chieftain",
                 "MinLevel": 15,
                 "MaxLevel": 60,
                 "Weight": 1.0

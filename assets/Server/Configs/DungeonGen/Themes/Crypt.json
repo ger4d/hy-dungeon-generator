@@ -59,7 +59,7 @@
             { "NpcRole": "Skeleton_Mage", "MinLevel": 10, "MaxLevel": 60, "Weight": 1.5 }
         ],
         "Boss": [
-            { "NpcRole": "Skeleton_Boss", "MinLevel": 15, "MaxLevel": 60, "Weight": 1.0 }
+            { "NpcRole": "Ghoul", "MinLevel": 15, "MaxLevel": 60, "Weight": 1.0 }
         ]
     }
 }

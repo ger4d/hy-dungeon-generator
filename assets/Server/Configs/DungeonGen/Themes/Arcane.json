@@ -139,13 +139,13 @@
     "SpawnPools": {
         "Tier1": [
             {
-                "NpcRole": "Outlander_Scout",
+                "NpcRole": "Outlander_Stalker",
                 "MinLevel": 1,
                 "MaxLevel": 15,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Outlander_Fighter",
+                "NpcRole": "Outlander_Berserker",
                 "MinLevel": 1,
                 "MaxLevel": 15,
                 "Weight": 2.0
@@ -153,13 +153,13 @@
         ],
         "Tier2": [
             {
-                "NpcRole": "Outlander_Fighter",
+                "NpcRole": "Outlander_Berserker",
                 "MinLevel": 5,
                 "MaxLevel": 30,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Outlander_Mage",
+                "NpcRole": "Outlander_Sorcerer",
                 "MinLevel": 5,
                 "MaxLevel": 30,
                 "Weight": 1.5
@@ -167,13 +167,13 @@
         ],
         "Tier3": [
             {
-                "NpcRole": "Outlander_Knight",
+                "NpcRole": "Outlander_Marauder",
                 "MinLevel": 10,
                 "MaxLevel": 60,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Outlander_Mage",
+                "NpcRole": "Outlander_Sorcerer",
                 "MinLevel": 10,
                 "MaxLevel": 60,
                 "Weight": 2.0
@@ -181,7 +181,7 @@
         ],
         "Boss": [
             {
-                "NpcRole": "Outlander_Boss",
+                "NpcRole": "Outlander_Brute",
                 "MinLevel": 15,
                 "MaxLevel": 60,
                 "Weight": 1.0

@@ -93,13 +93,13 @@
     "SpawnPools": {
         "Tier1": [
             {
-                "NpcRole": "Hive_Drone",
+                "NpcRole": "Scarak_Louse",
                 "MinLevel": 1,
                 "MaxLevel": 15,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Hive_Worker",
+                "NpcRole": "Scarak_Fighter",
                 "MinLevel": 1,
                 "MaxLevel": 15,
                 "Weight": 2.0
@@ -107,13 +107,13 @@
         ],
         "Tier2": [
             {
-                "NpcRole": "Hive_Soldier",
+                "NpcRole": "Scarak_Seeker",
                 "MinLevel": 5,
                 "MaxLevel": 30,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Hive_Spitter",
+                "NpcRole": "Scarak_Defender",
                 "MinLevel": 5,
                 "MaxLevel": 30,
                 "Weight": 1.5
@@ -121,13 +121,13 @@
         ],
         "Tier3": [
             {
-                "NpcRole": "Hive_Guardian",
+                "NpcRole": "Scarak_Fighter_Royal_Guard",
                 "MinLevel": 10,
                 "MaxLevel": 60,
                 "Weight": 3.0
             },
             {
-                "NpcRole": "Hive_Spitter",
+                "NpcRole": "Scarak_Defender",
                 "MinLevel": 10,
                 "MaxLevel": 60,
                 "Weight": 2.0
@@ -135,7 +135,7 @@
         ],
         "Boss": [
             {
-                "NpcRole": "Hive_Queen",
+                "NpcRole": "Scarak_Broodmother",
                 "MinLevel": 15,
                 "MaxLevel": 60,
                 "Weight": 1.0
