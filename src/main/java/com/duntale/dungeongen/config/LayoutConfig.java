@@ -29,6 +29,7 @@ import java.util.Map;
  * @param trapDensity        density of traps (default: 0.08)
  * @param floorTraps         if true, include breakable floor traps that drop players into the void (default: false)
  * @param secretWallChance   chance of secret walls (default: 0.05)
+ * @param merchantSpawnChance per-room probability of placing a merchant near fluids (default: 0.3)
  * @param entrancePlacement  entrance placement strategy: edge/corner/center/random (default: "edge")
  * @param exitDistance        min normalised distance entrance→exit (default: 0.7)
  * @param enemyDensity       enemy density scaler (default: 0.4)
@@ -67,6 +68,7 @@ public record LayoutConfig(
     double trapDensity,
     boolean floorTraps,
     double secretWallChance,
+    double merchantSpawnChance,
     // Entrance / Exit
     String entrancePlacement,
     double exitDistance,
@@ -115,6 +117,7 @@ public record LayoutConfig(
             json.containsKey("trapDensity")       ? JsonParser.toDouble(json.get("trapDensity"))    : d.trapDensity(),
             json.containsKey("floorTraps")        ? JsonParser.toBoolean(json.get("floorTraps"))     : d.floorTraps(),
             json.containsKey("secretWallChance")  ? JsonParser.toDouble(json.get("secretWallChance")): d.secretWallChance(),
+            json.containsKey("merchantSpawnChance")? JsonParser.toDouble(json.get("merchantSpawnChance")): d.merchantSpawnChance(),
             json.containsKey("entrancePlacement") ? JsonParser.toStringOrNull(json.get("entrancePlacement")) : d.entrancePlacement(),
             json.containsKey("exitDistance")      ? JsonParser.toDouble(json.get("exitDistance"))   : d.exitDistance(),
             json.containsKey("enemyDensity")      ? JsonParser.toDouble(json.get("enemyDensity"))   : d.enemyDensity(),
@@ -142,6 +145,7 @@ public record LayoutConfig(
             "rectangular", 0.2,                      // shape
             2, 0.3, 0.15, false, 0.5,               // corridors
             0.1, 0.05, 0.0, 0.08, false, 0.05,      // features
+            0.3,                                     // merchant
             "edge", 0.7,                             // entrance/exit
             0.4, 5, true, 0.1,                       // enemies
             0.1,                                     // architecture

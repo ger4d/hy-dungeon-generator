@@ -18,6 +18,7 @@ public class DungeonBlueprint {
 
     private final List<BlockEntry> blocks;
     private final List<SpawnerDefinition> spawners;
+    private final List<MerchantDefinition> merchants;
     private final DungeonGraph graph;
     private final String seed;
 
@@ -32,6 +33,7 @@ public class DungeonBlueprint {
         this.graph = graph;
         this.blocks = new ArrayList<>();
         this.spawners = new ArrayList<>();
+        this.merchants = new ArrayList<>();
     }
 
     /**
@@ -67,6 +69,16 @@ public class DungeonBlueprint {
     }
 
     /**
+     * Register a merchant definition in the blueprint.
+     *
+     * @param merchant the merchant definition to add
+     * @since 1.3.0
+     */
+    public void addMerchant(@Nonnull MerchantDefinition merchant) {
+        merchants.add(merchant);
+    }
+
+    /**
      * @return unmodifiable list of all block entries.
      */
     @Nonnull
@@ -81,6 +93,15 @@ public class DungeonBlueprint {
     @Nonnull
     public List<SpawnerDefinition> getSpawners() {
         return Collections.unmodifiableList(spawners);
+    }
+
+    /**
+     * @return unmodifiable list of all merchant definitions.
+     * @since 1.3.0
+     */
+    @Nonnull
+    public List<MerchantDefinition> getMerchants() {
+        return Collections.unmodifiableList(merchants);
     }
 
     /**

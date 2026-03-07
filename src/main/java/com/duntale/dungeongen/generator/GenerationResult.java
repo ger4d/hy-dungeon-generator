@@ -1,5 +1,6 @@
 package com.duntale.dungeongen.generator;
 
+import com.duntale.dungeongen.model.MerchantDefinition;
 import com.duntale.dungeongen.model.SpawnerDefinition;
 
 import javax.annotation.Nonnull;
@@ -17,6 +18,8 @@ import java.util.List;
  * @param totalBlocks         total voxel blocks in the blueprint (0 until voxel carver is implemented)
  * @param spawners            number of spawner definitions placed
  * @param spawnerDefinitions  the spawner definitions for creating ECS spawner entities
+ * @param merchants           number of merchant definitions placed
+ * @param merchantDefinitions the merchant definitions for creating merchant NPC entities
  * @param generationTimeMs    wall-clock time for the generation pipeline
  * @param assemblyTimeMs      wall-clock time for world assembly (0 if assemble=false)
  * @param assemblyError       {@code null} if assembly succeeded or was not requested; error message otherwise
@@ -29,6 +32,8 @@ public record GenerationResult(
     int totalBlocks,
     int spawners,
     @Nonnull List<SpawnerDefinition> spawnerDefinitions,
+    int merchants,
+    @Nonnull List<MerchantDefinition> merchantDefinitions,
     long generationTimeMs,
     long assemblyTimeMs,
     @Nullable String assemblyError
@@ -51,6 +56,7 @@ public record GenerationResult(
         sb.append("\"corridors\": ").append(corridors).append(",");
         sb.append("\"totalBlocks\": ").append(totalBlocks).append(",");
         sb.append("\"spawners\": ").append(spawners).append(",");
+        sb.append("\"merchants\": ").append(merchants).append(",");
         sb.append("\"generationTimeMs\": ").append(generationTimeMs).append(",");
         sb.append("\"assemblyTimeMs\": ").append(assemblyTimeMs);
         sb.append("}");

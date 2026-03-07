@@ -15,6 +15,7 @@ import com.duntale.dungeongen.generator.theme.ThemeDecorator;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
 import com.duntale.dungeongen.generator.voxel.VoxelCarver;
 import com.duntale.dungeongen.model.DungeonBlueprint;
+import com.duntale.dungeongen.model.MerchantDefinition;
 import com.duntale.dungeongen.model.SpawnerDefinition;
 import com.duntale.dungeongen.util.BlockResolver;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -103,6 +104,7 @@ public class GenerationOrchestrator {
                 Math.max(0.0, Math.min(settings.getTrapDensityCap(), layout.trapDensity() * cScale)),
                 layout.floorTraps(),
                 Math.max(0.0, Math.min(settings.getSecretWallCap(), layout.secretWallChance() * cScale)),
+                layout.merchantSpawnChance(),
                 layout.entrancePlacement(), layout.exitDistance(),
                 Math.max(0.0, Math.min(1.0, layout.enemyDensity() * cScale)),
                 layout.maxEnemiesPerRoom(), layout.bossRoom(), layout.ambushChance(),
@@ -168,10 +170,13 @@ public class GenerationOrchestrator {
             grid.toBlockEntries().forEach(blueprint::addBlock);
             spawners.forEach(blueprint::addSpawner);
 
+            // Phase 6b: Merchant placement (near fluids)
+            featurePlacer.placeMerchants(grid, graph, layout, blueprint, config.floorLevel());
+
             long genElapsed = System.currentTimeMillis() - start;
 
-            LOGGER.atInfo().log("[DungeonGen] Generation complete: %d blocks in %d ms",
-                blueprint.getTotalBlocks(), genElapsed);
+            LOGGER.atInfo().log("[DungeonGen] Generation complete: %d blocks, %d merchants in %d ms",
+                blueprint.getTotalBlocks(), blueprint.getMerchants().size(), genElapsed);
 
             // Phase 7: World assembly (optional)
             long assemblyMs = 0;
@@ -198,6 +203,8 @@ public class GenerationOrchestrator {
                 blueprint.getTotalBlocks(),
                 spawners.size(),
                 List.copyOf(spawners),
+                blueprint.getMerchants().size(),
+                List.copyOf(blueprint.getMerchants()),
                 genElapsed,
                 assemblyMs,
                 assemblyError
