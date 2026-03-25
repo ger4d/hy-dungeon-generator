@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     // Hytale Server API — compileOnly, never bundle
-    compileOnly("com.hypixel.hytale:Server:2026.03.19-d0cb09bb3")
+    compileOnly("com.hypixel.hytale:Server:2026.03.23-338988e70")
 }
 
 tasks {
