@@ -90,56 +90,13 @@
     "FillBlock": "Soil_Hive_Brick",
     "SecondaryWallChance": 0.2,
     "LevelVariance": 5,
-    "SpawnPools": {
-        "Tier1": [
-            {
-                "NpcRole": "Scarak_Louse",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Scarak_Fighter",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 2.0
-            }
-        ],
-        "Tier2": [
-            {
-                "NpcRole": "Scarak_Seeker",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Scarak_Defender",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 1.5
-            }
-        ],
-        "Tier3": [
-            {
-                "NpcRole": "Scarak_Fighter_Royal_Guard",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Scarak_Defender",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 2.0
-            }
-        ],
-        "Boss": [
-            {
-                "NpcRole": "Scarak_Broodmother",
-                "MinLevel": 15,
-                "MaxLevel": 60,
-                "Weight": 1.0
-            }
-        ]
-    }
+    "SpawnPool": [
+        { "NpcRole": "Scarak_Louse", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Scarak_Fighter", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Scarak_Seeker", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Scarak_Defender", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Scarak_Fighter_Royal_Guard", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Scarak_Defender", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Scarak_Broodmother", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+    ]
 }

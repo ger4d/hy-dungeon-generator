@@ -102,56 +102,13 @@
     "FillBlock": "Rock_Volcanic_Brick",
     "SecondaryWallChance": 0.2,
     "LevelVariance": 5,
-    "SpawnPools": {
-        "Tier1": [
-            {
-                "NpcRole": "Feran_Sharptooth",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Feran_Longtooth",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 2.0
-            }
-        ],
-        "Tier2": [
-            {
-                "NpcRole": "Feran_Longtooth",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Spirit_Ember",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 1.5
-            }
-        ],
-        "Tier3": [
-            {
-                "NpcRole": "Golem_Crystal_Flame",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Spirit_Ember",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 2.0
-            }
-        ],
-        "Boss": [
-            {
-                "NpcRole": "Golem_Firesteel",
-                "MinLevel": 15,
-                "MaxLevel": 60,
-                "Weight": 1.0
-            }
-        ]
-    }
+    "SpawnPool": [
+        { "NpcRole": "Feran_Sharptooth", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Feran_Longtooth", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Feran_Longtooth", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Spirit_Ember", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Golem_Crystal_Flame", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Spirit_Ember", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Golem_Firesteel", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+    ]
 }

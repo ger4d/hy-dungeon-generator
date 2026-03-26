@@ -136,56 +136,13 @@
     "FillBlock": "Rock_Runic_Blue_Brick",
     "SecondaryWallChance": 0.2,
     "LevelVariance": 5,
-    "SpawnPools": {
-        "Tier1": [
-            {
-                "NpcRole": "Outlander_Stalker",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Outlander_Berserker",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 2.0
-            }
-        ],
-        "Tier2": [
-            {
-                "NpcRole": "Outlander_Berserker",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Outlander_Sorcerer",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 1.5
-            }
-        ],
-        "Tier3": [
-            {
-                "NpcRole": "Outlander_Marauder",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Outlander_Sorcerer",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 2.0
-            }
-        ],
-        "Boss": [
-            {
-                "NpcRole": "Outlander_Brute",
-                "MinLevel": 15,
-                "MaxLevel": 60,
-                "Weight": 1.0
-            }
-        ]
-    }
+    "SpawnPool": [
+        { "NpcRole": "Outlander_Stalker", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Outlander_Berserker", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Outlander_Berserker", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Outlander_Sorcerer", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Outlander_Marauder", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Outlander_Sorcerer", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Outlander_Brute", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+    ]
 }

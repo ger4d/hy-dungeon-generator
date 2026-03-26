@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
  * at runtime from the spawner's floor level and level variance, not
  * from per-entry ranges.
  *
- * <p>The theme JSON's {@code MinLevel}/{@code MaxLevel} fields control
+ * <p>The theme JSON's {@code MinFloor}/{@code MaxFloor} fields control
  * <strong>floor eligibility</strong> (which floors this NPC can appear on),
  * not the NPC's actual combat level.</p>
  *

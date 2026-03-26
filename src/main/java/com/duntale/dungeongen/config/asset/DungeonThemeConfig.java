@@ -68,8 +68,8 @@ public class DungeonThemeConfig
     // Secondary wall replacement chance (0.0 to 1.0)
     protected double secondaryWallChance = 0.2;
 
-    // Spawn Pools — NPC spawner entries per tier
-    protected SpawnPoolsEntry spawnPools = new SpawnPoolsEntry();
+    // Spawn Pool — flat array of NPC entries with floor range and variant tags
+    protected SpawnPoolEntry[] spawnPool = new SpawnPoolEntry[0];
 
     // Level variance applied to spawned NPCs: actual level = floorLevel ± variance
     protected int levelVariance = 5;
@@ -105,8 +105,8 @@ public class DungeonThemeConfig
                 (c, v) -> c.fillBlock = v, c -> c.fillBlock).add()
             .append(new KeyedCodec<>("SecondaryWallChance", Codec.DOUBLE),
                 (c, v) -> c.secondaryWallChance = v, c -> c.secondaryWallChance).add()
-            .append(new KeyedCodec<>("SpawnPools", SpawnPoolsEntry.CODEC),
-                (c, v) -> c.spawnPools = v, c -> c.spawnPools).add()
+            .append(new KeyedCodec<>("SpawnPool", SpawnPoolEntry.ARRAY_CODEC),
+                (c, v) -> c.spawnPool = v, c -> c.spawnPool).add()
             .append(new KeyedCodec<>("LevelVariance", Codec.INTEGER),
                 (c, v) -> c.levelVariance = v, c -> c.levelVariance).add()
             .build();
@@ -170,11 +170,11 @@ public class DungeonThemeConfig
     public double getSecondaryWallChance() { return secondaryWallChance; }
 
     /**
-     * @return the spawn pools configuration for this theme.
-     * @since 1.1.0
+     * @return the flat spawn pool array for this theme.
+     * @since 1.4.0
      */
     @Nonnull
-    public SpawnPoolsEntry getSpawnPools() { return spawnPools; }
+    public SpawnPoolEntry[] getSpawnPool() { return spawnPool; }
 
     /**
      * @return the level variance for spawned NPCs (actual level = floorLevel ± variance).

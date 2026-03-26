@@ -89,56 +89,13 @@
     "FillBlock": "Rock_Stone",
     "SecondaryWallChance": 0.2,
     "LevelVariance": 5,
-    "SpawnPools": {
-        "Tier1": [
-            {
-                "NpcRole": "Goblin_Scrapper",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Goblin_Miner",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 2.0
-            }
-        ],
-        "Tier2": [
-            {
-                "NpcRole": "Goblin_Scavenger",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Goblin_Lobber",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 1.5
-            }
-        ],
-        "Tier3": [
-            {
-                "NpcRole": "Goblin_Ogre",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Goblin_Lobber",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 2.0
-            }
-        ],
-        "Boss": [
-            {
-                "NpcRole": "Goblin_Duke",
-                "MinLevel": 15,
-                "MaxLevel": 60,
-                "Weight": 1.0
-            }
-        ]
-    }
+    "SpawnPool": [
+        { "NpcRole": "Goblin_Scrapper", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Goblin_Miner", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Goblin_Scavenger", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Goblin_Lobber", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Goblin_Ogre", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Goblin_Lobber", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Goblin_Duke", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+    ]
 }

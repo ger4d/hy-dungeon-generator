@@ -88,56 +88,13 @@
     "FillBlock": "Plant_Moss_Block_Green",
     "SecondaryWallChance": 0.2,
     "LevelVariance": 5,
-    "SpawnPools": {
-        "Tier1": [
-            {
-                "NpcRole": "Trork_Hunter",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Trork_Brawler",
-                "MinLevel": 1,
-                "MaxLevel": 15,
-                "Weight": 2.0
-            }
-        ],
-        "Tier2": [
-            {
-                "NpcRole": "Trork_Warrior",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Trork_Shaman",
-                "MinLevel": 5,
-                "MaxLevel": 30,
-                "Weight": 1.5
-            }
-        ],
-        "Tier3": [
-            {
-                "NpcRole": "Trork_Mauler",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 3.0
-            },
-            {
-                "NpcRole": "Trork_Shaman",
-                "MinLevel": 10,
-                "MaxLevel": 60,
-                "Weight": 2.0
-            }
-        ],
-        "Boss": [
-            {
-                "NpcRole": "Trork_Chieftain",
-                "MinLevel": 15,
-                "MaxLevel": 60,
-                "Weight": 1.0
-            }
-        ]
-    }
+    "SpawnPool": [
+        { "NpcRole": "Trork_Hunter", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Trork_Brawler", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Trork_Warrior", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Trork_Shaman", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Trork_Mauler", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Trork_Shaman", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Trork_Chieftain", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+    ]
 }

@@ -76,11 +76,14 @@ public class DungeonSettingsConfig
     protected int bossAccentMinRoomSize = 8;
     protected int corridorLightDensity = 8;
 
-    // --- Spawns ---
-    protected int bossTier = 3;
-    protected double tierThreshold1 = 0.33;
-    protected double tierThreshold2 = 0.66;
-    protected double difficultyRampBase = 0.5;
+    // --- Spawns — elite budget (sigmoid model) ---
+    protected double eliteRatioMin = 0.05;
+    protected double eliteRatioMax = 0.30;
+    protected double eliteRatioMidpoint = 30.0;
+    protected double eliteRatioSteepness = 0.12;
+    protected double eliteRoomWeightExponent = 1.0;
+    protected int maxElitesPerCombatRoom = 4;
+    protected int bossRoomEliteMax = 2;
     protected int bossSpawnBase = 3;
     protected int bossSpawnAreaDivisor = 30;
     protected int combatSpawnBase = 1;
@@ -161,15 +164,21 @@ public class DungeonSettingsConfig
                 (c, v) -> c.bossAccentMinRoomSize = v, c -> c.bossAccentMinRoomSize).add()
             .append(new KeyedCodec<>("CorridorLightDensity", Codec.INTEGER),
                 (c, v) -> c.corridorLightDensity = v, c -> c.corridorLightDensity).add()
-            // Spawns
-            .append(new KeyedCodec<>("BossTier", Codec.INTEGER),
-                (c, v) -> c.bossTier = v, c -> c.bossTier).add()
-            .append(new KeyedCodec<>("TierThreshold1", Codec.DOUBLE),
-                (c, v) -> c.tierThreshold1 = v, c -> c.tierThreshold1).add()
-            .append(new KeyedCodec<>("TierThreshold2", Codec.DOUBLE),
-                (c, v) -> c.tierThreshold2 = v, c -> c.tierThreshold2).add()
-            .append(new KeyedCodec<>("DifficultyRampBase", Codec.DOUBLE),
-                (c, v) -> c.difficultyRampBase = v, c -> c.difficultyRampBase).add()
+            // Spawns — elite budget (sigmoid model)
+            .append(new KeyedCodec<>("EliteRatioMin", Codec.DOUBLE),
+                (c, v) -> c.eliteRatioMin = v, c -> c.eliteRatioMin).add()
+            .append(new KeyedCodec<>("EliteRatioMax", Codec.DOUBLE),
+                (c, v) -> c.eliteRatioMax = v, c -> c.eliteRatioMax).add()
+            .append(new KeyedCodec<>("EliteRatioMidpoint", Codec.DOUBLE),
+                (c, v) -> c.eliteRatioMidpoint = v, c -> c.eliteRatioMidpoint).add()
+            .append(new KeyedCodec<>("EliteRatioSteepness", Codec.DOUBLE),
+                (c, v) -> c.eliteRatioSteepness = v, c -> c.eliteRatioSteepness).add()
+            .append(new KeyedCodec<>("EliteRoomWeightExponent", Codec.DOUBLE),
+                (c, v) -> c.eliteRoomWeightExponent = v, c -> c.eliteRoomWeightExponent).add()
+            .append(new KeyedCodec<>("MaxElitesPerCombatRoom", Codec.INTEGER),
+                (c, v) -> c.maxElitesPerCombatRoom = v, c -> c.maxElitesPerCombatRoom).add()
+            .append(new KeyedCodec<>("BossRoomEliteMax", Codec.INTEGER),
+                (c, v) -> c.bossRoomEliteMax = v, c -> c.bossRoomEliteMax).add()
             .append(new KeyedCodec<>("BossSpawnBase", Codec.INTEGER),
                 (c, v) -> c.bossSpawnBase = v, c -> c.bossSpawnBase).add()
             .append(new KeyedCodec<>("BossSpawnAreaDivisor", Codec.INTEGER),
@@ -297,10 +306,13 @@ public class DungeonSettingsConfig
     // Getters — Spawns
     // ============================================
 
-    public int getBossTier() { return bossTier; }
-    public double getTierThreshold1() { return tierThreshold1; }
-    public double getTierThreshold2() { return tierThreshold2; }
-    public double getDifficultyRampBase() { return difficultyRampBase; }
+    public double getEliteRatioMin() { return eliteRatioMin; }
+    public double getEliteRatioMax() { return eliteRatioMax; }
+    public double getEliteRatioMidpoint() { return eliteRatioMidpoint; }
+    public double getEliteRatioSteepness() { return eliteRatioSteepness; }
+    public double getEliteRoomWeightExponent() { return eliteRoomWeightExponent; }
+    public int getMaxElitesPerCombatRoom() { return maxElitesPerCombatRoom; }
+    public int getBossRoomEliteMax() { return bossRoomEliteMax; }
     public int getBossSpawnBase() { return bossSpawnBase; }
     public int getBossSpawnAreaDivisor() { return bossSpawnAreaDivisor; }
     public int getCombatSpawnBase() { return combatSpawnBase; }

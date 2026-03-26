@@ -49,21 +49,12 @@
     "FillBlock": "Rock_Stone_Brick",
     "SecondaryWallChance": 0.2,
     "LevelVariance": 5,
-    "SpawnPools": {
-        "Tier1": [
-            { "NpcRole": "Skeleton_Fighter", "MinLevel": 1, "MaxLevel": 15, "Weight": 3.0 },
-            { "NpcRole": "Skeleton_Archer", "MinLevel": 1, "MaxLevel": 15, "Weight": 2.0 }
-        ],
-        "Tier2": [
-            { "NpcRole": "Skeleton_Soldier", "MinLevel": 5, "MaxLevel": 30, "Weight": 3.0 },
-            { "NpcRole": "Skeleton_Archer", "MinLevel": 5, "MaxLevel": 30, "Weight": 2.0 }
-        ],
-        "Tier3": [
-            { "NpcRole": "Skeleton_Knight", "MinLevel": 10, "MaxLevel": 60, "Weight": 3.0 },
-            { "NpcRole": "Skeleton_Mage", "MinLevel": 10, "MaxLevel": 60, "Weight": 1.5 }
-        ],
-        "Boss": [
-            { "NpcRole": "Ghoul", "MinLevel": 15, "MaxLevel": 60, "Weight": 1.0 }
-        ]
-    }
+    "SpawnPool": [
+        { "NpcRole": "Skeleton_Fighter", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Skeleton_Archer", "MinFloor": 1, "MaxFloor": 30, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Skeleton_Soldier", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Skeleton_Knight", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Skeleton_Mage", "MinFloor": 10, "MaxFloor": 60, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Ghoul", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+    ]
 }

@@ -19,7 +19,7 @@ import java.util.List;
  * @param spawnPool     weighted pool of NPC roles to pick from
  * @param totalCount    total NPCs to spawn (for FIXED)
  * @param spawnOffsets  pre-validated spawn positions relative to spawner center
- * @param isBoss        true for boss spawners
+ * @param variant       spawner variant (NORMAL, ELITE, BOSS)
  * @since 1.1.0
  */
 public record SpawnerDefinition(
@@ -31,7 +31,7 @@ public record SpawnerDefinition(
     @Nonnull List<SpawnEntry> spawnPool,
     int totalCount,
     @Nonnull List<Vec3i> spawnOffsets,
-    boolean isBoss,
+    @Nonnull SpawnerVariant variant,
     int floorLevel,
     int levelVariance
 ) {}
