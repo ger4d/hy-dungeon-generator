@@ -16,8 +16,7 @@ import com.duntale.dungeongen.util.JsonParser;
  * @param layout   layout generation parameters
  * @param theme    theme / visual palette parameters
  * @param pacing   pacing / tension curve parameters
- * @param assemble   whether to place the dungeon in-world after generation
- * @param clear      whether to run a /clear command before generation to wipe the area
+ * @param assemble whether to place the dungeon in-world after generation
  * @param floorLevel the dungeon floor level for spawn-pool filtering (default: 1)
  * @since 1.0.0
  */
@@ -30,7 +29,6 @@ public record DungeonConfig(
     @Nonnull ThemeConfig theme,
     @Nonnull PacingConfig pacing,
     boolean assemble,
-    boolean clear,
     int floorLevel
 ) {
 
@@ -86,15 +84,11 @@ public record DungeonConfig(
             ? JsonParser.toBoolean(json.get("assemble"))
             : d.assemble();
 
-        boolean clear = json.containsKey("clear")
-            ? JsonParser.toBoolean(json.get("clear"))
-            : d.clear();
-
         int floorLevel = json.containsKey("floorLevel")
             ? JsonParser.toInt(json.get("floorLevel"))
             : d.floorLevel();
 
-        return new DungeonConfig(seed, preset, worldName, origin, layout, theme, pacing, assemble, clear, floorLevel);
+        return new DungeonConfig(seed, preset, worldName, origin, layout, theme, pacing, assemble, floorLevel);
     }
 
     /**
@@ -112,7 +106,6 @@ public record DungeonConfig(
             LayoutConfig.defaults(),
             ThemeConfig.defaults(),
             PacingConfig.defaults(),
-            false,
             false,
             1
         );

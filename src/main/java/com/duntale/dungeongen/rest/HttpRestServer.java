@@ -5,11 +5,6 @@ import com.duntale.dungeongen.generator.GenerationOrchestrator;
 import com.duntale.dungeongen.generator.GenerationResult;
 import com.duntale.dungeongen.util.JsonParser;
 import com.hypixel.hytale.logger.HytaleLogger;
-import com.hypixel.hytale.server.core.NameMatching;
-import com.hypixel.hytale.server.core.command.system.CommandManager;
-import com.hypixel.hytale.server.core.universe.PlayerRef;
-import com.hypixel.hytale.server.core.universe.Universe;
-import com.hypixel.hytale.server.core.universe.world.World;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
@@ -20,7 +15,6 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -132,34 +126,6 @@ public class HttpRestServer {
 
             LOGGER.atInfo().log("[DungeonGen-REST] Generation request: seed=%s, preset=%s",
                 config.seed(), config.preset());
-
-            // Run /clear command to wipe the area before generation
-            if (config.clear()) {
-                World world = Universe.get().getWorld(config.worldName());
-                if (world != null) {
-                    CompletableFuture<Void> clearFuture = new CompletableFuture<>();
-                    world.execute(() -> {
-                        PlayerRef clearPlayer = Universe.get().getPlayerByUsername("zki", NameMatching.EXACT_IGNORE_CASE);
-                        if (clearPlayer != null) {
-                            String clearCmd = "clear -300 0 -300 300 130 300";
-                            LOGGER.atInfo().log("[DungeonGen-REST] Running clear command: /%s", clearCmd);
-                            CommandManager.get().handleCommand(clearPlayer, clearCmd)
-                                .whenComplete((v, ex) -> {
-                                    if (ex != null) clearFuture.completeExceptionally(ex);
-                                    else clearFuture.complete(null);
-                                });
-                        } else {
-                            LOGGER.atWarning().log("[DungeonGen-REST] Cannot clear: player 'zki' not online");
-                            clearFuture.complete(null);
-                        }
-                    });
-                    clearFuture.get(FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-                    // Clear is queued; wait for server to finish executing it
-                    Thread.sleep(3000);
-                } else {
-                    LOGGER.atWarning().log("[DungeonGen-REST] Cannot clear: world '%s' not found", config.worldName());
-                }
-            }
 
             GenerationResult result = orchestrator.generate(config)
                 .get(FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
