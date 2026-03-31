@@ -3,12 +3,14 @@ package com.duntale.dungeongen.generator;
 import com.duntale.dungeongen.assembly.WorldAssembler;
 import com.duntale.dungeongen.config.DungeonConfig;
 import com.duntale.dungeongen.config.LayoutConfig;
+import com.duntale.dungeongen.config.Vec3i;
 import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
 import com.duntale.dungeongen.generator.entity.SpawnerPlacer;
 import com.duntale.dungeongen.generator.feature.FeaturePlacer;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.LayoutGenerator;
+import com.duntale.dungeongen.generator.layout.Room;
 import com.duntale.dungeongen.generator.lighting.LightPlacer;
 import com.duntale.dungeongen.generator.props.PropPlacer;
 import com.duntale.dungeongen.generator.theme.ThemeDecorator;
@@ -124,6 +126,9 @@ public class GenerationOrchestrator {
             LOGGER.atInfo().log("[DungeonGen] Layout: %d rooms, %d corridors, connected=%b",
                 graph.getRooms().size(), graph.getCorridors().size(), graph.isFullyConnected());
 
+            Vec3i entrancePosition = getRoomStandingPosition(graph, graph.getEntranceRoomId());
+            Vec3i exitPosition = getRoomStandingPosition(graph, graph.getBossRoomId());
+
             // Phase 2: Voxel carving
             String palette = config.theme().palette();
             DungeonThemeConfig themeAsset = DungeonThemeConfig.get(palette);
@@ -205,6 +210,8 @@ public class GenerationOrchestrator {
                 List.copyOf(spawners),
                 blueprint.getMerchants().size(),
                 List.copyOf(blueprint.getMerchants()),
+                entrancePosition,
+                exitPosition,
                 genElapsed,
                 assemblyMs,
                 assemblyError
@@ -219,5 +226,15 @@ public class GenerationOrchestrator {
     public void shutdown() {
         executor.shutdown();
         LOGGER.atInfo().log("[DungeonGen] Generation orchestrator shut down");
+    }
+
+    @Nullable
+    private static Vec3i getRoomStandingPosition(@Nonnull DungeonGraph graph, int roomId) {
+        Room room = graph.getRoom(roomId);
+        if (room == null) {
+            return null;
+        }
+
+        return new Vec3i(room.centerX(), room.getY() + 1, room.centerZ());
     }
 }
