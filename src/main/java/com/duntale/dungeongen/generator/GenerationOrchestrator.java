@@ -126,9 +126,6 @@ public class GenerationOrchestrator {
             LOGGER.atInfo().log("[DungeonGen] Layout: %d rooms, %d corridors, connected=%b",
                 graph.getRooms().size(), graph.getCorridors().size(), graph.isFullyConnected());
 
-            Vec3i entrancePosition = getRoomStandingPosition(graph, graph.getEntranceRoomId());
-            Vec3i exitPosition = getRoomStandingPosition(graph, graph.getBossRoomId());
-
             // Phase 2: Voxel carving
             String palette = config.theme().palette();
             DungeonThemeConfig themeAsset = DungeonThemeConfig.get(palette);
@@ -177,6 +174,9 @@ public class GenerationOrchestrator {
 
             // Phase 6b: Merchant placement (near fluids)
             featurePlacer.placeMerchants(grid, graph, layout, blueprint, config.floorLevel());
+
+            Vec3i entrancePosition = resolveRoomStandingPosition(grid, graph, graph.getEntranceRoomId());
+            Vec3i exitPosition = resolveRoomStandingPosition(grid, graph, graph.getBossRoomId());
 
             long genElapsed = System.currentTimeMillis() - start;
 
@@ -229,12 +229,90 @@ public class GenerationOrchestrator {
     }
 
     @Nullable
+    private static Vec3i resolveRoomStandingPosition(
+            @Nonnull BlockGrid grid,
+            @Nonnull DungeonGraph graph,
+            int roomId
+    ) {
+        Room room = graph.getRoom(roomId);
+        if (room == null) {
+            return null;
+        }
+
+        return findSafeStandingPosition(grid, room, getRoomStandingPosition(room));
+    }
+
+    @Nonnull
+    private static Vec3i findSafeStandingPosition(
+            @Nonnull BlockGrid grid,
+            @Nonnull Room room,
+            @Nonnull Vec3i candidate
+    ) {
+        int y = candidate.y();
+        if (isSafeStandingPosition(grid, candidate.x(), y, candidate.z())) {
+            return candidate;
+        }
+
+        int maxRadius = Math.max(1, Math.max(room.getWidth(), room.getDepth()) / 2);
+        for (int radius = 1; radius <= maxRadius; radius++) {
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    if (Math.abs(dx) != radius && Math.abs(dz) != radius) {
+                        continue;
+                    }
+
+                    int x = candidate.x() + dx;
+                    int z = candidate.z() + dz;
+                    if (!isRoomInteriorPosition(room, x, z)) {
+                        continue;
+                    }
+                    if (isSafeStandingPosition(grid, x, y, z)) {
+                        return new Vec3i(x, y, z);
+                    }
+                }
+            }
+        }
+
+        return candidate;
+    }
+
+    private static boolean isRoomInteriorPosition(@Nonnull Room room, int x, int z) {
+        if (room.hasCells()) {
+            for (int[] cell : room.getCells()) {
+                if (cell[0] == x && cell[1] == z) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        return x >= room.getX() + 1
+                && x < room.getX() + room.getWidth() - 1
+                && z >= room.getZ() + 1
+                && z < room.getZ() + room.getDepth() - 1;
+    }
+
+    private static boolean isSafeStandingPosition(@Nonnull BlockGrid grid, int x, int y, int z) {
+        return grid.canPlace(x, y - 1, z)
+                && grid.canPlace(x, y, z)
+                && grid.canPlace(x, y + 1, z)
+                && grid.isSolid(x, y - 1, z)
+                && grid.isAir(x, y, z)
+                && grid.isAir(x, y + 1, z);
+    }
+
+    @Nullable
     private static Vec3i getRoomStandingPosition(@Nonnull DungeonGraph graph, int roomId) {
         Room room = graph.getRoom(roomId);
         if (room == null) {
             return null;
         }
 
+        return getRoomStandingPosition(room);
+    }
+
+    @Nonnull
+    private static Vec3i getRoomStandingPosition(@Nonnull Room room) {
         return new Vec3i(room.centerX(), room.getY() + 1, room.centerZ());
     }
 }

@@ -169,7 +169,7 @@ public class FeaturePlacer {
                 } else if (regularTraps.length > 0) {
                     // Floor-level regular trap at Y=1
                     String trap = regularTraps[random.nextInt(regularTraps.length)];
-                    LOGGER.atInfo().log("[DungeonGen] Placing trap %s at (%d, %d, %d)", trap, x, 1, z);
+                    LOGGER.atFine().log("[DungeonGen] Placing trap %s at (%d, %d, %d)", trap, x, 1, z);
                     grid.set(x, 1, z, trap);
                 }
             }
