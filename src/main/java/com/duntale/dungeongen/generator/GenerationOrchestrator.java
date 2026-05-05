@@ -16,6 +16,7 @@ import com.duntale.dungeongen.generator.props.PropPlacer;
 import com.duntale.dungeongen.generator.theme.ThemeDecorator;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
 import com.duntale.dungeongen.generator.voxel.VoxelCarver;
+import com.duntale.dungeongen.model.ChestDefinition;
 import com.duntale.dungeongen.model.DungeonBlueprint;
 import com.duntale.dungeongen.model.MerchantDefinition;
 import com.duntale.dungeongen.model.SpawnerDefinition;
@@ -154,7 +155,7 @@ public class GenerationOrchestrator {
 
             // Phase 4: Prop placement
             PropPlacer propPlacer = new PropPlacer(seed + 2);
-            propPlacer.placeProps(grid, graph, palette, layout.removeCeiling());
+            List<ChestDefinition> chests = propPlacer.placeProps(grid, graph, palette, layout.removeCeiling());
 
             // Phase 5: Light placement
             LightPlacer lightPlacer = new LightPlacer(seed + 3);
@@ -164,8 +165,8 @@ public class GenerationOrchestrator {
             SpawnerPlacer spawnerPlacer = new SpawnerPlacer(seed + 4, config.pacing());
             List<SpawnerDefinition> spawners = spawnerPlacer.placeSpawners(grid, graph, palette, config.floorLevel());
 
-            LOGGER.atInfo().log("[DungeonGen] Props/lights/spawns placed: %d spawners",
-                spawners.size());
+            LOGGER.atInfo().log("[DungeonGen] Props/lights/spawns placed: %d spawners, %d chests",
+                spawners.size(), chests.size());
 
             // Build the blueprint
             DungeonBlueprint blueprint = new DungeonBlueprint(seedStr, graph);
@@ -210,6 +211,8 @@ public class GenerationOrchestrator {
                 List.copyOf(spawners),
                 blueprint.getMerchants().size(),
                 List.copyOf(blueprint.getMerchants()),
+                chests.size(),
+                List.copyOf(chests),
                 entrancePosition,
                 exitPosition,
                 genElapsed,

@@ -35,13 +35,15 @@
             "BlockId": "Furniture_Ancient_Crate",
             "Placement": "FLOOR",
             "SpawnChance": 0.15,
-            "MaxPerRoom": 3
+            "MaxPerRoom": 3,
+            "ChestTier": "Regular"
         },
         {
             "BlockId": "Furniture_Crude_Chest_Small",
             "Placement": "FLOOR",
             "SpawnChance": 0.6,
             "MaxPerRoom": 1,
+            "ChestTier": "Regular",
             "AllowedRoomTypes": [
                 "LOOT"
             ]
@@ -51,6 +53,7 @@
             "Placement": "CENTER",
             "SpawnChance": 0.8,
             "MaxPerRoom": 1,
+            "ChestTier": "Epic",
             "AllowedRoomTypes": [
                 "BOSS"
             ]

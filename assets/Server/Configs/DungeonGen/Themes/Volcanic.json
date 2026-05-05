@@ -55,6 +55,7 @@
             "Placement": "CENTER",
             "SpawnChance": 0.9,
             "MaxPerRoom": 1,
+            "ChestTier": "Epic",
             "AllowedRoomTypes": [
                 "BOSS"
             ]
@@ -64,6 +65,7 @@
             "Placement": "CENTER",
             "SpawnChance": 0.7,
             "MaxPerRoom": 1,
+            "ChestTier": "Golden",
             "AllowedRoomTypes": [
                 "LOOT"
             ]
@@ -72,7 +74,8 @@
             "BlockId": "Furniture_Ancient_Crate",
             "Placement": "FLOOR",
             "SpawnChance": 0.15,
-            "MaxPerRoom": 2
+            "MaxPerRoom": 2,
+            "ChestTier": "Regular"
         },
         {
             "BlockId": "Deco_Iron_Stack",

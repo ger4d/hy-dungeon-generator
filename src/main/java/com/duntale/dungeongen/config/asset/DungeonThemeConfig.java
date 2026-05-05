@@ -2,6 +2,7 @@ package com.duntale.dungeongen.config.asset;
 
 import com.duntale.dungeongen.generator.layout.RoomType;
 import com.duntale.dungeongen.generator.props.PropRule;
+import com.duntale.dungeongen.model.ChestTier;
 import com.duntale.dungeongen.generator.theme.BlockPalette;
 import com.hypixel.hytale.assetstore.AssetExtraInfo;
 import com.hypixel.hytale.assetstore.AssetRegistry;
@@ -16,6 +17,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Hytale asset-backed dungeon theme configuration.
@@ -249,9 +251,23 @@ public class DungeonThemeConfig
                 entry.getSpawnChance(),
                 entry.getMaxPerRoom(),
                 allowed,
-                entry.getYOffset()
+                entry.getYOffset(),
+                parseChestTier(entry.getChestTier())
             ));
         }
         return rules;
+    }
+
+    @Nullable
+    private static ChestTier parseChestTier(@Nullable String rawChestTier) {
+        if (rawChestTier == null || rawChestTier.isBlank()) {
+            return null;
+        }
+
+        try {
+            return ChestTier.valueOf(rawChestTier.trim().toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 }

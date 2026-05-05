@@ -25,6 +25,7 @@ public class PropRuleEntry {
     protected int maxPerRoom = 1;
     protected String[] allowedRoomTypes = new String[0];
     protected int yOffset = 0;
+    protected String chestTier = "";
 
     public PropRuleEntry() {}
 
@@ -42,6 +43,8 @@ public class PropRuleEntry {
                 (e, v) -> e.allowedRoomTypes = v, e -> e.allowedRoomTypes).add()
             .append(new KeyedCodec<>("YOffset", Codec.INTEGER),
                 (e, v) -> e.yOffset = v, e -> e.yOffset).add()
+            .append(new KeyedCodec<>("ChestTier", Codec.STRING),
+                (e, v) -> e.chestTier = v, e -> e.chestTier).add()
             .build();
         ARRAY_CODEC = new ArrayCodec<>(CODEC, PropRuleEntry[]::new);
     }
@@ -56,4 +59,7 @@ public class PropRuleEntry {
     public int getMaxPerRoom() { return maxPerRoom; }
     @Nonnull public String[] getAllowedRoomTypes() { return allowedRoomTypes; }
     public int getYOffset() { return yOffset; }
+    @Nullable public String getChestTier() {
+        return chestTier == null || chestTier.isBlank() ? null : chestTier;
+    }
 }

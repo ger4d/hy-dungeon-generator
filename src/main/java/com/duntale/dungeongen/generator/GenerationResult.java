@@ -1,6 +1,7 @@
 package com.duntale.dungeongen.generator;
 
 import com.duntale.dungeongen.config.Vec3i;
+import com.duntale.dungeongen.model.ChestDefinition;
 import com.duntale.dungeongen.model.MerchantDefinition;
 import com.duntale.dungeongen.model.SpawnerDefinition;
 
@@ -21,6 +22,8 @@ import java.util.List;
  * @param spawnerDefinitions  the spawner definitions for creating ECS spawner entities
  * @param merchants           number of merchant definitions placed
  * @param merchantDefinitions the merchant definitions for creating merchant NPC entities
+ * @param chests              number of chest definitions placed
+ * @param chestDefinitions    the chest definitions for filling placed loot containers
  * @param entrancePosition    dungeon-origin-relative standing position for the entrance room,
  *                            or {@code null} if no entrance room was assigned
  * @param exitPosition        dungeon-origin-relative standing position for the boss/exit room,
@@ -39,6 +42,8 @@ public record GenerationResult(
     @Nonnull List<SpawnerDefinition> spawnerDefinitions,
     int merchants,
     @Nonnull List<MerchantDefinition> merchantDefinitions,
+    int chests,
+    @Nonnull List<ChestDefinition> chestDefinitions,
     @Nullable Vec3i entrancePosition,
     @Nullable Vec3i exitPosition,
     long generationTimeMs,
@@ -70,6 +75,7 @@ public record GenerationResult(
         sb.append("\"totalBlocks\": ").append(totalBlocks).append(",");
         sb.append("\"spawners\": ").append(spawners).append(",");
         sb.append("\"merchants\": ").append(merchants).append(",");
+        sb.append("\"chests\": ").append(chests).append(",");
         sb.append("\"generationTimeMs\": ").append(generationTimeMs).append(",");
         sb.append("\"assemblyTimeMs\": ").append(assemblyTimeMs);
         sb.append("}");

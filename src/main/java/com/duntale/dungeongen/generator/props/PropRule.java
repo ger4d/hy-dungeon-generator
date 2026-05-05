@@ -1,6 +1,7 @@
 package com.duntale.dungeongen.generator.props;
 
 import com.duntale.dungeongen.generator.layout.RoomType;
+import com.duntale.dungeongen.model.ChestTier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -32,6 +33,7 @@ public class PropRule {
     private final int maxPerRoom;
     private final RoomType[] allowedRooms;
     private final int yOffset;
+    private final ChestTier chestTier;
 
     /**
      * Create a new prop rule.
@@ -47,7 +49,7 @@ public class PropRule {
                     double spawnChance,
                     int maxPerRoom,
                     @Nullable RoomType[] allowedRooms) {
-        this(blockId, placement, spawnChance, maxPerRoom, allowedRooms, 0);
+        this(blockId, placement, spawnChance, maxPerRoom, allowedRooms, 0, null);
     }
 
     /**
@@ -66,12 +68,34 @@ public class PropRule {
                     int maxPerRoom,
                     @Nullable RoomType[] allowedRooms,
                     int yOffset) {
+        this(blockId, placement, spawnChance, maxPerRoom, allowedRooms, yOffset, null);
+    }
+
+    /**
+     * Create a new prop rule with a vertical offset and optional chest tier.
+     *
+     * @param blockId      the block type ID for this prop
+     * @param placement    where in the room the prop may appear
+     * @param spawnChance  probability (0–1) of placement per valid position
+     * @param maxPerRoom   maximum instances in a single room
+     * @param allowedRooms room types that allow this prop ({@code null} = all)
+     * @param yOffset      Y offset relative to placement base (e.g. 1 for banners)
+     * @param chestTier    optional loot tier to assign when this prop is a loot container
+     */
+    public PropRule(@Nonnull String blockId,
+                    @Nonnull Placement placement,
+                    double spawnChance,
+                    int maxPerRoom,
+                    @Nullable RoomType[] allowedRooms,
+                    int yOffset,
+                    @Nullable ChestTier chestTier) {
         this.blockId = blockId;
         this.placement = placement;
         this.spawnChance = spawnChance;
         this.maxPerRoom = maxPerRoom;
         this.allowedRooms = allowedRooms;
         this.yOffset = yOffset;
+        this.chestTier = chestTier;
     }
 
     /** @return the block type ID for this prop. */
@@ -90,6 +114,10 @@ public class PropRule {
 
     /** @return the Y offset relative to the placement base (0 = default). */
     public int getYOffset() { return yOffset; }
+
+    /** @return the optional chest tier for loot containers placed by this rule. */
+    @Nullable
+    public ChestTier getChestTier() { return chestTier; }
 
     /**
      * Check whether this prop may appear in the given room type.

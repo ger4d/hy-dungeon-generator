@@ -53,6 +53,7 @@
             "Placement": "CENTER",
             "SpawnChance": 0.7,
             "MaxPerRoom": 1,
+            "ChestTier": "Regular",
             "AllowedRoomTypes": [
                 "LOOT"
             ]
@@ -62,6 +63,7 @@
             "Placement": "CENTER",
             "SpawnChance": 0.9,
             "MaxPerRoom": 1,
+            "ChestTier": "Epic",
             "AllowedRoomTypes": [
                 "BOSS"
             ]
