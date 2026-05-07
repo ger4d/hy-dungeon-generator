@@ -9,7 +9,7 @@
         }
     ],
     "Main": "com.duntale.dungeongen.DungeonGenPlugin",
-    "ServerVersion": "2026.04.30-b4f6a911e",
+    "ServerVersion": "2026.05.07-5efa15f6d",
     "Dependencies": {},
     "OptionalDependencies": {},
     "DisabledByDefault": false,
