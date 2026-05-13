@@ -2,9 +2,8 @@ package com.duntale.dungeongen;
 
 import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
-import com.duntale.dungeongen.generator.GenerationOrchestrator;
+import com.duntale.dungeongen.rest.BalanceAssetExportService;
 import com.duntale.dungeongen.rest.HttpRestServer;
-import com.duntale.dungeongen.util.BlockResolver;
 import com.hypixel.hytale.assetstore.AssetRegistry;
 import com.hypixel.hytale.server.core.asset.HytaleAssetStore;
 import com.hypixel.hytale.assetstore.map.IndexedLookupTableAssetMap;
@@ -15,13 +14,16 @@ import javax.annotation.Nonnull;
 import java.util.logging.Level;
 
 /**
- * DungeonGen — a procedural dungeon generator plugin for the Hytale
- * Dedicated Server, exposing a REST API for on-demand dungeon creation.
+ * DungeonGen exposes a lightweight asset inspection API for balancing work.
  *
  * <h2>REST Endpoints (port 3590):</h2>
  * <pre>{@code
- *   GET  /health   → server health check
- *   POST /generate → generate a dungeon from configuration JSON
+ *   GET /health
+ *   GET /assets/summary
+ *   GET /assets/weapons
+ *   GET /assets/armor
+ *   GET /assets/npcs
+ *   GET /assets/balance-dataset
  * }</pre>
  *
  * @since 1.0.0
@@ -34,8 +36,6 @@ public class DungeonGenPlugin extends JavaPlugin {
     // Fields
     // ============================================
 
-    private BlockResolver blockResolver;
-    private GenerationOrchestrator orchestrator;
     private HttpRestServer restServer;
 
     // ============================================
@@ -78,14 +78,8 @@ public class DungeonGenPlugin extends JavaPlugin {
                 .build()
         );
 
-        // Initialize block resolver for string→int block ID conversion
-        this.blockResolver = new BlockResolver();
-
-        // Initialize generation orchestrator with block resolver for assembly
-        this.orchestrator = new GenerationOrchestrator(blockResolver);
-
-        // Initialize REST server wired to the orchestrator
-        this.restServer = new HttpRestServer(orchestrator, REST_PORT);
+        // Initialize read-only asset export API
+        this.restServer = new HttpRestServer(new BalanceAssetExportService(), REST_PORT);
 
         getLogger().at(Level.INFO).log("[DungeonGen] Setup complete.");
     }
@@ -93,7 +87,7 @@ public class DungeonGenPlugin extends JavaPlugin {
     @Override
     protected void start() {
         getLogger().at(Level.INFO).log("╔══════════════════════════════════════════╗");
-        getLogger().at(Level.INFO).log("║     DungeonGen REST Server               ║");
+        getLogger().at(Level.INFO).log("║     DungeonGen Asset API                 ║");
         getLogger().at(Level.INFO).log("║       Version: 1.0.0                     ║");
         getLogger().at(Level.INFO).log("║       Port: " + REST_PORT + "                          ║");
         getLogger().at(Level.INFO).log("╚══════════════════════════════════════════╝");
@@ -101,7 +95,7 @@ public class DungeonGenPlugin extends JavaPlugin {
         // Start the REST server
         restServer.start();
 
-        getLogger().at(Level.INFO).log("[DungeonGen] REST server started on port %d", REST_PORT);
+        getLogger().at(Level.INFO).log("[DungeonGen] Asset API started on port %d", REST_PORT);
     }
 
     @Override
@@ -110,10 +104,6 @@ public class DungeonGenPlugin extends JavaPlugin {
 
         if (restServer != null) {
             restServer.stop();
-        }
-
-        if (orchestrator != null) {
-            orchestrator.shutdown();
         }
 
         getLogger().at(Level.INFO).log("[DungeonGen] Shutdown complete.");

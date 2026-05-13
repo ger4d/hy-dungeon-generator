@@ -653,9 +653,6 @@ public class LayoutGenerator {
      */
     @Nullable
     private Room pickExit(@Nonnull List<Room> rooms, @Nonnull Room entrance) {
-        double maxPossibleDist = Math.sqrt(
-            (double) config.width() * config.width()
-            + (double) config.depth() * config.depth());
         // exitDistance is a normalised minimum; we pick farthest regardless
         Room farthest = null;
         double farthestDist = 0;

@@ -18,7 +18,6 @@ import com.duntale.dungeongen.generator.voxel.BlockGrid;
 import com.duntale.dungeongen.generator.voxel.VoxelCarver;
 import com.duntale.dungeongen.model.ChestDefinition;
 import com.duntale.dungeongen.model.DungeonBlueprint;
-import com.duntale.dungeongen.model.MerchantDefinition;
 import com.duntale.dungeongen.model.SpawnerDefinition;
 import com.duntale.dungeongen.util.BlockResolver;
 import com.hypixel.hytale.logger.HytaleLogger;
@@ -177,7 +176,7 @@ public class GenerationOrchestrator {
             featurePlacer.placeMerchants(grid, graph, layout, blueprint, config.floorLevel());
 
             Vec3i entrancePosition = resolveRoomStandingPosition(grid, graph, graph.getEntranceRoomId());
-            Vec3i exitPosition = resolveRoomStandingPosition(grid, graph, graph.getBossRoomId());
+            Vec3i exitPosition = resolveRoomStandingPosition(grid, graph, resolveExitRoomId(graph));
 
             long genElapsed = System.currentTimeMillis() - start;
 
@@ -243,6 +242,15 @@ public class GenerationOrchestrator {
         }
 
         return findSafeStandingPosition(grid, room, getRoomStandingPosition(room));
+    }
+
+    private static int resolveExitRoomId(@Nonnull DungeonGraph graph) {
+        for (Room room : graph.getRooms()) {
+            if (room.isExit()) {
+                return room.getId();
+            }
+        }
+        return graph.getBossRoomId();
     }
 
     @Nonnull

@@ -1,31 +1,28 @@
 package com.duntale.dungeongen.rest;
 
-import com.duntale.dungeongen.config.DungeonConfig;
-import com.duntale.dungeongen.generator.GenerationOrchestrator;
-import com.duntale.dungeongen.generator.GenerationResult;
-import com.duntale.dungeongen.util.JsonParser;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
- * Lightweight HTTP REST server exposing dungeon generation endpoints.
+ * Lightweight HTTP server exposing balancing asset export endpoints.
  * Uses the built-in JDK {@link HttpServer} — no external dependencies.
  *
  * <h2>Endpoints:</h2>
  * <pre>{@code
- *   GET  /health   → {"status": "ok", "version": "1.0.0"}
- *   POST /generate → accepts DungeonConfig JSON, returns generation stats
+ *   GET /health
+ *   GET /assets/summary
+ *   GET /assets/weapons
+ *   GET /assets/armor
+ *   GET /assets/npcs
+ *   GET /assets/balance-dataset
  * }</pre>
  *
  * @since 1.0.0
@@ -33,14 +30,13 @@ import java.util.concurrent.TimeUnit;
 public class HttpRestServer {
 
     private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
-    private static final int FUTURE_TIMEOUT_SECONDS = 60;
     private static final String VERSION = "1.0.0";
 
     // ============================================
     // Fields
     // ============================================
 
-    private final GenerationOrchestrator orchestrator;
+    private final BalanceAssetExportService exportService;
     private final int port;
     private HttpServer server;
 
@@ -49,13 +45,13 @@ public class HttpRestServer {
     // ============================================
 
     /**
-     * Create a REST server wired to the given generation orchestrator.
+     * Create an asset API server wired to the given export service.
      *
-     * @param orchestrator the dungeon generation orchestrator
-     * @param port         the TCP port to listen on
+     * @param exportService the balancing asset export service
+     * @param port          the TCP port to listen on
      */
-    public HttpRestServer(@Nonnull GenerationOrchestrator orchestrator, int port) {
-        this.orchestrator = orchestrator;
+    public HttpRestServer(@Nonnull BalanceAssetExportService exportService, int port) {
+        this.exportService = exportService;
         this.port = port;
     }
 
@@ -70,7 +66,7 @@ public class HttpRestServer {
         try {
             server = HttpServer.create(new InetSocketAddress(port), 0);
             server.setExecutor(Executors.newFixedThreadPool(4, r -> {
-                Thread t = new Thread(r, "DungeonGen-REST");
+                Thread t = new Thread(r, "DungeonGen-AssetAPI");
                 t.setDaemon(true);
                 return t;
             }));
@@ -78,9 +74,9 @@ public class HttpRestServer {
             registerEndpoints();
             server.start();
 
-            LOGGER.atInfo().log("[DungeonGen-REST] HTTP server started on port %s", port);
+            LOGGER.atInfo().log("[DungeonGen-AssetAPI] HTTP server started on port %s", port);
         } catch (IOException e) {
-            LOGGER.atSevere().withCause(e).log("[DungeonGen-REST] Failed to start HTTP server on port %s", port);
+            LOGGER.atSevere().withCause(e).log("[DungeonGen-AssetAPI] Failed to start HTTP server on port %s", port);
         }
     }
 
@@ -90,7 +86,7 @@ public class HttpRestServer {
     public void stop() {
         if (server != null) {
             server.stop(1);
-            LOGGER.atInfo().log("[DungeonGen-REST] HTTP server stopped");
+            LOGGER.atInfo().log("[DungeonGen-AssetAPI] HTTP server stopped");
         }
     }
 
@@ -100,7 +96,11 @@ public class HttpRestServer {
 
     private void registerEndpoints() {
         server.createContext("/health", this::handleHealth);
-        server.createContext("/generate", this::handleGenerate);
+        server.createContext("/assets/summary", this::handleSummary);
+        server.createContext("/assets/weapons", this::handleWeapons);
+        server.createContext("/assets/armor", this::handleArmor);
+        server.createContext("/assets/npcs", this::handleNpcs);
+        server.createContext("/assets/balance-dataset", this::handleBalanceDataset);
     }
 
     // ============================================
@@ -109,33 +109,32 @@ public class HttpRestServer {
 
     private void handleHealth(@Nonnull HttpExchange exchange) throws IOException {
         if (!requireGet(exchange)) return;
-        sendJson(exchange, 200, "{\"status\": \"ok\", \"version\": \"" + VERSION + "\"}");
+        sendJson(exchange, 200, "{\"status\": \"ok\", \"version\": \"" + VERSION + "\", \"mode\": \"balance-assets\"}");
     }
 
-    private void handleGenerate(@Nonnull HttpExchange exchange) throws IOException {
-        if (!requirePost(exchange)) return;
+    private void handleSummary(@Nonnull HttpExchange exchange) throws IOException {
+        if (!requireGet(exchange)) return;
+        sendJson(exchange, 200, exportService.buildSummary().toString());
+    }
 
-        Map<String, Object> body = parseJsonBody(exchange);
-        if (body == null) {
-            sendJson(exchange, 400, errorJson("Invalid JSON body"));
-            return;
-        }
+    private void handleWeapons(@Nonnull HttpExchange exchange) throws IOException {
+        if (!requireGet(exchange)) return;
+        sendJson(exchange, 200, exportService.buildWeapons().toString());
+    }
 
-        try {
-            DungeonConfig config = DungeonConfig.fromJson(body);
+    private void handleArmor(@Nonnull HttpExchange exchange) throws IOException {
+        if (!requireGet(exchange)) return;
+        sendJson(exchange, 200, exportService.buildArmor().toString());
+    }
 
-            LOGGER.atInfo().log("[DungeonGen-REST] Generation request: seed=%s, preset=%s",
-                config.seed(), config.preset());
+    private void handleNpcs(@Nonnull HttpExchange exchange) throws IOException {
+        if (!requireGet(exchange)) return;
+        sendJson(exchange, 200, exportService.buildNpcs().toString());
+    }
 
-            GenerationResult result = orchestrator.generate(config)
-                .get(FUTURE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-
-            int httpStatus = result.assemblyError() != null ? 500 : 200;
-            sendJson(exchange, httpStatus, result.toJson());
-        } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("[DungeonGen-REST] Generation failed");
-            sendJson(exchange, 500, errorJson("Generation failed: " + e.getMessage()));
-        }
+    private void handleBalanceDataset(@Nonnull HttpExchange exchange) throws IOException {
+        if (!requireGet(exchange)) return;
+        sendJson(exchange, 200, exportService.buildBalanceDataset().toString());
     }
 
     // ============================================
@@ -152,31 +151,12 @@ public class HttpRestServer {
         }
     }
 
-    private boolean requirePost(@Nonnull HttpExchange exchange) throws IOException {
-        if (!"POST".equalsIgnoreCase(exchange.getRequestMethod())) {
-            sendJson(exchange, 405, errorJson("POST required"));
-            return false;
-        }
-        return true;
-    }
-
     private boolean requireGet(@Nonnull HttpExchange exchange) throws IOException {
         if (!"GET".equalsIgnoreCase(exchange.getRequestMethod())) {
             sendJson(exchange, 405, errorJson("GET required"));
             return false;
         }
         return true;
-    }
-
-    @Nullable
-    private Map<String, Object> parseJsonBody(@Nonnull HttpExchange exchange) {
-        try {
-            String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-            return JsonParser.parseObject(body);
-        } catch (Exception e) {
-            LOGGER.atWarning().withCause(e).log("[DungeonGen-REST] Failed to parse JSON body");
-            return null;
-        }
     }
 
     @Nonnull
