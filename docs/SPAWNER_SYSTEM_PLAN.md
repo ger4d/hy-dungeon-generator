@@ -450,7 +450,7 @@ Default values (tunable in `dungeon_floors` or global settings):
 | `assembly/WorldAssembler.java` | Place spawner debug blocks from blueprint | **DONE** |
 | `assets/.../Themes/*.json` | Add SpawnPools section to all 7 themes | **DONE** |
 | `assets/.../Settings/Generation.json` | Add `SpawnerBlock` field | **DONE** |
-| `rest/HttpRestServer.java` | Update response to include spawner stats | Deferred |
+| HTTP export surface | Removed with the embedded HTTP layer | N/A |
 
 ### v3-zsquad — new files
 

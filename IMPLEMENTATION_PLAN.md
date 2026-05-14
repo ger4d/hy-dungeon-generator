@@ -3,20 +3,15 @@
 > **Plugin Name**: DungeonGen  
 > **Package**: `com.duntale.dungeongen`  
 > **Output JAR**: `DungeonGen.jar`  
-> **REST Port**: 3590  
 > **Reference**: mcp-player plugin architecture  
+
+> Historical note: older drafts of this plan described an embedded HTTP layer. That surface has been removed from the current project.
 
 ---
 
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                  HTTP REST Server (:3590)                │
-│   /health  •  /generate                                 │
-└────────────────────┬────────────────────────────────────┘
-                     │ POST /generate {config JSON}
-                     ▼
 ┌─────────────────────────────────────────────────────────┐
 │              GenerationOrchestrator                      │
 │  (runs on dedicated thread pool)                        │
@@ -59,8 +54,6 @@ dungeon-gen/
 └── src/main/
     ├── java/com/duntale/dungeongen/
     │   ├── DungeonGenPlugin.java           # Entry point (JavaPlugin)
-    │   ├── rest/
-    │   │   └── HttpRestServer.java         # REST server (/health, /generate)
     │   ├── config/
     │   │   ├── DungeonConfig.java          # Full generation configuration
     │   │   ├── LayoutConfig.java           # Layout parameters
@@ -114,12 +107,9 @@ dungeon-gen/
 - Create `manifest.json`
 - Verify `./gradlew build` compiles
 
-### Step 2: Plugin Entry Point + REST Server
+### Step 2: Plugin Entry Point
 - `DungeonGenPlugin.java` - extends `JavaPlugin`, lifecycle methods
-- `HttpRestServer.java` - `/health` and `/generate` endpoints
-- `/health` returns `{"status": "ok"}`
-- `/generate` accepts POST with DungeonConfig JSON, returns generation result
-- Wire up lifecycle: `setup()` creates REST server, `start()` starts it, `shutdown()` stops it
+- Wire up lifecycle for asset registration and generation services
 
 ### Step 3: Configuration Model
 - `DungeonConfig.java` - top-level config record
@@ -127,7 +117,7 @@ dungeon-gen/
 - `ThemeConfig.java` - palette name, decay%, overgrowth%, flooding%
 - `PacingConfig.java` - tension curve parameters
 - `Preset.java` - built-in presets (ForgottenCrypt, FloodedMine, ArcaneVault)
-- JSON parsing for config from HTTP body
+- JSON parsing for config payloads
 
 ### Step 4: Block Resolution Utility
 - `BlockResolver.java` - wraps `BlockType.fromString()` and `BlockTypeAssetMap.getIndex()`
@@ -184,64 +174,6 @@ dungeon-gen/
 
 ---
 
-## REST API Specification
-
-### GET /health
-```json
-{"status": "ok", "version": "1.0.0"}
-```
-
-### POST /generate
-**Request body:**
-```json
-{
-  "seed": "my-dungeon-seed",
-  "preset": "forgotten_crypt",
-  "worldName": "default",
-  "origin": {"x": 0, "y": 60, "z": 0},
-  "layout": {
-    "width": 64,
-    "depth": 64,
-    "height": 12,
-    "minRooms": 8,
-    "maxRooms": 15,
-    "branchingFactor": 0.3,
-    "loopProbability": 0.2,
-    "deadEndFrequency": 0.15
-  },
-  "theme": {
-    "palette": "crypt",
-    "decayFactor": 0.4,
-    "overgrowthFactor": 0.2,
-    "floodingFactor": 0.0
-  },
-  "pacing": {
-    "breatheRoomFrequency": 0.3,
-    "difficultyRamp": 0.5
-  }
-}
-```
-
-**Response (success):**
-```json
-{
-  "status": "ok",
-  "seed": "my-dungeon-seed",
-  "stats": {
-    "rooms": 12,
-    "corridors": 14,
-    "totalBlocks": 28450,
-    "generationTimeMs": 342,
-    "assemblyTimeMs": 1205
-  }
-}
-```
-
-**Response (generation only, no assembly):**
-If `"assemble": false` is passed, returns the blueprint without placing it.
-
----
-
 ## Block Resolution Strategy
 
 ```java
@@ -268,7 +200,7 @@ chunk.setBlock(localX, localY, localZ, blockId, rotation, filler);
 
 3. **Seed determinism**: All `Random` instances are seeded from the dungeon seed. Same seed → identical dungeon.
 
-4. **No external dependencies**: Uses JDK `HttpServer` (like mcp-player). JSON parsing is hand-rolled. No Jackson/Gson.
+4. **No external dependencies**: JSON parsing is hand-rolled. No Jackson/Gson.
 
 5. **Block IDs resolved once at startup**: `BlockResolver` resolves all palette string IDs to integer IDs during `setup()`, avoiding repeated lookups during generation.
 
