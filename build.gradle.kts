@@ -64,7 +64,7 @@ tasks.register<Copy>("deployAssets") {
 // Deploy JAR + assets to server
 tasks.register<Copy>("deploy") {
     dependsOn(tasks.shadowJar)
-    dependsOn("deployAssets")
+    // dependsOn("deployAssets")
     from(tasks.shadowJar.get().archiveFile)
     into("${rootProject.projectDir}/../server/Server/mods")
 
