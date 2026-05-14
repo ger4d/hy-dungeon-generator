@@ -7,12 +7,14 @@ import com.duntale.dungeongen.config.Vec3i;
 import com.duntale.dungeongen.config.asset.DungeonSettingsConfig;
 import com.duntale.dungeongen.config.asset.DungeonThemeConfig;
 import com.duntale.dungeongen.generator.entity.SpawnerPlacer;
+import com.duntale.dungeongen.generator.feature.ExitPortalAccessPass;
 import com.duntale.dungeongen.generator.feature.FeaturePlacer;
 import com.duntale.dungeongen.generator.layout.DungeonGraph;
 import com.duntale.dungeongen.generator.layout.LayoutGenerator;
 import com.duntale.dungeongen.generator.layout.Room;
 import com.duntale.dungeongen.generator.lighting.LightPlacer;
 import com.duntale.dungeongen.generator.props.PropPlacer;
+import com.duntale.dungeongen.generator.theme.BlockPalette;
 import com.duntale.dungeongen.generator.theme.ThemeDecorator;
 import com.duntale.dungeongen.generator.voxel.BlockGrid;
 import com.duntale.dungeongen.generator.voxel.VoxelCarver;
@@ -25,6 +27,7 @@ import com.hypixel.hytale.logger.HytaleLogger;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -167,16 +170,34 @@ public class GenerationOrchestrator {
             LOGGER.atInfo().log("[DungeonGen] Props/lights/spawns placed: %d spawners, %d chests",
                 spawners.size(), chests.size());
 
-            // Build the blueprint
+            Vec3i entrancePosition = resolveRoomStandingPosition(grid, graph, graph.getEntranceRoomId());
+            int exitRoomId = resolveExitRoomId(graph);
+            Room exitRoom = graph.getRoom(exitRoomId);
+            ExitPortalAccessPass exitAccessPass = new ExitPortalAccessPass();
+            Vec3i exitPosition = exitRoom != null ? exitAccessPass.resolveAnchor(grid, exitRoom) : null;
+            Vec3i preferredExitAccessPosition = exitAccessPass.resolveIncomingAccessPosition(graph, exitRoomId);
+
+            // Build metadata against the natural fluid layout before the exit repair mutates the grid.
             DungeonBlueprint blueprint = new DungeonBlueprint(seedStr, graph);
-            grid.toBlockEntries().forEach(blueprint::addBlock);
             spawners.forEach(blueprint::addSpawner);
 
             // Phase 6b: Merchant placement (near fluids)
             featurePlacer.placeMerchants(grid, graph, layout, blueprint, config.floorLevel());
 
-            Vec3i entrancePosition = resolveRoomStandingPosition(grid, graph, graph.getEntranceRoomId());
-            Vec3i exitPosition = resolveRoomStandingPosition(grid, graph, resolveExitRoomId(graph));
+            if (exitRoom != null && exitPosition != null) {
+                ExitPortalAccessPass.ExitPortalAccess exitAccess = exitAccessPass.protect(
+                    grid,
+                    exitRoom,
+                    exitPosition,
+                    BlockPalette.fromName(palette).getFloor(),
+                    preferredExitAccessPosition
+                );
+                chests = filterChestsOutsideProtectedCells(chests, exitAccess.protectedStandingCells());
+                exitPosition = exitAccess.exitPosition();
+            }
+
+            // Emit blocks after the exit repair so the final blueprint contains the dry access path.
+            grid.toBlockEntries().forEach(blueprint::addBlock);
 
             long genElapsed = System.currentTimeMillis() - start;
 
@@ -307,9 +328,23 @@ public class GenerationOrchestrator {
         return grid.canPlace(x, y - 1, z)
                 && grid.canPlace(x, y, z)
                 && grid.canPlace(x, y + 1, z)
-                && grid.isSolid(x, y - 1, z)
+                && grid.isBlock(x, y - 1, z)
                 && grid.isAir(x, y, z)
                 && grid.isAir(x, y + 1, z);
+    }
+
+    @Nonnull
+    static List<ChestDefinition> filterChestsOutsideProtectedCells(
+            @Nonnull List<ChestDefinition> chests,
+            @Nonnull Set<Vec3i> protectedStandingCells
+    ) {
+        if (protectedStandingCells.isEmpty()) {
+            return chests;
+        }
+
+        return chests.stream()
+                .filter(chest -> !protectedStandingCells.contains(new Vec3i(chest.x(), chest.y(), chest.z())))
+                .toList();
     }
 
     @Nullable

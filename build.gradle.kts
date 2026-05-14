@@ -24,12 +24,19 @@ repositories {
 dependencies {
     // Hytale Server API — compileOnly, never bundle
     compileOnly("com.hypixel.hytale:Server:2026.05.07-5efa15f6d")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
         options.release = 25
+    }
+
+    test {
+        useJUnitPlatform()
     }
 
     shadowJar {
