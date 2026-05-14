@@ -125,8 +125,14 @@ public class DungeonThemeConfig
      * @return the theme config, or {@code null} if not loaded
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     public static DungeonThemeConfig get(@Nonnull String id) {
-        return getAssetMap().getAsset(id);
+        AssetStore<String, DungeonThemeConfig,
+                IndexedLookupTableAssetMap<String, DungeonThemeConfig>> store = getAssetStore();
+        if (store == null) {
+            return null;
+        }
+        return ((IndexedLookupTableAssetMap<String, DungeonThemeConfig>) store.getAssetMap()).getAsset(id);
     }
 
     /**

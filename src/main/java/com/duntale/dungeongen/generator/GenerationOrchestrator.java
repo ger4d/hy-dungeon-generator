@@ -85,7 +85,26 @@ public class GenerationOrchestrator {
      */
     @Nonnull
     public CompletableFuture<GenerationResult> generate(@Nonnull DungeonConfig config) {
-        return CompletableFuture.supplyAsync(() -> {
+        return generateArtifacts(config).thenApply(GenerationArtifacts::result);
+    }
+
+    /**
+     * Asynchronously generate a dungeon and return preview-safe generation artifacts.
+     *
+     * <p>If {@code config.assemble()} is {@code true}, the generated blueprint
+     * will be placed into the target world before the future completes.</p>
+     *
+     * @param config the dungeon generation config
+     * @return a future that completes with generation result, final grid, and blueprint
+     * @since 1.6.0
+     */
+    @Nonnull
+    public CompletableFuture<GenerationArtifacts> generateArtifacts(@Nonnull DungeonConfig config) {
+        return CompletableFuture.supplyAsync(() -> generateArtifactsSync(config), executor);
+    }
+
+    @Nonnull
+    private GenerationArtifacts generateArtifactsSync(@Nonnull DungeonConfig config) {
             long start = System.currentTimeMillis();
             long seed = config.seed() != null ? config.seed().hashCode() : System.nanoTime();
             String seedStr = config.seed() != null ? config.seed() : String.valueOf(seed);
@@ -222,7 +241,7 @@ public class GenerationOrchestrator {
                 }
             }
 
-            return new GenerationResult(
+            GenerationResult result = new GenerationResult(
                 seedStr,
                 graph.getRooms().size(),
                 graph.getCorridors().size(),
@@ -239,7 +258,7 @@ public class GenerationOrchestrator {
                 assemblyMs,
                 assemblyError
             );
-        }, executor);
+            return new GenerationArtifacts(result, grid, blueprint);
     }
 
     /**

@@ -221,8 +221,14 @@ public class DungeonSettingsConfig
      * @return the settings config, or {@code null} if not loaded
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     public static DungeonSettingsConfig get(@Nonnull String id) {
-        return getAssetMap().getAsset(id);
+        AssetStore<String, DungeonSettingsConfig,
+                IndexedLookupTableAssetMap<String, DungeonSettingsConfig>> store = getAssetStore();
+        if (store == null) {
+            return null;
+        }
+        return ((IndexedLookupTableAssetMap<String, DungeonSettingsConfig>) store.getAssetMap()).getAsset(id);
     }
 
     /**

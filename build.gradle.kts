@@ -25,6 +25,7 @@ dependencies {
     // Hytale Server API — compileOnly, never bundle
     compileOnly("com.hypixel.hytale:Server:0.5.0-pre.8")
 
+    testImplementation("com.hypixel.hytale:Server:0.5.0-pre.8")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
@@ -37,6 +38,7 @@ tasks {
 
     test {
         useJUnitPlatform()
+        jvmArgs("-Djava.util.logging.manager=com.hypixel.hytale.logger.backend.HytaleLogManager")
     }
 
     shadowJar {
