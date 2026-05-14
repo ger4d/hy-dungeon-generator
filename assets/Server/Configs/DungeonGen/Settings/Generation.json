@@ -43,5 +43,5 @@
   "BlocksPerBatch": 1000,
   "FluidFallbackBlock": "Rock_Stone_Brick",
 
-  "SpawnerBlock": "Furniture_Temple_Scarak_Window"
+  "SpawnerBlock": null
 }

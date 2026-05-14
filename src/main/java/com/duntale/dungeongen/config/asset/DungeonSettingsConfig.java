@@ -96,7 +96,8 @@ public class DungeonSettingsConfig
     protected String fluidFallbackBlock = "Rock_Stone_Brick";
 
     // Spawner visual marker block (null or empty = invisible)
-    protected String spawnerBlock = "Furniture_Temple_Scarak_Window";
+    // protected String spawnerBlock = "Furniture_Temple_Scarak_Window";
+    protected String spawnerBlock = null;
 
     /** No-arg constructor required by codec. */
     public DungeonSettingsConfig() {}
