@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 plugins {
     id("java-library")
     id("com.gradleup.shadow") version "9.3.0"
@@ -42,7 +44,9 @@ tasks {
     }
 
     shadowJar {
-        archiveBaseName.set("DungeonGen")
+        val manifest = file("src/main/resources/manifest.json")
+        val pluginName = (JsonSlurper().parse(manifest) as Map<*, *>)["Name"] as String
+        archiveFileName.set("${pluginName}.jar")
         archiveClassifier.set("")
         mergeServiceFiles()
     }

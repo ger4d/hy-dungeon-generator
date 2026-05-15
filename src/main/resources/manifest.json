@@ -1,8 +1,8 @@
 {
     "Group": "com.duntale",
     "Name": "DungeonGen",
-    "Version": "1.0.0-SNAPSHOT",
-    "Description": "Procedural dungeon generator with REST API",
+    "Version": "0.1.0",
+    "Description": "Procedural dungeon generator",
     "Authors": [
         {
             "Name": "Duntale Team"
