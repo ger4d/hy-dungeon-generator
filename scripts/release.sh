@@ -107,7 +107,6 @@ perl -0pi -e 's/"Version":\s*"[^"]+"/"Version": "'"$version"'"/' src/main/resour
 git add gradle.properties src/main/resources/manifest.json
 git commit -m "release: v$version"
 git tag -a "v$version" -m "Release v$version"
-git push origin HEAD
-git push origin "v$version"
+git push origin HEAD --follow-tags
 
 echo "Bumped ${current_version} -> ${version} and pushed tag v${version}. GitHub Actions will build and publish the shadow jar."
