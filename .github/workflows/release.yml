@@ -53,12 +53,7 @@ jobs:
         run: |
           expected_version="${{ steps.meta.outputs.version }}"
           gradle_version="$(grep '^pluginVersion=' gradle.properties | cut -d= -f2-)"
-          manifest_version="$(python3 - <<'PY'
-import json
-with open('src/main/resources/manifest.json', 'r', encoding='utf-8') as handle:
-    print(json.load(handle)['Version'])
-PY
-)"
+          manifest_version="$(python3 -c 'import json, pathlib; print(json.loads(pathlib.Path("src/main/resources/manifest.json").read_text(encoding="utf-8"))["Version"])')"
 
           [[ "$gradle_version" == "$expected_version" ]] || {
             echo "gradle.properties pluginVersion '$gradle_version' does not match tag version '$expected_version'" >&2
