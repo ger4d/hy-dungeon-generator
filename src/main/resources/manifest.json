@@ -1,7 +1,7 @@
 {
     "Group": "com.duntale",
     "Name": "DungeonGen",
-    "Version": "0.1.1",
+    "Version": "0.1.2",
     "Description": "Procedural dungeon generator",
     "Authors": [
         {
