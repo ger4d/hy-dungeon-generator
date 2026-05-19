@@ -69,11 +69,11 @@ $C.@Container {
           Padding: (Horizontal: 14, Top: 4, Bottom: 12);
 
           Label { Text: "Width"; Style: (FontSize: 14, TextColor: #96a9be, VerticalAlignment: Center); Anchor: (Width: 60); }
-          $C.@NumberField #Width { @Anchor = (Width: 85, Right: 30); Value: 64; Format: (MaxDecimalPlaces: 0, Step: 8, MinValue: 16, MaxValue: 256); }
+          $C.@NumberField #Width { @Anchor = (Width: 85, Right: 30); Value: 64; Format: (MaxDecimalPlaces: 0, Step: 8, MinValue: 16, MaxValue: 456); }
           Label { Text: "Depth"; Style: (FontSize: 14, TextColor: #96a9be, VerticalAlignment: Center); Anchor: (Width: 60); }
-          $C.@NumberField #Depth { @Anchor = (Width: 85, Right: 30); Value: 64; Format: (MaxDecimalPlaces: 0, Step: 8, MinValue: 16, MaxValue: 256); }
+          $C.@NumberField #Depth { @Anchor = (Width: 85, Right: 30); Value: 64; Format: (MaxDecimalPlaces: 0, Step: 8, MinValue: 16, MaxValue: 456); }
           Label { Text: "Height"; Style: (FontSize: 14, TextColor: #96a9be, VerticalAlignment: Center); Anchor: (Width: 60); }
-          $C.@NumberField #Height { @Anchor = (Width: 85); Value: 12; Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 4, MaxValue: 64); }
+          $C.@NumberField #Height { @Anchor = (Width: 85); Value: 12; Format: (MaxDecimalPlaces: 0, Step: 1, MinValue: 4, MaxValue: 14); }
         }
       }
 
