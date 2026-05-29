@@ -25,9 +25,9 @@ repositories {
 
 dependencies {
     // Hytale Server API — compileOnly, never bundle
-    compileOnly("com.hypixel.hytale:Server:0.5.0-pre.9.1")
+    compileOnly("com.hypixel.hytale:Server:0.6.0-pre.1")
 
-    testImplementation("com.hypixel.hytale:Server:0.5.0-pre.9.1")
+    testImplementation("com.hypixel.hytale:Server:0.6.0-pre.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
