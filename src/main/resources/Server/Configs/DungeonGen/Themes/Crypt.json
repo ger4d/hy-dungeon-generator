@@ -28,11 +28,11 @@
     },
     "Props": [
         { "BlockId": "Deco_SpiderWeb", "Placement": "CORNER", "SpawnChance": 0.7, "MaxPerRoom": 4 },
-        { "BlockId": "Deco_Bone_Skulls", "Placement": "CORNER", "SpawnChance": 0.3, "MaxPerRoom": 2, "AllowedRoomTypes": ["COMBAT", "DEAD_END", "BOSS"] },
-        { "BlockId": "Deco_Bone_Pile", "Placement": "FLOOR", "SpawnChance": 0.2, "MaxPerRoom": 3, "AllowedRoomTypes": ["COMBAT", "DEAD_END"] },
+        { "BlockId": "Deco_Bone_Skulls", "Placement": "CORNER", "SpawnChance": 0.3, "MaxPerRoom": 2, "AllowedRoomTypes": ["COMBAT", "BOSS"] },
+        { "BlockId": "Deco_Bone_Pile", "Placement": "FLOOR", "SpawnChance": 0.2, "MaxPerRoom": 3, "AllowedRoomTypes": ["COMBAT"] },
         { "BlockId": "Furniture_Ancient_Pot", "Placement": "FLOOR", "SpawnChance": 0.15, "MaxPerRoom": 2 },
         { "BlockId": "Furniture_Ancient_Barrel", "Placement": "FLOOR", "SpawnChance": 0.1, "MaxPerRoom": 2, "AllowedRoomTypes": ["SAFE", "LOOT"] },
-        { "BlockId": "Furniture_Ancient_Coffin", "Placement": "CENTER", "SpawnChance": 0.4, "MaxPerRoom": 1, "AllowedRoomTypes": ["COMBAT", "DEAD_END"] },
+        { "BlockId": "Furniture_Ancient_Coffin", "Placement": "CENTER", "SpawnChance": 0.4, "MaxPerRoom": 1, "AllowedRoomTypes": ["COMBAT"] },
         { "BlockId": "Furniture_Ancient_Chest_Small", "Placement": "CENTER", "SpawnChance": 0.8, "MaxPerRoom": 1, "AllowedRoomTypes": ["LOOT"], "ChestTier": "Regular" },
         { "BlockId": "Furniture_Dungeon_Chest_Epic", "Placement": "CENTER", "SpawnChance": 0.9, "MaxPerRoom": 1, "AllowedRoomTypes": ["BOSS"], "ChestTier": "Epic" },
         { "BlockId": "Furniture_Ancient_Statue", "Placement": "CENTER", "SpawnChance": 0.3, "MaxPerRoom": 1, "AllowedRoomTypes": ["HUB", "ENTRANCE"] },
@@ -51,10 +51,15 @@
     "LevelVariance": 5,
     "SpawnPool": [
         { "NpcRole": "Skeleton_Fighter", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
-        { "NpcRole": "Skeleton_Archer", "MinFloor": 1, "MaxFloor": 30, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Skeleton_Soldier", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Skeleton_Knight", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Skeleton_Mage", "MinFloor": 10, "MaxFloor": 60, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Ghoul", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+        { "NpcRole": "Skeleton_Archer", "MinFloor": 1, "MaxFloor": 30, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Skeleton_Soldier", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Goblin_Hermit", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Skeleton_Knight", "MinFloor": 10, "MaxFloor": 70, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Skeleton_Mage", "MinFloor": 10, "MaxFloor": 70, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Goblin_Duke", "MinFloor": 10, "MaxFloor": 70, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Golem_Cyrstal_Earth", "MinFloor": 20, "MaxFloor": 70, "Weight": 2.0, "Variants": ["BOSS"] },
+        { "NpcRole": "Spawn_Void", "MinFloor": 30, "MaxFloor": 70, "Weight": 2.0, "Variants": ["BOSS"] },
+        { "NpcRole": "Zombie_Aberrant", "MinFloor": 5, "MaxFloor": 70, "Weight": 1.0, "Variants": ["BOSS"] },
+        { "NpcRole": "Ghoul", "MinFloor": 15, "MaxFloor": 70, "Weight": 1.0, "Variants": ["BOSS"] }
     ]
 }

@@ -1,19 +1,23 @@
 {
     "Palette": {
-        "PrimaryWall": "Plant_Moss_Block_Green",
-        "SecondaryWall": "Plant_Moss_Block_Blue",
-        "Floor": "Plant_Moss_Cave_Green",
+        "PrimaryWall": "Plant_Crop_Mushroom_Block_Red",
+        "SecondaryWall": "Build_Lightsource_Red",
+        "Floor": "Plant_Crop_Mushroom_Block_White",
         "Ceiling": "Plant_Moss_Block_Green_Dark",
-        "PillarBase": "Plant_Crop_Mushroom_Block_Blue_Trunk",
-        "PillarMiddle": "Plant_Crop_Mushroom_Block_Blue_Trunk",
+        "PillarBase": "Plant_Crop_Mushroom_Block_Red_Trunk",
+        "PillarMiddle": "Plant_Crop_Mushroom_Block_Red_Trunk",
         "Stairs": "Plant_Moss_Block_Green",
         "Slab": "Plant_Moss_Block_Green",
         "DecayVariants": [
-            "Plant_Moss_Block_Red",
-            "Plant_Moss_Block_Yellow"
+            "Plant_Crop_Mushroom_Block_Brown_Trunk"
         ],
         "OvergrowthBlocks": {
-            "Ceiling": ["Plant_Vine_Hanging", "Plant_Vine_Green_Hanging"]
+            "Floor": [],
+            "Wall": [],
+            "Ceiling": [
+                "Plant_Vine_Hanging",
+                "Plant_Vine_Green_Hanging"
+            ]
         },
         "RubbleBlocks": [],
         "FluidBlock": "Fluid_Slime",
@@ -21,52 +25,57 @@
         "AccentBlock": "Plant_Crop_Mushroom_Glowing_Blue"
     },
     "Lights": {
-        "WallLight": "Wood_Torch_Wall",
-        "FloorLightBlock": "Plant_Crop_Mushroom_Glowing_Purple",
+        "WallLight": "Deco_Lantern",
+        "FloorLightBlock": "Plant_Crop_Mushroom_Glowing_Red",
         "FloorLightTall": false,
-        "AccentFloorLight": "Furniture_Human_Ruins_Torch"
+        "AccentFloorLight": "Furniture_Jungle_Torch"
     },
     "Props": [
         {
-            "BlockId": "Plant_Crop_Mushroom_Block_Blue",
+            "BlockId": "Plant_Crop_Mushroom_Cap_Red",
             "Placement": "FLOOR",
             "SpawnChance": 0.2,
-            "MaxPerRoom": 3
+            "MaxPerRoom": 3,
+            "YOffset": 0
         },
         {
-            "BlockId": "Plant_Crop_Mushroom_Block_Purple",
+            "BlockId": "Plant_Crop_Mushroom_Cap_White",
             "Placement": "FLOOR",
             "SpawnChance": 0.15,
-            "MaxPerRoom": 2
+            "MaxPerRoom": 2,
+            "YOffset": 0
         },
         {
-            "BlockId": "Plant_Crop_Mushroom_Block_Red",
+            "BlockId": "Plant_Crop_Mushroom_Block_White_Mycelium",
             "Placement": "FLOOR",
             "SpawnChance": 0.1,
             "MaxPerRoom": 2,
             "AllowedRoomTypes": [
                 "COMBAT"
-            ]
+            ],
+            "YOffset": 0
         },
         {
             "BlockId": "Furniture_Jungle_Chest_Small",
             "Placement": "CENTER",
             "SpawnChance": 0.7,
             "MaxPerRoom": 1,
-            "ChestTier": "Regular",
             "AllowedRoomTypes": [
                 "LOOT"
-            ]
+            ],
+            "YOffset": 0,
+            "ChestTier": "Regular"
         },
         {
-            "BlockId": "Furniture_Dungeon_Chest_Epic",
+            "BlockId": "Furniture_Goblin_Chest_Small",
             "Placement": "CENTER",
             "SpawnChance": 0.9,
             "MaxPerRoom": 1,
-            "ChestTier": "Epic",
             "AllowedRoomTypes": [
                 "BOSS"
-            ]
+            ],
+            "YOffset": 0,
+            "ChestTier": "Epic"
         }
     ],
     "SpawnerPrefix": "Zone1_Trork",
@@ -82,21 +91,98 @@
         ],
         "FloorTraps": [
             "Trap_Ancient_Platform",
-            "Trap_Ice",
-            "Trap_Slate",
             "Survival_Trap_Grass"
         ]
     },
-    "FillBlock": "Plant_Moss_Block_Green",
-    "SecondaryWallChance": 0.2,
-    "LevelVariance": 5,
+    "FillBlock": "Plant_Crop_Mushroom_Block_White",
+    "SecondaryWallChance": 0.029999999329447746,
     "SpawnPool": [
-        { "NpcRole": "Trork_Hunter", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
-        { "NpcRole": "Trork_Brawler", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
-        { "NpcRole": "Trork_Warrior", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Trork_Shaman", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Trork_Mauler", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Trork_Shaman", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Trork_Chieftain", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
-    ]
+        {
+            "NpcRole": "Trork_Hunter",
+            "MinFloor": 1,
+            "MaxFloor": 30,
+            "Weight": 3.0,
+            "Variants": [
+                "NORMAL"
+            ]
+        },
+        {
+            "NpcRole": "Trork_Brawler",
+            "MinFloor": 1,
+            "MaxFloor": 30,
+            "Weight": 2.0,
+            "Variants": [
+                "NORMAL"
+            ]
+        },
+        {
+            "NpcRole": "Trork_Warrior",
+            "MinFloor": 5,
+            "MaxFloor": 45,
+            "Weight": 3.0,
+            "Variants": [
+                "NORMAL",
+                "ELITE"
+            ]
+        },
+        {
+            "NpcRole": "Toad_Rhino",
+            "MinFloor": 25,
+            "MaxFloor": 70,
+            "Weight": 1.0,
+            "Variants": [
+                "NORMAL",
+                "ELITE",
+                "BOSS"
+            ]
+        },
+        {
+            "NpcRole": "Trork_Sentry",
+            "MinFloor": 5,
+            "MaxFloor": 45,
+            "Weight": 1.5,
+            "Variants": [
+                "NORMAL",
+                "ELITE"
+            ]
+        },
+        {
+            "NpcRole": "Trork_Mauler",
+            "MinFloor": 10,
+            "MaxFloor": 70,
+            "Weight": 3.0,
+            "Variants": [
+                "NORMAL",
+                "ELITE"
+            ]
+        },
+        {
+            "NpcRole": "Trork_Shaman",
+            "MinFloor": 10,
+            "MaxFloor": 70,
+            "Weight": 1.5,
+            "Variants": [
+                "NORMAL"
+            ]
+        },
+        {
+            "NpcRole": "Trork_Doctor_Witch",
+            "MinFloor": 25,
+            "MaxFloor": 70,
+            "Weight": 1.25,
+            "Variants": [
+                "NORMAL"
+            ]
+        },
+        {
+            "NpcRole": "Trork_Chieftain",
+            "MinFloor": 15,
+            "MaxFloor": 70,
+            "Weight": 1.0,
+            "Variants": [
+                "BOSS"
+            ]
+        }
+    ],
+    "LevelVariance": 5
 }

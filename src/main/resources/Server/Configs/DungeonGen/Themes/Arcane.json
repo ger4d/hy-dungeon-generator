@@ -139,12 +139,15 @@
     "SecondaryWallChance": 0.2,
     "LevelVariance": 5,
     "SpawnPool": [
-        { "NpcRole": "Outlander_Stalker", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
-        { "NpcRole": "Outlander_Berserker", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Outlander_Stalker", "MinFloor": 1, "MaxFloor": 40, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Outlander_Hunter", "MinFloor": 1, "MaxFloor": 40, "Weight": 2.0, "Variants": ["NORMAL"] },
         { "NpcRole": "Outlander_Berserker", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Outlander_Sorcerer", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Outlander_Marauder", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Outlander_Sorcerer", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Outlander_Brute", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+        { "NpcRole": "Outlander_Peon", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL"] },
+        { "NpcRole": "Outlander_Marauder", "MinFloor": 10, "MaxFloor": 70, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Leopard_Snow", "MinFloor": 20, "MaxFloor": 70, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Outlander_Priest", "MinFloor": 10, "MaxFloor": 35, "Weight": 1.5, "Variants": ["NORMAL"] },
+        { "NpcRole": "Outlander_Sorcerer", "MinFloor": 25, "MaxFloor": 70, "Weight": 1.5, "Variants": ["NORMAL"] },
+        { "NpcRole": "Outlander_Brute", "MinFloor": 15, "MaxFloor": 70, "Weight": 1.0, "Variants": ["BOSS"] },
+        { "NpcRole": "Yeti", "MinFloor": 15, "MaxFloor": 70, "Weight": 1.0, "Variants": ["BOSS"] }
     ]
 }

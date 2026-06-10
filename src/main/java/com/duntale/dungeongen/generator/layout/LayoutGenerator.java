@@ -538,21 +538,37 @@ public class LayoutGenerator {
         Set<Integer> criticalSet = new HashSet<>(criticalPath);
 
         // --- Dead-ends, hubs, treasure ---
+        List<Room> potentialHubs = new ArrayList<>();
         for (Room room : rooms) {
             if (room.getType() != RoomType.COMBAT) continue;
 
             int conns = room.getConnections().size();
 
             if (conns == 1 && !criticalSet.contains(room.getId())) {
-                // Dead-end room
-                if (random.nextDouble() < 0.5) {
-                    room.setType(RoomType.DEAD_END);
-                } else {
+                // Replace DEAD_END with 70% LOOT and 30% COMBAT
+                if (random.nextDouble() < 0.70) {
                     room.setType(RoomType.LOOT);
                     room.setTreasureRoom(true);
+                } else {
+                    room.setType(RoomType.COMBAT);
                 }
             } else if (conns >= 3) {
-                room.setType(RoomType.HUB);
+                potentialHubs.add(room);
+            }
+        }
+
+        // Shuffle potential hubs and select 1 or 2 to remain as HUB, the rest stay COMBAT
+        if (!potentialHubs.isEmpty()) {
+            Collections.shuffle(potentialHubs, random);
+            int hubLimit = 1 + random.nextInt(4); // 1 to 4 HUBs
+            int chosen = 0;
+            for (Room room : potentialHubs) {
+                if (chosen < hubLimit) {
+                    room.setType(RoomType.HUB);
+                    chosen++;
+                } else {
+                    room.setType(RoomType.COMBAT);
+                }
             }
         }
 
@@ -565,6 +581,12 @@ public class LayoutGenerator {
             if (i % 5 == 0 && random.nextDouble() < 0.4) {
                 room.setType(RoomType.SAFE);
             }
+        }
+
+        // --- Log final room types and metadata for debug/observability ---
+        for (Room room : rooms) {
+            LOGGER.atFine().log("[DungeonGen] Room %d: type=%s, size=%dx%d, connections=%d, criticalPath=%b",
+                room.getId(), room.getType(), room.getWidth(), room.getDepth(), room.getConnections().size(), criticalSet.contains(room.getId()));
         }
     }
 

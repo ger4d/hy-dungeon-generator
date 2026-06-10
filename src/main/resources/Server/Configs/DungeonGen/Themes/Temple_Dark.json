@@ -46,8 +46,7 @@
             "SpawnChance": 0.3,
             "MaxPerRoom": 1,
             "AllowedRoomTypes": [
-                "COMBAT",
-                "DEAD_END"
+                "COMBAT"
             ]
         },
         {
@@ -122,12 +121,14 @@
     "SecondaryWallChance": 0.2,
     "LevelVariance": 5,
     "SpawnPool": [
-        { "NpcRole": "Wraith_Lantern", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
-        { "NpcRole": "Zombie", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
-        { "NpcRole": "Shadow_Knight", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Wraith", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Risen_Knight", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Wraith", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Zombie_Aberrant", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+        { "NpcRole": "Wraith_Lantern", "MinFloor": 1, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Spectre_Void", "MinFloor": 30, "MaxFloor": 70, "Weight": 3.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Zombie", "MinFloor": 1, "MaxFloor": 30, "Weight": 3.5, "Variants": ["NORMAL"] },
+        { "NpcRole": "Fen_Stalker", "MinFloor": 15, "MaxFloor": 40, "Weight": 2.5, "Variants": ["NORMAL"] },
+        { "NpcRole": "Skeleton_Frost_Fighter", "MinFloor": 10, "MaxFloor": 70, "Weight": 3.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Skeleton_Burnt_Alchemist", "MinFloor": 10, "MaxFloor": 70, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Wraith", "MinFloor": 10, "MaxFloor": 70, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Shadow_Knight", "MinFloor": 20, "MaxFloor": 70, "Weight": 1.3, "Variants": ["BOSS", "ELITE"] },
+        { "NpcRole": "Werewolf", "MinFloor": 5, "MaxFloor": 70, "Weight": 1.0, "Variants": ["BOSS"] }
     ]
 }

@@ -107,11 +107,14 @@
     "LevelVariance": 5,
     "SpawnPool": [
         { "NpcRole": "Feran_Sharptooth", "MinFloor": 1, "MaxFloor": 15, "Weight": 3.0, "Variants": ["NORMAL"] },
-        { "NpcRole": "Feran_Longtooth", "MinFloor": 1, "MaxFloor": 15, "Weight": 2.0, "Variants": ["NORMAL"] },
-        { "NpcRole": "Feran_Longtooth", "MinFloor": 5, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Emberwulf", "MinFloor": 15, "MaxFloor": 45, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Feran_Longtooth", "MinFloor": 1, "MaxFloor": 30, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Feran_Windwalker", "MinFloor": 25, "MaxFloor": 70, "Weight": 1.0, "Variants": ["NORMAL", "ELITE"] },
         { "NpcRole": "Spirit_Ember", "MinFloor": 5, "MaxFloor": 30, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Golem_Crystal_Flame", "MinFloor": 10, "MaxFloor": 60, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Spirit_Ember", "MinFloor": 10, "MaxFloor": 60, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Golem_Firesteel", "MinFloor": 15, "MaxFloor": 60, "Weight": 1.0, "Variants": ["BOSS"] }
+        { "NpcRole": "Toad_Rhino_Magma", "MinFloor": 25, "MaxFloor": 70, "Weight": 1.0, "Variants": ["NORMAL", "ELITE", "BOSS"] },
+        { "NpcRole": "Slug_Magma", "MinFloor": 30, "MaxFloor": 70, "Weight": 2.0, "Variants": ["NORMAL"] },
+        { "NpcRole": "Golem_Crystal_Flame", "MinFloor": 10, "MaxFloor": 70, "Weight": 2.5, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Spirit_Ember", "MinFloor": 10, "MaxFloor": 70, "Weight": 2.0, "Variants": ["NORMAL", "ELITE"] },
+        { "NpcRole": "Golem_Firesteel", "MinFloor": 15, "MaxFloor": 70, "Weight": 1.0, "Variants": ["BOSS"] }
     ]
 }

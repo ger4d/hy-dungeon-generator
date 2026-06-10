@@ -19,8 +19,6 @@ public enum RoomType {
     BOSS,
     /** Central hub connecting multiple paths. */
     HUB,
-    /** Terminal room with an optional secret. */
-    DEAD_END,
     /** Small transitional room at corridor junctions. */
     CORRIDOR_JUNCTION
 }
