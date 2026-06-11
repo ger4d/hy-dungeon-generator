@@ -57,7 +57,7 @@
         { "NpcRole": "Skeleton_Knight", "MinFloor": 10, "MaxFloor": 70, "Weight": 3.0, "Variants": ["NORMAL", "ELITE"] },
         { "NpcRole": "Skeleton_Mage", "MinFloor": 10, "MaxFloor": 70, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
         { "NpcRole": "Goblin_Duke", "MinFloor": 10, "MaxFloor": 70, "Weight": 1.5, "Variants": ["NORMAL", "ELITE"] },
-        { "NpcRole": "Golem_Cyrstal_Earth", "MinFloor": 20, "MaxFloor": 70, "Weight": 2.0, "Variants": ["BOSS"] },
+        { "NpcRole": "Golem_Crystal_Earth", "MinFloor": 20, "MaxFloor": 70, "Weight": 2.0, "Variants": ["BOSS"] },
         { "NpcRole": "Spawn_Void", "MinFloor": 30, "MaxFloor": 70, "Weight": 2.0, "Variants": ["BOSS"] },
         { "NpcRole": "Zombie_Aberrant", "MinFloor": 5, "MaxFloor": 70, "Weight": 1.0, "Variants": ["BOSS"] },
         { "NpcRole": "Ghoul", "MinFloor": 15, "MaxFloor": 70, "Weight": 1.0, "Variants": ["BOSS"] }
